@@ -1,12 +1,14 @@
+import {Link} from 'react-router-dom';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
 import {ProductPreviewCard} from '../../types/product';
+import {AppRoute} from '../../consts';
 
 type ProductCardProps = {
   card: ProductPreviewCard;
 }
 
 function ProductCard({card}: ProductCardProps): JSX.Element {
-  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = card;
+  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
   const formattedPrice = price.toLocaleString('ru-RU');
 
   return (
@@ -42,9 +44,9 @@ function ProductCard({card}: ProductCardProps): JSX.Element {
         >
 Купить
         </button>
-        <a className="btn btn--transparent" href="#">
+        <Link className="btn btn--transparent" to={AppRoute.Product.replace(':id', String(id))}>
 Подробнее
-        </a>
+        </Link>
       </div>
     </div>
   );
