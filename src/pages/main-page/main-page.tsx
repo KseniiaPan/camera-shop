@@ -1,3 +1,4 @@
+import {Helmet} from 'react-helmet-async';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import Banner from '../../components/banner/banner';
@@ -9,6 +10,9 @@ function MainPage(): JSX.Element {
     <div className="wrapper">
       <Header />
       <main>
+        <Helmet>
+          <title>Каталог - Фотошоп</title>
+        </Helmet>
         <Banner />
         <div className="page-content">
           <Breadcrumbs />

@@ -10,8 +10,8 @@ function NotFoundPage(): JSX.Element{
         <title>Страница не найдена - Фотошоп</title>
       </Helmet>
       <div className={styles.error__container}>
-        <span className={styles.error__code}>404</span> <br/>
-        Страница не найдена
+        <span className={styles.error__code}>404</span>
+        <p className={styles.error__text}>Страница не найдена</p>
         <Link to={AppRoute.Main} className={styles.error__returnLink}>Вернуться на главную</Link>
       </div>
     </section>
