@@ -1,6 +1,6 @@
 import {Link} from 'react-router-dom';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
-import {ProductPreviewCard} from '../../types/product';
+import {ProductPreviewCard} from '../../types/product-types';
 import {AppRoute} from '../../consts';
 
 type ProductCardProps = {

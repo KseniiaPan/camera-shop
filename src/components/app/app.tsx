@@ -5,13 +5,8 @@ import ProductPage from '../../pages/product-page/product-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import Layout from '../../components/layout/layout';
 import {AppRoute} from '../../consts';
-import {ProductPreviewCard} from '../../types/product';
 
-type AppProps = {
-  cards: ProductPreviewCard[];
-}
-
-function App({cards}: AppProps): JSX.Element {
+function App(): JSX.Element {
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -19,7 +14,7 @@ function App({cards}: AppProps): JSX.Element {
           <Route path='/' element={<Layout />}>
             <Route
               path={AppRoute.Main}
-              element={<MainPage cards={cards}/>}
+              element={<MainPage />}
             />
             <Route
               path={AppRoute.Product}

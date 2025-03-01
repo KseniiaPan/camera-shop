@@ -1,18 +1,17 @@
-import {ProductPreviewCard} from '../../types/product';
 import ProductCard from '../../components/product-card/product-card';
+import {useAppSelector} from '../../hooks/index';
+import {getProductsData} from '../../store/product-process/selectors';
 
-type ProductCardsListProps = {
-  cards: ProductPreviewCard[];
-}
+function ProductCardsList(): JSX.Element {
+  const products = useAppSelector(getProductsData);
 
-function ProductCardsList({cards}: ProductCardsListProps): JSX.Element {
   return (
     <div className="cards catalog__cards">
       {
-        cards.map ((card) => (
+        products.map ((product) => (
           <ProductCard
-            key={card.id}
-            card={card}
+            key={product.id}
+            card={product}
           />
         ))
       }

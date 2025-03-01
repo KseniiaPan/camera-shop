@@ -2,13 +2,9 @@ import {Helmet} from 'react-helmet-async';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
-import {ProductPreviewCard} from '../../types/product';
 
-type MainPageProps = {
-  cards: ProductPreviewCard[];
-}
+function MainPage(): JSX.Element {
 
-function MainPage({cards}: MainPageProps): JSX.Element {
   return (
     <main>
       <Helmet>
@@ -25,7 +21,7 @@ function MainPage({cards}: MainPageProps): JSX.Element {
                 <img src="img/banner.png" />
               </div>
               <div className="catalog__content">
-                <ProductCardsList cards={cards}/>
+                <ProductCardsList />
               </div>
             </div>
           </div>
