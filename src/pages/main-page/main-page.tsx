@@ -3,9 +3,14 @@ import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
-import CardsList from '../../components/cards-list/cards-list';
+import ProductCardsList from '../../components/product-cards-list/product-cards-list';
+import {ProductPreviewCard} from '../../types/product';
 
-function MainPage(): JSX.Element {
+type MainPageProps = {
+  cards: ProductPreviewCard[];
+}
+
+function MainPage({cards}: MainPageProps): JSX.Element {
   return (
     <div className="wrapper">
       <Header />
@@ -24,7 +29,7 @@ function MainPage(): JSX.Element {
                   <img src="img/banner.png" />
                 </div>
                 <div className="catalog__content">
-                  <CardsList />
+                  <ProductCardsList cards={cards}/>
                 </div>
               </div>
             </div>
