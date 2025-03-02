@@ -7,5 +7,7 @@ export type AppDispatch = typeof store.dispatch;
 
 export type ProductsProcess ={
   products: ProductPreviewCard[];
+  detailedProduct: null | ProductPreviewCard;
   isProductsDataLoading: boolean;
+  isDetailedProductLoading: boolean;
 }

@@ -14,3 +14,4 @@ export type ProductPreviewCard = {
     rating: number;
     reviewCount: number;
 };
+

@@ -15,3 +15,15 @@ export const fetchProductsAction = createAsyncThunk<ProductPreviewCard[], undefi
     return data;
   },
 );
+
+export const fetchDetailedProductAction = createAsyncThunk<ProductPreviewCard, string, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/fetchDetailedProduct',
+  async (id, {extra: api}) => {
+    const {data} = await api.get<ProductPreviewCard>(`${APIRoute.Cameras}/${id}`);
+    return data;
+  },
+);
