@@ -18,6 +18,11 @@ export enum APIRoute {
   Order = '/orders',
 }
 
+export enum TabOption {
+  Characteristics = 'Characteristics',
+  Description = 'Description',
+}
+
 export const MAX_RATING = 5;
 
 export const RATING_STARS = Array.from({length: MAX_RATING}, (_, i) => i + 1);
