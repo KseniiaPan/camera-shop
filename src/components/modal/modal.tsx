@@ -11,7 +11,6 @@ type ModalProps = {
 function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
   const products = useAppSelector(getProductsData);
   const openedCameraInfo = products.find((product) => modalData.openedCameraId === product.id);
-
   return (
     <div className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}>
       <div className="modal__wrapper">
@@ -31,6 +30,9 @@ function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
                 type="tel"
                 name="user-tel"
                 placeholder="Введите ваш номер"
+                minLength={10}
+                pattern="^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$"
+                data-error-message="Номер должен иметь формат +7(9XX)XXX-XX-XX"
                 required
               />
             </label>
