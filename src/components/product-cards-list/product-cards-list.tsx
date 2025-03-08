@@ -2,7 +2,11 @@ import ProductCard from '../../components/product-card/product-card';
 import {useAppSelector} from '../../hooks/index';
 import {getProductsData} from '../../store/product-process/selectors';
 
-function ProductCardsList(): JSX.Element {
+type ProductCardsListProps = {
+  onModalOpenClick: (id: number | null) => void;
+}
+
+function ProductCardsList({onModalOpenClick}: ProductCardsListProps): JSX.Element {
   const products = useAppSelector(getProductsData);
 
   return (
@@ -10,6 +14,7 @@ function ProductCardsList(): JSX.Element {
       {
         products.map ((product) => (
           <ProductCard
+            onModalOpenClick={onModalOpenClick}
             key={product.id}
             card={product}
           />

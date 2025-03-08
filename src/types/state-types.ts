@@ -1,13 +1,13 @@
 import {store} from '../store/index';
-import {ProductPreviewCard} from './product-types';
+import {ProductInfo} from './product-types';
 
 export type State = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
 export type ProductsProcess ={
-  products: ProductPreviewCard[];
-  detailedProduct: null | ProductPreviewCard;
+  products: ProductInfo[];
+  currentProduct: null | ProductInfo;
   isProductsDataLoading: boolean;
-  isDetailedProductLoading: boolean;
+  isCurrentProductLoading: boolean;
 }

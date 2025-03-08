@@ -1,10 +1,10 @@
 import {useState, SetStateAction} from 'react';
 import {useAppSelector} from '../../hooks/index';
-import {getDetailedProductData} from '../../store/product-process/selectors';
+import {getCurrentProductData} from '../../store/product-process/selectors';
 import {TabOption} from '../../consts';
 
 function ProductTabs(): JSX.Element {
-  const currentProduct = useAppSelector(getDetailedProductData);
+  const currentProduct = useAppSelector(getCurrentProductData);
 
   const [activeTab, setActiveTab] = useState(TabOption.Characteristics);
 

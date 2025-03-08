@@ -7,31 +7,31 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import {useAppDispatch, useAppSelector} from '../../hooks/index';
-import {fetchDetailedProductAction} from '../../store/api-actions';
-import {getDetailedProductData, getDetailedProductLoadingStatus} from '../../store/product-process/selectors';
+import {fetchCurrentProductAction} from '../../store/api-actions';
+import {getCurrentProductData, getCurrentProductLoadingStatus} from '../../store/product-process/selectors';
 
 function ProductPage(): JSX.Element {
 
-  const isDetailedProductLoading = useAppSelector(getDetailedProductLoadingStatus);
-  const currentDetailedProduct = useAppSelector(getDetailedProductData);
+  const isDetailedProductLoading = useAppSelector(getCurrentProductLoadingStatus);
+  const currentProduct = useAppSelector(getCurrentProductData);
 
   const params = useParams();
-  const detailedProductId = params.id;
+  const currentProductId = params.id;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (detailedProductId) {
-      dispatch(fetchDetailedProductAction(detailedProductId));
+    if (currentProductId) {
+      dispatch(fetchCurrentProductAction(currentProductId));
     }
-  }, [detailedProductId, dispatch]);
+  }, [currentProductId, dispatch]);
 
   if (isDetailedProductLoading) {
     return (
       <LoadingPage />
     );
   }
-  if (!isDetailedProductLoading && currentDetailedProduct) {
-    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentDetailedProduct;
+  if (!isDetailedProductLoading && currentProduct) {
+    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
     return (
       <>

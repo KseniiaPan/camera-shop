@@ -1,4 +1,4 @@
-export type ProductPreviewCard = {
+export type ProductInfo = {
     id: number;
     name: string;
     vendorCode: string;
@@ -15,3 +15,7 @@ export type ProductPreviewCard = {
     reviewCount: number;
 };
 
+export type ProductModalData = {
+    isModalOpen: boolean;
+    openedCameraId: null|number;
+  };

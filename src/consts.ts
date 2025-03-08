@@ -23,6 +23,11 @@ export enum TabOption {
   Description = 'Description',
 }
 
+export enum ProductCategory {
+  videoCamera = 'Видеокамера',
+  photoCamera = 'Фотокамера',
+}
+
 export const MAX_RATING = 5;
 
 export const RATING_STARS = Array.from({length: MAX_RATING}, (_, i) => i + 1);

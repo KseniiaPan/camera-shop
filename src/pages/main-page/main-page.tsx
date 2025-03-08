@@ -1,9 +1,27 @@
 import {Helmet} from 'react-helmet-async';
+import {useState} from 'react';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
+import Modal from '../../components/modal/modal';
+import {ProductModalData} from '../../types/product-types';
+
+const initialState: ProductModalData = {
+  isModalOpen: false,
+  openedCameraId: null,
+};
 
 function MainPage(): JSX.Element {
+
+  const [modalData, setModalData] = useState(initialState);
+
+  const handleModalOpenClick = (id: number|null) => {
+    setModalData({isModalOpen: true, openedCameraId: id});
+  };
+
+  const handleModalCloselick = () => {
+    setModalData({...modalData, isModalOpen: false});
+  };
 
   return (
     <main>
@@ -21,12 +39,13 @@ function MainPage(): JSX.Element {
                 <img src="img/banner.png" />
               </div>
               <div className="catalog__content">
-                <ProductCardsList />
+                <ProductCardsList onModalOpenClick={handleModalOpenClick}/>
               </div>
             </div>
           </div>
         </section>
       </div>
+      <Modal onModalCloseClick={handleModalCloselick} modalData={modalData}/>
     </main>
   );
 }

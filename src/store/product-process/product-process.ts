@@ -2,13 +2,13 @@ import {createSlice} from '@reduxjs/toolkit';
 import {NameSpace} from '../../consts';
 import {toast} from 'react-toastify';
 import {ProductsProcess} from '../../types/state-types';
-import {fetchProductsAction, fetchDetailedProductAction} from '../api-actions';
+import {fetchProductsAction, fetchCurrentProductAction} from '../api-actions';
 
 const initialState: ProductsProcess = {
   products: [],
-  detailedProduct: null,
+  currentProduct: null,
   isProductsDataLoading: false,
-  isDetailedProductLoading: false,
+  isCurrentProductLoading: false,
 };
 
 export const productProcess = createSlice({
@@ -28,15 +28,15 @@ export const productProcess = createSlice({
         state.isProductsDataLoading = false;
         toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
       })
-      .addCase(fetchDetailedProductAction.pending, (state) => {
-        state.isDetailedProductLoading = true;
+      .addCase(fetchCurrentProductAction.pending, (state) => {
+        state.isCurrentProductLoading = true;
       })
-      .addCase(fetchDetailedProductAction.fulfilled, (state, action) => {
-        state.detailedProduct = action.payload;
-        state.isDetailedProductLoading = false;
+      .addCase(fetchCurrentProductAction.fulfilled, (state, action) => {
+        state.currentProduct = action.payload;
+        state.isCurrentProductLoading = false;
       })
-      .addCase(fetchDetailedProductAction.rejected, (state) => {
-        state.isDetailedProductLoading = false;
+      .addCase(fetchCurrentProductAction.rejected, (state) => {
+        state.isCurrentProductLoading = false;
         toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
       });
   }

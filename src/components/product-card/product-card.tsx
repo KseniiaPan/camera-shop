@@ -1,15 +1,18 @@
 import {Link} from 'react-router-dom';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
-import {ProductPreviewCard} from '../../types/product-types';
+import {ProductInfo} from '../../types/product-types';
 import {AppRoute} from '../../consts';
+import {getFormattedPrice} from '../../utils';
 
 type ProductCardProps = {
-  card: ProductPreviewCard;
+  card: ProductInfo;
+  onModalOpenClick: (id: number | null) => void;
 }
 
-function ProductCard({card}: ProductCardProps): JSX.Element {
+function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
+
   const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
-  const formattedPrice = price.toLocaleString('ru-RU');
+  const formattedPrice = getFormattedPrice(price);
 
   return (
     <div className="product-card">
@@ -41,6 +44,7 @@ function ProductCard({card}: ProductCardProps): JSX.Element {
         <button
           className="btn btn--purple product-card__btn"
           type="button"
+          onClick={() => onModalOpenClick && onModalOpenClick(id)}
         >
 Купить
         </button>
