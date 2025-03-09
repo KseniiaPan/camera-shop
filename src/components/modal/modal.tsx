@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 import {getFormattedPhoneNumber, validatePhone} from '../../utils';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';
@@ -9,22 +9,23 @@ import {PHONE_INITIAL_VALUE} from '../../consts';
 
 type ModalProps = {
   modalData: ProductModalData;
-  onModalCloseClick: () => void;
+  onModalClose: () => void;
 };
 
-function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
+function Modal({onModalClose, modalData}: ModalProps): JSX.Element {
   const [phoneNumber, setPhoneNumber] = useState<string>(PHONE_INITIAL_VALUE);
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
 
   const products = useAppSelector(getProductsData);
   const openedCameraInfo = products.find((product) => modalData.openedCameraId === product.id);
 
-  const handlePhoneValueChange = (phone: string|undefined):void => {
-    if (phone) {
-      const isPhoneValid = validatePhone(phone);
+  const handlePhoneValueChange = (evt: ChangeEvent<HTMLInputElement>):void => {
+    const {value} = evt.target;
+    if (value) {
+      const isPhoneValid = validatePhone(value);
 
       if (isPhoneValid) {
-        const formattedPhoneNumber = getFormattedPhoneNumber(phone);
+        const formattedPhoneNumber = getFormattedPhoneNumber(value);
         setPhoneNumber(formattedPhoneNumber);
         setIsValidationError(false);
       } else {
@@ -37,6 +38,7 @@ function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
     evt.preventDefault();
     setPhoneNumber(PHONE_INITIAL_VALUE);
     setIsValidationError(false);
+    onModalClose();
   };
 
   const isSubmitButtonDisabled = phoneNumber === PHONE_INITIAL_VALUE || isValidationError;
@@ -48,7 +50,7 @@ function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
         <div className="modal__content">
           <p className="title title--h4">Свяжитесь со мной</p>
           {openedCameraInfo && <BasketItem openedCameraInfo={openedCameraInfo}/>}
-          <BasketPhoneForm onPhoneValueChange={handlePhoneValueChange} isValidationError={isValidationError}/>
+          <BasketPhoneForm onPhoneValueChange={handlePhoneValueChange} isValidationError={isValidationError} phoneNumber={phoneNumber}/>
           <div className="modal__buttons">
             <button
               className="btn btn--purple modal__btn modal__btn--fit-width"
@@ -66,7 +68,7 @@ function Modal({onModalCloseClick, modalData}: ModalProps): JSX.Element {
             className="cross-btn"
             type="button"
             aria-label="Закрыть попап"
-            onClick={onModalCloseClick}
+            onClick={onModalClose}
           >
             <svg width={10} height={10} aria-hidden="true">
               <use xlinkHref="#icon-close" />

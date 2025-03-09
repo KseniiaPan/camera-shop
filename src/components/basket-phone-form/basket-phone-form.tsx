@@ -1,11 +1,11 @@
-import {useRef} from 'react';
+import {ChangeEvent} from 'react';
 
 type BasketPhoneFormProps = {
-  onPhoneValueChange: (phone: string | undefined) => void;
+  onPhoneValueChange: (evt: ChangeEvent<HTMLInputElement>) => void;
   isValidationError: boolean;
+  phoneNumber: string;
 }
-function BasketPhoneForm({onPhoneValueChange, isValidationError}:BasketPhoneFormProps): JSX.Element {
-  const phoneRef = useRef<HTMLInputElement | null>(null);
+function BasketPhoneForm({onPhoneValueChange, isValidationError, phoneNumber}:BasketPhoneFormProps): JSX.Element {
 
   return (
     <>
@@ -18,14 +18,14 @@ function BasketPhoneForm({onPhoneValueChange, isValidationError}:BasketPhoneForm
             </svg>
           </span>
           <input
-            ref={phoneRef}
             type="tel"
             name="user-tel"
             placeholder="Введите ваш номер"
+            defaultValue={phoneNumber}
             minLength={10}
             pattern="^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$"
             data-error-message="Номер должен иметь формат +7(9XX)XXX-XX-XX"
-            onChange={() => onPhoneValueChange(phoneRef.current?.value)}
+            onChange={onPhoneValueChange}
             required
           />
         </label>

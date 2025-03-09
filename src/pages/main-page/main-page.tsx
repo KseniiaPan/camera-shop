@@ -19,7 +19,7 @@ function MainPage(): JSX.Element {
     setModalData({isModalOpen: true, openedCameraId: id});
   };
 
-  const handleModalCloselick = () => {
+  const handleModalClose = () => {
     setModalData({...modalData, isModalOpen: false});
   };
 
@@ -45,7 +45,7 @@ function MainPage(): JSX.Element {
           </div>
         </section>
       </div>
-      <Modal onModalCloseClick={handleModalCloselick} modalData={modalData}/>
+      <Modal onModalClose={handleModalClose} modalData={modalData}/>
     </main>
   );
 }
