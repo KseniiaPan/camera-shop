@@ -31,3 +31,5 @@ export enum ProductCategory {
 export const MAX_RATING = 5;
 
 export const RATING_STARS = Array.from({length: MAX_RATING}, (_, i) => i + 1);
+export const PHONE_REGEXP = /^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$/;
+export const PHONE_INITIAL_VALUE = '';
