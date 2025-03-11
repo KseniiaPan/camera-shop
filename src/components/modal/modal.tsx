@@ -1,4 +1,4 @@
-import FocusTrap from 'focus-trap-react';
+
 import {useEffect, useRef} from 'react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';

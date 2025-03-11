@@ -7,14 +7,15 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
-import { RatingOption } from '../../consts';
 import {useAppDispatch, useAppSelector} from '../../hooks/index';
-import {fetchCurrentProductAction} from '../../store/api-actions';
+import {RatingOption} from '../../consts';
+import {fetchCurrentProductAction, fetchReviewsAction} from '../../store/api-actions';
 import {getCurrentProductData, getCurrentProductLoadingStatus} from '../../store/product-process/selectors';
 
 function ProductPage(): JSX.Element {
-
-  const isDetailedProductLoading = useAppSelector(getCurrentProductLoadingStatus);
+  const isDetailedProductLoading = useAppSelector(
+    getCurrentProductLoadingStatus
+  );
   const currentProduct = useAppSelector(getCurrentProductData);
 
   const params = useParams();
@@ -23,17 +24,28 @@ function ProductPage(): JSX.Element {
 
   useEffect(() => {
     if (currentProductId) {
-      dispatch(fetchCurrentProductAction(currentProductId));
+      dispatch(fetchCurrentProductAction(currentProductId)).then((response) => {
+        if (response.meta.requestStatus === 'fulfilled') {
+          dispatch(fetchReviewsAction(currentProductId));
+        }
+      });
     }
   }, [currentProductId, dispatch]);
 
   if (isDetailedProductLoading) {
-    return (
-      <LoadingPage />
-    );
+    return <LoadingPage />;
   }
   if (!isDetailedProductLoading && currentProduct) {
-    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
+    const {
+      previewImgWebp,
+      previewImgWebp2x,
+      previewImg,
+      previewImg2x,
+      name,
+      rating,
+      price,
+      reviewCount,
+    } = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
     return (
       <>
@@ -63,15 +75,20 @@ function ProductPage(): JSX.Element {
                   </div>
                   <div className="product__content">
                     <h1 className="title title--h3">{name}</h1>
-                    <ProductCardRating rating={rating} reviewCount={reviewCount} ratingOption={RatingOption.product}/>
+                    <ProductCardRating
+                      rating={rating}
+                      reviewCount={reviewCount}
+                      ratingOption={RatingOption.product}
+                    />
                     <p className="product__price">
-                      <span className="visually-hidden">Цена:</span>{formattedPrice}
+                      <span className="visually-hidden">Цена:</span>
+                      {formattedPrice}
                     </p>
                     <button className="btn btn--purple" type="button">
                       <svg width={24} height={16} aria-hidden="true">
                         <use xlinkHref="#icon-add-basket" />
                       </svg>
-                Добавить в корзину
+                      Добавить в корзину
                     </button>
                     <ProductTabs />
                   </div>
@@ -91,7 +108,7 @@ function ProductPage(): JSX.Element {
       </>
     );
   }
-  return (<NotFoundPage />);
+  return <NotFoundPage />;
 }
 
 export default ProductPage;

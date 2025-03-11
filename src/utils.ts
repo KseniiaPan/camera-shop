@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
+
 import {PHONE_REGEXP} from './consts';
 const getFormattedPrice = (price:number) => price.toLocaleString('ru-RU');
 const getFormattedPhoneNumber = (phoneNumber:string) => {
@@ -9,4 +12,9 @@ const getFormattedPhoneNumber = (phoneNumber:string) => {
 };
 const validatePhone = (value:string) => PHONE_REGEXP.test(value);
 
-export {getFormattedPrice, getFormattedPhoneNumber, validatePhone};
+const humanizeCommentDate = (commentDate: string) =>
+  dayjs(commentDate).locale('ru').format('D MMMM');
+
+const getDateWithoutTime = (date: string): string => date.split('T')[0];
+
+export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime,};
