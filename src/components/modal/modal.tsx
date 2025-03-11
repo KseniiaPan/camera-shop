@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import FocusTrap from 'focus-trap-react';
+import {useEffect, useRef} from 'react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';
-import { useAppSelector } from '../../hooks/index';
-import { getProductsData } from '../../store/product-process/selectors';
-import { ProductModalData } from '../../types/product-types';
+import {useAppSelector} from '../../hooks/index';
+import {getProductsData} from '../../store/product-process/selectors';
+import {ProductModalData} from '../../types/product-types';
 
 type ModalProps = {
   modalData: ProductModalData;
@@ -14,28 +15,27 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-
     const handleClickOutside = (evt: MouseEvent) => {
-      if (
-        (evt.target instanceof HTMLElement &&
-          modalRef.current &&
-          modalRef.current.contains(evt.target))
-      ) {
-        onModalClose();
+      if (!modalData.isModalOpen) {
+        return;
       }
+
+      if (
+        !modalRef?.current ||
+        modalRef.current.contains((evt?.target as Node) || null)
+      ) {
+        return;
+      }
+      onModalClose();
     };
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener('pointerdown', handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener('pointerdown', handleClickOutside);
     };
   }, [modalData.isModalOpen, onModalClose]);
 
   useEffect(() => {
-    if (!modalData.isModalOpen) {
-      return;
-    }
-
     const handleEscKeyDown = (evt: KeyboardEvent) => {
       if (evt.key === 'Escape') {
         onModalClose();
@@ -47,7 +47,7 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleEscKeyDown);
     };
-  }, [modalData.isModalOpen, onModalClose]);
+  }, [onModalClose]);
 
   useEffect(() => {
     if (modalData.isModalOpen) {
@@ -63,13 +63,10 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
   );
 
   return (
-    <div
-      className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}
-      ref={modalRef}
-    >
+    <div className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}>
       <div className="modal__wrapper">
         <div className="modal__overlay" />
-        <div className="modal__content">
+        <div className="modal__content" ref={modalRef}>
           <p className="title title--h4">Свяжитесь со мной</p>
           {openedCameraInfo && (
             <BasketItem openedCameraInfo={openedCameraInfo} />
