@@ -12,15 +12,14 @@ const initialState: ProductModalData = {
 };
 
 function MainPage(): JSX.Element {
-
   const [modalData, setModalData] = useState(initialState);
 
-  const handleModalOpenClick = (id: number|null) => {
-    setModalData({isModalOpen: true, openedCameraId: id});
+  const handleModalOpenClick = (id: number | null) => {
+    setModalData({ isModalOpen: true, openedCameraId: id });
   };
 
   const handleModalClose = () => {
-    setModalData({...modalData, isModalOpen: false});
+    setModalData({ ...modalData, isModalOpen: false });
   };
 
   return (
@@ -39,13 +38,13 @@ function MainPage(): JSX.Element {
                 <img src="img/banner.png" />
               </div>
               <div className="catalog__content">
-                <ProductCardsList onModalOpenClick={handleModalOpenClick}/>
+                <ProductCardsList onModalOpenClick={handleModalOpenClick} />
               </div>
             </div>
           </div>
         </section>
       </div>
-      <Modal onModalClose={handleModalClose} modalData={modalData}/>
+      <Modal onModalClose={handleModalClose} modalData={modalData} />
     </main>
   );
 }

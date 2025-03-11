@@ -6,6 +6,8 @@ import LoadingPage from '../loading-page/loading-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
+import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
+import { RatingOption } from '../../consts';
 import {useAppDispatch, useAppSelector} from '../../hooks/index';
 import {fetchCurrentProductAction} from '../../store/api-actions';
 import {getCurrentProductData, getCurrentProductLoadingStatus} from '../../store/product-process/selectors';
@@ -40,33 +42,7 @@ function ProductPage(): JSX.Element {
             <title>Продукт - Фотошоп</title>
           </Helmet>
           <div className="page-content">
-            <div className="breadcrumbs">
-              <div className="container">
-                <ul className="breadcrumbs__list">
-                  <li className="breadcrumbs__item">
-                    <a className="breadcrumbs__link" href="index.html">
-                Главная
-                      <svg width={5} height={8} aria-hidden="true">
-                        <use xlinkHref="#icon-arrow-mini" />
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="breadcrumbs__item">
-                    <a className="breadcrumbs__link" href="catalog.html">
-                Каталог
-                      <svg width={5} height={8} aria-hidden="true">
-                        <use xlinkHref="#icon-arrow-mini" />
-                      </svg>
-                    </a>
-                  </li>
-                  <li className="breadcrumbs__item">
-                    <span className="breadcrumbs__link breadcrumbs__link--active">
-                      {name}
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <Breadcrumbs cameraName={name} />
             <div className="page-content__section">
               <section className="product">
                 <div className="container">
@@ -87,7 +63,7 @@ function ProductPage(): JSX.Element {
                   </div>
                   <div className="product__content">
                     <h1 className="title title--h3">{name}</h1>
-                    <ProductCardRating rating={rating} reviewCount={reviewCount}/>
+                    <ProductCardRating rating={rating} reviewCount={reviewCount} ratingOption={RatingOption.product}/>
                     <p className="product__price">
                       <span className="visually-hidden">Цена:</span>{formattedPrice}
                     </p>

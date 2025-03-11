@@ -1,17 +1,29 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
-import {ProductInfo} from '../../types/product-types';
-import {AppRoute} from '../../consts';
-import {getFormattedPrice} from '../../utils';
+import { ProductInfo } from '../../types/product-types';
+import { AppRoute, RatingOption } from '../../consts';
+import { getFormattedPrice } from '../../utils';
 
 type ProductCardProps = {
   card: ProductInfo;
   onModalOpenClick: (id: number | null) => void;
-}
+};
 
-function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
-
-  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
+function ProductCard({
+  card,
+  onModalOpenClick,
+}: ProductCardProps): JSX.Element {
+  const {
+    previewImgWebp,
+    previewImgWebp2x,
+    previewImg,
+    previewImg2x,
+    name,
+    rating,
+    price,
+    reviewCount,
+    id,
+  } = card;
   const formattedPrice = getFormattedPrice(price);
 
   return (
@@ -32,12 +44,15 @@ function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
         </picture>
       </div>
       <div className="product-card__info">
-        <ProductCardRating rating={rating} reviewCount={reviewCount}/>
-        <p className="product-card__title">
-          {name}
-        </p>
+        <ProductCardRating
+          rating={rating}
+          reviewCount={reviewCount}
+          ratingOption={RatingOption.productCard}
+        />
+        <p className="product-card__title">{name}</p>
         <p className="product-card__price">
-          <span className="visually-hidden">Цена:</span>{formattedPrice} ₽
+          <span className="visually-hidden">Цена:</span>
+          {formattedPrice} ₽
         </p>
       </div>
       <div className="product-card__buttons">
@@ -46,10 +61,13 @@ function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
           type="button"
           onClick={() => onModalOpenClick && onModalOpenClick(id)}
         >
-Купить
+          Купить
         </button>
-        <Link className="btn btn--transparent" to={AppRoute.Product.replace(':id', String(id))}>
-Подробнее
+        <Link
+          className="btn btn--transparent"
+          to={AppRoute.Product.replace(':id', String(id))}
+        >
+          Подробнее
         </Link>
       </div>
     </div>

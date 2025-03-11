@@ -27,6 +27,11 @@ export enum ProductCategory {
   videoCamera = 'Видеокамера',
   photoCamera = 'Фотокамера',
 }
+export enum RatingOption {
+  reviewCard = 'review-card',
+  productCard = 'product-card',
+  product = 'product',
+}
 
 export const MAX_RATING = 5;
 
