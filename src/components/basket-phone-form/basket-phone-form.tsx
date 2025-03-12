@@ -1,12 +1,16 @@
 import { useState, useRef } from 'react';
 import { getFormattedPhoneNumber, validatePhone } from '../../utils';
 import { PHONE_INITIAL_VALUE } from '../../consts';
+import {useAppDispatch} from '../../hooks/index';
+import {postOrderAction} from '../../store/api-actions';
 
 type BasketPhoneFormProps = {
   onModalClose: () => void;
+  openedCameraId: number;
 };
 
-function BasketPhoneForm({ onModalClose }: BasketPhoneFormProps): JSX.Element {
+function BasketPhoneForm({ onModalClose, openedCameraId }: BasketPhoneFormProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const [phoneNumber, setPhoneNumber] = useState<string>(PHONE_INITIAL_VALUE);
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
@@ -34,7 +38,13 @@ function BasketPhoneForm({ onModalClose }: BasketPhoneFormProps): JSX.Element {
     if (phoneRef.current) {
       phoneRef.current.value = PHONE_INITIAL_VALUE;
     }
-    onModalClose();
+
+    dispatch(postOrderAction({tel: phoneNumber, camerasIds: [openedCameraId],
+      coupon: null})).then((response) => {
+      if (response.meta.requestStatus === 'fulfilled') {
+        onModalClose();
+      }
+    });
   };
 
   const isSubmitButtonDisabled =

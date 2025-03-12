@@ -17,3 +17,7 @@ export type ReviewsProcess = {
   reviews: Review[];
   isReviewsDataLoading: boolean;
 };
+
+export type OrderProcess = {
+  isOrderPosting: boolean;
+}

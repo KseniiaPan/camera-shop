@@ -1,5 +1,5 @@
 import {useEffect, useRef} from 'react';
-import FocusTrap from 'focus-trap-react';
+import {FocusTrap} from 'focus-trap-react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';
 import {useAppSelector} from '../../hooks/index';
@@ -78,7 +78,8 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
             {openedCameraInfo && (
               <BasketItem openedCameraInfo={openedCameraInfo} />
             )}
-            <BasketPhoneForm onModalClose={onModalClose} />
+            {openedCameraInfo && (<BasketPhoneForm onModalClose={onModalClose} openedCameraId={openedCameraInfo.id}/>
+            )}
             <button
               className="cross-btn"
               type="button"

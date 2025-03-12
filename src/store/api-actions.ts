@@ -4,6 +4,7 @@ import {AppDispatch, State} from '../types/state-types';
 import {APIRoute} from '../consts';
 import {ProductInfo} from '../types/product-types';
 import {Review} from '../types/review-types';
+import {Order} from '../types/order-types';
 
 export const fetchProductsAction = createAsyncThunk<ProductInfo[], undefined, {
   dispatch: AppDispatch;
@@ -42,4 +43,16 @@ export const fetchReviewsAction = createAsyncThunk<
     `${APIRoute.Cameras}/${id}${APIRoute.Reviews}`
   );
   return data;
+});
+
+export const postOrderAction = createAsyncThunk<
+void,
+Order,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/postOrder', async (userOrder, { extra: api }) => {
+  await api.post<Order>(APIRoute.Order, userOrder);
 });

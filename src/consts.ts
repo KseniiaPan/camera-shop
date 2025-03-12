@@ -8,6 +8,7 @@ export enum NameSpace {
   Product = 'Product',
   Promo = 'Promo',
   Review = 'Review',
+  Order = 'Order',
 }
 
 export enum APIRoute {
