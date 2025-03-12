@@ -1,5 +1,5 @@
-
 import {useEffect, useRef} from 'react';
+import FocusTrap from 'focus-trap-react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';
 import {useAppSelector} from '../../hooks/index';
@@ -52,9 +52,10 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
   useEffect(() => {
     if (modalData.isModalOpen) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
     }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [modalData.isModalOpen]);
 
   const products = useAppSelector(getProductsData);
@@ -63,28 +64,35 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
   );
 
   return (
-    <div className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}>
-      <div className="modal__wrapper">
-        <div className="modal__overlay" />
-        <div className="modal__content" ref={modalRef}>
-          <p className="title title--h4">Свяжитесь со мной</p>
-          {openedCameraInfo && (
-            <BasketItem openedCameraInfo={openedCameraInfo} />
-          )}
-          <BasketPhoneForm onModalClose={onModalClose} />
-          <button
-            className="cross-btn"
-            type="button"
-            aria-label="Закрыть попап"
-            onClick={onModalClose}
-          >
-            <svg width={10} height={10} aria-hidden="true">
-              <use xlinkHref="#icon-close" />
-            </svg>
-          </button>
+    <FocusTrap
+      active={modalData.isModalOpen}
+      focusTrapOptions={{
+        initialFocus: '#phone',
+      }}
+    >
+      <div className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}>
+        <div className="modal__wrapper">
+          <div className="modal__overlay" />
+          <div className="modal__content" ref={modalRef}>
+            <p className="title title--h4">Свяжитесь со мной</p>
+            {openedCameraInfo && (
+              <BasketItem openedCameraInfo={openedCameraInfo} />
+            )}
+            <BasketPhoneForm onModalClose={onModalClose} />
+            <button
+              className="cross-btn"
+              type="button"
+              aria-label="Закрыть попап"
+              onClick={onModalClose}
+            >
+              <svg width={10} height={10} aria-hidden="true">
+                <use xlinkHref="#icon-close" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </FocusTrap>
   );
 }
 

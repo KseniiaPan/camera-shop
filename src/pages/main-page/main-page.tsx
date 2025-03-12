@@ -44,7 +44,9 @@ function MainPage(): JSX.Element {
           </div>
         </section>
       </div>
-      <Modal onModalClose={handleModalClose} modalData={modalData} />
+      {modalData.isModalOpen && (
+        <Modal onModalClose={handleModalClose} modalData={modalData} />
+      )}
     </main>
   );
 }
