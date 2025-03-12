@@ -7,6 +7,7 @@ import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import ProductCardRating from '../../components/product-card-rating/product-card-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
+import ScrollUpButton from '../../components/scroll-up-button/scroll-up-button';
 import {useAppDispatch, useAppSelector} from '../../hooks/index';
 import {RatingOption} from '../../consts';
 import {fetchCurrentProductAction, fetchReviewsAction} from '../../store/api-actions';
@@ -31,6 +32,13 @@ function ProductPage(): JSX.Element {
       });
     }
   }, [currentProductId, dispatch]);
+
+  const handleScrollUpButtonClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   if (isDetailedProductLoading) {
     return <LoadingPage />;
@@ -100,11 +108,7 @@ function ProductPage(): JSX.Element {
             </div>
           </div>
         </main>
-        <a className="up-btn" href="#header">
-          <svg width={12} height={18} aria-hidden="true">
-            <use xlinkHref="#icon-arrow2" />
-          </svg>
-        </a>
+        <ScrollUpButton onScrollUpButtonClick={handleScrollUpButtonClick} />
       </>
     );
   }
