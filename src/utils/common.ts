@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
+import {Review} from '../types/review-types';
 
 import {PHONE_REGEXP} from '../consts';
 const getFormattedPrice = (price:number) => price.toLocaleString('ru-RU');
@@ -13,8 +14,10 @@ const getFormattedPhoneNumber = (phoneNumber:string) => {
 const validatePhone = (value:string) => PHONE_REGEXP.test(value);
 
 const humanizeCommentDate = (commentDate: string) =>
-  dayjs(commentDate).locale('ru').format('D MMMM');
+  dayjs(commentDate).locale('ru').format('DD MMMM');
 
 const getDateWithoutTime = (date: string): string => date.split('T')[0];
 
-export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime,};
+const sortReviews = (reviews: Review[]) => [...reviews].sort((reviewA, reviewB) => Date.parse(reviewB.createAt) - Date.parse(reviewA.createAt));
+
+export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime, sortReviews};

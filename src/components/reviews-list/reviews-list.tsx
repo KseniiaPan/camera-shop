@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { useAppSelector } from '../../hooks/index';
-import { getReviewsData } from '../../store/review-process/selectos';
+import {useState} from 'react';
+import {useAppSelector} from '../../hooks/index';
+import {getReviewsData} from '../../store/review-process/selectos';
 import ReviewsItem from '../../components/reviews-item/reviews-item';
-import { COMMENTS_COUNT_STEP, COMMENTS_DEFAULT_COUNT } from '../../consts';
+import {COMMENTS_COUNT_STEP, COMMENTS_DEFAULT_COUNT} from '../../consts';
+import {sortReviews} from '../../utils/common';
 
 function ReviewsList(): JSX.Element {
   const [reviewsCount, setReviewsCount] = useState<number>(COMMENTS_COUNT_STEP);
 
   const reviews = useAppSelector(getReviewsData);
-  const visibleReviews = reviews.slice(COMMENTS_DEFAULT_COUNT, reviewsCount);
+  const visibleReviews = sortReviews(reviews).slice(COMMENTS_DEFAULT_COUNT, reviewsCount);
   const handleReviewsLoadingButtonClick = () =>
     setReviewsCount(reviewsCount + COMMENTS_COUNT_STEP);
 

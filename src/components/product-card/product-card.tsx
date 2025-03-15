@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import ProductRating from '../product-rating/product-rating';
 import { ProductInfo } from '../../types/product-types';
 import { AppRoute, RatingOption } from '../../consts';
-import { getFormattedPrice } from '../../utils/utils';
+import { getFormattedPrice } from '../../utils/common';
 
 type ProductCardProps = {
   card: ProductInfo;

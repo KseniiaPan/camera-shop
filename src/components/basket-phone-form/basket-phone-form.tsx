@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { getFormattedPhoneNumber, validatePhone } from '../../utils/utils';
+import { getFormattedPhoneNumber, validatePhone } from '../../utils/common';
 import { PHONE_INITIAL_VALUE } from '../../consts';
 import {useAppDispatch} from '../../hooks/index';
 import {postOrderAction} from '../../store/api-actions';
