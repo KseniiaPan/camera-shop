@@ -18,12 +18,12 @@ export const fetchProductsAction = createAsyncThunk<ProductInfo[], undefined, {
   },
 );
 
-export const fetchCurrentProductAction = createAsyncThunk<ProductInfo, string, {
+export const fetchCurrentProductAction = createAsyncThunk<ProductInfo, number, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
-  'data/fetchDetailedProduct',
+  'data/fetchCurrentProduct',
   async (id, {extra: api}) => {
     const {data} = await api.get<ProductInfo>(`${APIRoute.Cameras}/${id}`);
     return data;
@@ -32,13 +32,13 @@ export const fetchCurrentProductAction = createAsyncThunk<ProductInfo, string, {
 
 export const fetchReviewsAction = createAsyncThunk<
   Review[],
-  string,
+  number,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchReview', async (id, { extra: api }) => {
+>('data/fetchReviews', async (id, { extra: api }) => {
   const { data } = await api.get<Review[]>(
     `${APIRoute.Cameras}/${id}${APIRoute.Reviews}`
   );

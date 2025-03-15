@@ -20,7 +20,7 @@ function ProductPage(): JSX.Element {
   const currentProduct = useAppSelector(getCurrentProductData);
 
   const params = useParams();
-  const currentProductId = params.id;
+  const currentProductId = Number(params.id);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

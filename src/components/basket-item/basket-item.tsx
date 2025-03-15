@@ -1,6 +1,6 @@
 import {ProductInfo} from '../../types/product-types';
 import {ProductCategory} from '../../consts';
-import {getFormattedPrice} from '../../utils';
+import {getFormattedPrice} from '../../utils/utils';
 
 type BasketItemProps = {
   openedCameraInfo: ProductInfo;

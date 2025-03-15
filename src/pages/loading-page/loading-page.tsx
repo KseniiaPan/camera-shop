@@ -2,7 +2,7 @@ import styles from './loading-page.module.css';
 
 function LoadingPage(): JSX.Element {
   return (
-    <div className={styles.loader}></div>
+    <div className={styles.loader} data-testid="loader"></div>
   );
 }
 

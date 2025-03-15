@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 
-import {PHONE_REGEXP} from './consts';
+import {PHONE_REGEXP} from '../consts';
 const getFormattedPrice = (price:number) => price.toLocaleString('ru-RU');
 const getFormattedPhoneNumber = (phoneNumber:string) => {
   let formattedPhoneNumber = phoneNumber.replace(/[(|)| |\-))]/g, '');
