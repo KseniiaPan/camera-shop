@@ -1,18 +1,15 @@
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import ProductRating from '../product-rating/product-rating';
-import { ProductInfo } from '../../types/product-types';
-import { AppRoute, RatingOption } from '../../consts';
-import { getFormattedPrice } from '../../utils/common';
+import {ProductInfo} from '../../types/product-types';
+import {AppRoute, RatingOption} from '../../consts';
+import {getFormattedPrice} from '../../utils/common';
 
 type ProductCardProps = {
   card: ProductInfo;
   onModalOpenClick: (id: number | null) => void;
 };
 
-function ProductCard({
-  card,
-  onModalOpenClick,
-}: ProductCardProps): JSX.Element {
+function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
   const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
   const formattedPrice = getFormattedPrice(price);
 

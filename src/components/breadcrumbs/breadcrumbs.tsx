@@ -6,7 +6,7 @@ type BreadcrumbsProps = {
 };
 function Breadcrumbs({ cameraName }: BreadcrumbsProps): JSX.Element {
   return (
-    <div className="breadcrumbs">
+    <div className="breadcrumbs" data-testid="breadcrumbs">
       <div className="container">
         <ul className="breadcrumbs__list">
           <li className="breadcrumbs__item">
