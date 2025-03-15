@@ -6,3 +6,4 @@ export const getProductsData = (state: State): ProductInfo[] => state[NameSpace.
 export const getProductsLoadingStatus = (state: State): boolean => state[NameSpace.Product].isProductsDataLoading;
 export const getCurrentProductData = (state: State): null | ProductInfo => state[NameSpace.Product].currentProduct;
 export const getCurrentProductLoadingStatus = (state: State): boolean => state[NameSpace.Product].isCurrentProductLoading;
+export const getDataLoadingErrorStatus = (state: State): boolean => state[NameSpace.Product].isDataLoadingError;

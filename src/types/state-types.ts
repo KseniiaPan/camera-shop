@@ -11,6 +11,7 @@ export type ProductsProcess = {
   currentProduct: null | ProductInfo;
   isProductsDataLoading: boolean;
   isCurrentProductLoading: boolean;
+  isDataLoadingError: boolean;
 };
 
 export type ReviewsProcess = {

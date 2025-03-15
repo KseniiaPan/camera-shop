@@ -7,6 +7,7 @@ const initialState = {
   currentProduct: null,
   isProductsDataLoading: false,
   isCurrentProductLoading: false,
+  isDataLoadingError: false
 };
 
 describe('ProductProcess Slice', () => {
@@ -46,8 +47,8 @@ describe('ProductProcess Slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-  it('should set "isProductsDataLoading" to "false" with "fetchProductsAction.rejected"', () => {
-    const expectedState = { ...initialState };
+  it('should set "isProductsDataLoading" to "false", "isDataLoadingError" to "true" with "fetchProductsAction.rejected"', () => {
+    const expectedState = { ...initialState, isDataLoadingError: true };
     const result = productProcess.reducer(
       undefined,
       fetchProductsAction.rejected
@@ -76,8 +77,8 @@ describe('ProductProcess Slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-  it('should set "isCurrentProductLoading" to "false"', () => {
-    const expectedState = { ...initialState };
+  it('should set "isCurrentProductLoading" to "false", "isDataLoadingError" to "true" with "fetchCurrentProductAction.rejected"', () => {
+    const expectedState = { ...initialState, isDataLoadingError: true };
     const result = productProcess.reducer(
       undefined,
       fetchCurrentProductAction.rejected

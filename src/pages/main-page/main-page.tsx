@@ -4,7 +4,11 @@ import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
 import Modal from '../../components/modal/modal';
+import LoadingPage from '../loading-page/loading-page';
+import ErrorMessage from '../../components/errorMessage/error-message';
 import {ProductModalData} from '../../types/product-types';
+import {useAppSelector} from '../../hooks/index';
+import {getDataLoadingErrorStatus, getProductsLoadingStatus} from '../../store/product-process/selectors';
 
 const initialState: ProductModalData = {
   isModalOpen: false,
@@ -13,6 +17,8 @@ const initialState: ProductModalData = {
 
 function MainPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
+  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
+  const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
 
   const handleModalOpenClick = (id: number | null) => {
     setModalData({ isModalOpen: true, openedCameraId: id });
@@ -21,6 +27,14 @@ function MainPage(): JSX.Element {
   const handleModalClose = () => {
     setModalData({ ...modalData, isModalOpen: false });
   };
+
+  if (isProductsDataLoading) {
+    return <LoadingPage />;
+  }
+
+  if (isDataLoadingError) {
+    return <ErrorMessage />;
+  }
 
   return (
     <main>

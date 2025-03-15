@@ -8,10 +8,11 @@ import ProductRating from '../../components/product-rating/product-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ScrollUpButton from '../../components/scroll-up-button/scroll-up-button';
+import ErrorMessage from '../../components/errorMessage/error-message';
 import {useAppDispatch, useAppSelector} from '../../hooks/index';
 import {RatingOption} from '../../consts';
 import {fetchCurrentProductAction, fetchReviewsAction} from '../../store/api-actions';
-import {getCurrentProductData, getCurrentProductLoadingStatus} from '../../store/product-process/selectors';
+import {getCurrentProductData, getCurrentProductLoadingStatus, getDataLoadingErrorStatus} from '../../store/product-process/selectors';
 
 function ProductPage(): JSX.Element {
   const isDetailedProductLoading = useAppSelector(
@@ -22,6 +23,7 @@ function ProductPage(): JSX.Element {
   const params = useParams();
   const currentProductId = Number(params.id);
   const dispatch = useAppDispatch();
+  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
 
   useEffect(() => {
     if (currentProductId) {
@@ -43,6 +45,11 @@ function ProductPage(): JSX.Element {
   if (isDetailedProductLoading) {
     return <LoadingPage />;
   }
+
+  if (isDataLoadingError) {
+    return <ErrorMessage />;
+  }
+
   if (!isDetailedProductLoading && currentProduct) {
     const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
