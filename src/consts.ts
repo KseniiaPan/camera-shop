@@ -34,6 +34,15 @@ export enum RatingOption {
   product = 'product',
 }
 
+export enum LogoOption {
+  footer = 'footer',
+  header = 'header',
+}
+
+export enum NavigationOption {
+  main = 'main-nav',
+  footer = 'footer',
+}
 export const MAX_RATING = 5;
 export const COMMENTS_COUNT_STEP = 3;
 export const COMMENTS_DEFAULT_COUNT = 0;

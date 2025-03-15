@@ -1,5 +1,5 @@
 import {Review} from '../../types/review-types';
-import ProductCardRating from '../../components/product-card-rating/product-card-rating';
+import ProductRating from '../product-rating/product-rating';
 import {RatingOption} from '../../consts';
 import {humanizeCommentDate, getDateWithoutTime} from '../../utils/utils';
 
@@ -21,7 +21,7 @@ function ReviewsItem({ userReview }: ReviewsItemProps): JSX.Element {
           {humanizeCommentDate(createAt)}
         </time>
       </div>
-      <ProductCardRating
+      <ProductRating
         rating={rating}
         ratingOption={RatingOption.reviewCard}
       />

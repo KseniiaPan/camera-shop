@@ -1,12 +1,12 @@
 import {RATING_STARS} from '../../consts';
 
-type ProductCardRatingProps = {
+type ProductRatingProps = {
   rating: number;
   ratingOption: string;
   reviewCount?: number;
 };
 
-function ProductCardRating({rating,ratingOption,reviewCount}: ProductCardRatingProps): JSX.Element {
+function ProductRating({rating,ratingOption,reviewCount}: ProductRatingProps): JSX.Element {
   return (
     <div className={`rate ${ratingOption}__rate`}>
       {RATING_STARS.map((starValue) => (
@@ -27,4 +27,4 @@ function ProductCardRating({rating,ratingOption,reviewCount}: ProductCardRatingP
   );
 }
 
-export default ProductCardRating;
+export default ProductRating;

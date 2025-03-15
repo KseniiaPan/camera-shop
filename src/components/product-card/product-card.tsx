@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import ProductCardRating from '../../components/product-card-rating/product-card-rating';
+import ProductRating from '../product-rating/product-rating';
 import { ProductInfo } from '../../types/product-types';
 import { AppRoute, RatingOption } from '../../consts';
-import { getFormattedPrice } from '../../utils';
+import { getFormattedPrice } from '../../utils/utils';
 
 type ProductCardProps = {
   card: ProductInfo;
@@ -13,17 +13,7 @@ function ProductCard({
   card,
   onModalOpenClick,
 }: ProductCardProps): JSX.Element {
-  const {
-    previewImgWebp,
-    previewImgWebp2x,
-    previewImg,
-    previewImg2x,
-    name,
-    rating,
-    price,
-    reviewCount,
-    id,
-  } = card;
+  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
   const formattedPrice = getFormattedPrice(price);
 
   return (
@@ -44,7 +34,7 @@ function ProductCard({
         </picture>
       </div>
       <div className="product-card__info">
-        <ProductCardRating
+        <ProductRating
           rating={rating}
           reviewCount={reviewCount}
           ratingOption={RatingOption.productCard}

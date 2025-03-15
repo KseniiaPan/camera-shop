@@ -4,7 +4,7 @@ import {useEffect} from 'react';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import LoadingPage from '../loading-page/loading-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
-import ProductCardRating from '../../components/product-card-rating/product-card-rating';
+import ProductRating from '../../components/product-rating/product-rating';
 import ProductTabs from '../../components/product-tabs/product-tabs';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ScrollUpButton from '../../components/scroll-up-button/scroll-up-button';
@@ -44,16 +44,7 @@ function ProductPage(): JSX.Element {
     return <LoadingPage />;
   }
   if (!isDetailedProductLoading && currentProduct) {
-    const {
-      previewImgWebp,
-      previewImgWebp2x,
-      previewImg,
-      previewImg2x,
-      name,
-      rating,
-      price,
-      reviewCount,
-    } = currentProduct;
+    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
     return (
       <>
@@ -83,7 +74,7 @@ function ProductPage(): JSX.Element {
                   </div>
                   <div className="product__content">
                     <h1 className="title title--h3">{name}</h1>
-                    <ProductCardRating
+                    <ProductRating
                       rating={rating}
                       reviewCount={reviewCount}
                       ratingOption={RatingOption.product}
