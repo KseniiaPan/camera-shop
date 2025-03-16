@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
-import { getFormattedPhoneNumber, validatePhone } from '../../utils/common';
-import { PHONE_INITIAL_VALUE } from '../../consts';
+import {useState, useRef} from 'react';
+import {getFormattedPhoneNumber, validatePhone} from '../../utils/common';
+import {PHONE_INITIAL_VALUE} from '../../consts';
 import {useAppDispatch} from '../../hooks/index';
 import {postOrderAction} from '../../store/api-actions';
 
@@ -72,13 +72,14 @@ function BasketPhoneForm({ onModalClose, openedCameraId }: BasketPhoneFormProps)
             data-error-message="Номер должен иметь формат +7(9XX)XXX-XX-XX"
             onChange={() => handlePhoneValueChange(phoneRef.current?.value)}
             required
+            data-testid="phoneElement"
           />
         </label>
         <p className="custom-input__error">Нужно указать номер</p>
       </div>
       {isValidationError && (
         <div style={{ color: 'red', marginBottom: 15 }}>
-          Номер должен иметь формат +7(9XX)XXX-XX-XX
+          Номер должен иметь формат +7(9XX)XXX-XX-XX или 8(9XX)XXX-XX-XX
         </div>
       )}
       <div className="modal__buttons">

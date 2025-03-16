@@ -13,7 +13,7 @@ function BasketItem({openedCameraInfo}: BasketItemProps): JSX.Element {
   const basketItemName = `${type} ${category === ProductCategory.videoCamera ? ProductCategory.videoCamera.toLowerCase() : ProductCategory.photoCamera.toLowerCase() }`;
 
   return (
-    <div className="basket-item basket-item--short">
+    <div className="basket-item basket-item--short" data-testid="basket-item">
       <div className="basket-item__img">
         <picture>
           <source

@@ -6,7 +6,7 @@ type ProductRatingProps = {
   reviewCount?: number;
 };
 
-function ProductRating({rating,ratingOption,reviewCount}: ProductRatingProps): JSX.Element {
+function ProductRating({rating, ratingOption, reviewCount}: ProductRatingProps): JSX.Element {
   return (
     <div className={`rate ${ratingOption}__rate`}>
       {RATING_STARS.map((starValue) => (
