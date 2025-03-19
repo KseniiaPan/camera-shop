@@ -1,5 +1,5 @@
 .loader {
-  position: relative;
+  margin: 200px auto;
   width: 2.5em;
   height: 2.5em;
   transform: rotate(165deg); }
@@ -45,8 +45,4 @@
     box-shadow: 0.5em 1em rgba(232, 126, 241, 0.75), -0.5em -1em rgba(248, 234, 110, 0.75); }
   }
 
-.loader {
-  position: absolute;
-  top: calc(50% - 1.25em);
-  left: calc(50% - 1.25em);
-}
+
