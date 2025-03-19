@@ -1,5 +1,5 @@
 import {store} from '../store/index';
-import {ProductInfo} from './product-types';
+import {ProductInfo, PrimaryProductInfo} from './product-types';
 import {Review} from './review-types';
 
 export type State = ReturnType<typeof store.getState>;
@@ -22,3 +22,8 @@ export type ReviewsProcess = {
 export type OrderProcess = {
   isOrderPosting: boolean;
 }
+
+export type PromoProcess = {
+  promoProducts: PrimaryProductInfo[];
+  isPromoProductsDataLoading: boolean;
+};

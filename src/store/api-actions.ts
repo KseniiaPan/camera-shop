@@ -2,7 +2,7 @@ import {AxiosInstance} from 'axios';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {AppDispatch, State} from '../types/state-types';
 import {APIRoute} from '../consts';
-import {ProductInfo} from '../types/product-types';
+import {ProductInfo, PrimaryProductInfo} from '../types/product-types';
 import {Review} from '../types/review-types';
 import {Order} from '../types/order-types';
 
@@ -55,4 +55,17 @@ Order,
   }
 >('data/postOrder', async (userOrder, { extra: api }) => {
   await api.post<Order>(APIRoute.Order, userOrder);
+});
+
+export const fetchPromoProductsAction = createAsyncThunk<
+  PrimaryProductInfo[],
+  undefined,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/fetchPromoProducts', async (_arg, { extra: api }) => {
+  const { data } = await api.get<PrimaryProductInfo[]>(APIRoute.Promo);
+  return data;
 });

@@ -1,0 +1,17 @@
+.swiper-pagination {
+  text-align: right;
+  padding-right: 40px;
+  padding-bottom: 10px;
+}
+
+.swiper-pagination-bullet {
+  width: 16px;
+  height: 16px;
+  background-color: #f4f4fc;
+  opacity: 1;
+  margin-left: 14px;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #7575e2;
+}

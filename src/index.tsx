@@ -5,9 +5,13 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {store} from './store';
 import App from './components/app/app';
-import {fetchProductsAction} from './store/api-actions';
+import {fetchProductsAction, fetchPromoProductsAction} from './store/api-actions';
 
-store.dispatch(fetchProductsAction());
+store.dispatch(fetchProductsAction()).then((response) => {
+  if (response.meta.requestStatus === 'fulfilled') {
+    store.dispatch(fetchPromoProductsAction());
+  }
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
