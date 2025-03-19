@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 
 function FooterNavigationSupport(): JSX.Element {
   return (
-    <ul className="footer__list">
+    <ul className="footer__list" data-testid="footer-navigation-support">
       <li className="footer__item">
         <Link className="link" to={'#'}>
                 FAQ

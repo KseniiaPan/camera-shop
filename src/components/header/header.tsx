@@ -4,7 +4,7 @@ import NavigationList from '../../components/navigation-list/navigation-list';
 
 function Header(): JSX.Element {
   return (
-    <header className="header" id="header">
+    <header className="header" id="header" data-testid="header">
       <div className="container">
         <Logo logoOption={LogoOption.header}/>
         <nav className="main-nav header__main-nav">

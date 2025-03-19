@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 
 function FooterSocials(): JSX.Element {
   return (
-    <ul className="social">
+    <ul className="social" data-testid="footer-socials">
       <li className="social__item">
         <Link
           className="link"

@@ -8,7 +8,7 @@ type ProductRatingProps = {
 
 function ProductRating({rating, ratingOption, reviewCount}: ProductRatingProps): JSX.Element {
   return (
-    <div className={`rate ${ratingOption}__rate`}>
+    <div className={`rate ${ratingOption}__rate`} data-testid="product-rating">
       {RATING_STARS.map((starValue) => (
         <svg key={starValue} width={17} height={16} aria-hidden="true">
           <use

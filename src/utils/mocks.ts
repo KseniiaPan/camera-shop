@@ -5,6 +5,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { createAPI } from '../services/api';
 import { State } from '../types/state-types';
+import { NameSpace } from '../consts';
 
 const makeFakeProduct = (): ProductInfo => ({
   id: datatype.number(),
@@ -53,6 +54,24 @@ export const mockUserOrder = {
   coupon: null,
   tel: datatype.string(),
 };
+
+export const mockStore = {
+  [NameSpace.Product]: {
+    products: mockProducts,
+    currentProduct: mockProduct,
+    isProductsDataLoading: false,
+    isCurrentProductLoading: false,
+    isDataLoadingError: false,
+  },
+  [NameSpace.Review]: {
+    reviews: mockReviews,
+    isReviewsDataLoading: false,
+  },
+  [NameSpace.Order]: {
+    isOrderPosting: false,
+  },
+};
+
 export type AppThunkDispatch = ThunkDispatch<
   State,
   ReturnType<typeof createAPI>,

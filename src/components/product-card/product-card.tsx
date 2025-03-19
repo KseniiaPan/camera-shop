@@ -14,7 +14,7 @@ function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
   const formattedPrice = getFormattedPrice(price);
 
   return (
-    <div className="product-card">
+    <div className="product-card" data-testid="product-card">
       <div className="product-card__img">
         <picture>
           <source

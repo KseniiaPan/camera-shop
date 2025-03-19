@@ -10,7 +10,7 @@ function ProductCardsList({onModalOpenClick}: ProductCardsListProps): JSX.Elemen
   const products = useAppSelector(getProductsData);
 
   return (
-    <div className="cards catalog__cards">
+    <div className="cards catalog__cards" data-testid="product-cards-list">
       {
         products.map ((product) => (
           <ProductCard
