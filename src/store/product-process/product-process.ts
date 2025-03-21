@@ -13,7 +13,7 @@ const initialState: ProductsProcess = {
   currentProduct: null,
   similarProducts: [],
   isProductsDataLoading: false,
-  isCurrentProductLoading: false,
+  isCurrentProductLoading: true,
   isSimilarProductsDataLoading: false,
   isDataLoadingError: false,
 };

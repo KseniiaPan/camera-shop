@@ -5,9 +5,11 @@ import {mockProducts, mockProduct} from '../../utils/mocks';
 const initialState = {
   products: [],
   currentProduct: null,
+  similarProducts: [],
   isProductsDataLoading: false,
-  isCurrentProductLoading: false,
-  isDataLoadingError: false
+  isCurrentProductLoading: true,
+  isSimilarProductsDataLoading: false,
+  isDataLoadingError: false,
 };
 
 describe('ProductProcess Slice', () => {
