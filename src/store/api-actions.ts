@@ -69,3 +69,18 @@ export const fetchPromoProductsAction = createAsyncThunk<
   const { data } = await api.get<PrimaryProductInfo[]>(APIRoute.Promo);
   return data;
 });
+
+export const fetchSimilarProductsAction = createAsyncThunk<
+  ProductInfo[],
+  number,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/fetchSimilarProducts', async (id, { extra: api }) => {
+  const { data } = await api.get<ProductInfo[]>(
+    `${APIRoute.Cameras}/${id}${APIRoute.SimilarCameras}`
+  );
+  return data;
+});

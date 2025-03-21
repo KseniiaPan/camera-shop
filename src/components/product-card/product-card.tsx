@@ -1,20 +1,38 @@
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProductRating from '../product-rating/product-rating';
-import {ProductInfo} from '../../types/product-types';
-import {AppRoute, RatingOption} from '../../consts';
-import {getFormattedPrice} from '../../utils/common';
+import { ProductInfo } from '../../types/product-types';
+import { AppRoute, RatingOption } from '../../consts';
+import { getFormattedPrice } from '../../utils/common';
 
 type ProductCardProps = {
   card: ProductInfo;
   onModalOpenClick: (id: number | null) => void;
+  isActive: boolean | undefined;
 };
 
-function ProductCard({card, onModalOpenClick}: ProductCardProps): JSX.Element {
-  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
+function ProductCard({
+  card,
+  onModalOpenClick,
+  isActive,
+}: ProductCardProps): JSX.Element {
+  const {
+    previewImgWebp,
+    previewImgWebp2x,
+    previewImg,
+    previewImg2x,
+    name,
+    rating,
+    price,
+    reviewCount,
+    id,
+  } = card;
   const formattedPrice = getFormattedPrice(price);
 
   return (
-    <div className="product-card" data-testid="product-card">
+    <div
+      className={`product-card ${isActive ? 'is-active' : ''}`}
+      data-testid="product-card"
+    >
       <div className="product-card__img">
         <picture>
           <source

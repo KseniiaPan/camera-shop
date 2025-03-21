@@ -1,14 +1,19 @@
-import {Helmet} from 'react-helmet-async';
-import {useState} from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
 import Modal from '../../components/modal/modal';
 import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
-import {ProductModalData} from '../../types/product-types';
-import {useAppSelector} from '../../hooks/index';
-import {getDataLoadingErrorStatus, getProductsLoadingStatus} from '../../store/product-process/selectors';
+import { ProductModalData } from '../../types/product-types';
+import { useAppSelector } from '../../hooks/index';
+import {
+  getDataLoadingErrorStatus,
+  getProductsLoadingStatus,
+  getProductsData
+} from '../../store/product-process/selectors';
+import { ProductsListOption } from '../../consts';
 
 const initialState: ProductModalData = {
   isModalOpen: false,
@@ -19,6 +24,7 @@ function MainPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
   const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
+  const products = useAppSelector(getProductsData);
 
   const handleModalOpenClick = (id: number | null) => {
     setModalData({ isModalOpen: true, openedCameraId: id });
@@ -52,7 +58,11 @@ function MainPage(): JSX.Element {
                 <img src="img/banner.png" />
               </div>
               <div className="catalog__content">
-                <ProductCardsList onModalOpenClick={handleModalOpenClick} />
+                <ProductCardsList
+                  products={products}
+                  onModalOpenClick={handleModalOpenClick}
+                  productsListOption={ProductsListOption.CatalogList}
+                />
               </div>
             </div>
           </div>

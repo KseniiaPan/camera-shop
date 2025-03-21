@@ -1,25 +1,37 @@
 import ProductCard from '../../components/product-card/product-card';
-import {useAppSelector} from '../../hooks/index';
-import {getProductsData} from '../../store/product-process/selectors';
+import { ProductsListOption } from '../../consts';
+import { ProductInfo } from '../../types/product-types';
 
 type ProductCardsListProps = {
+  products: ProductInfo[];
   onModalOpenClick: (id: number | null) => void;
-}
+  productsListOption: string;
+  isActive?: boolean | undefined;
+};
 
-function ProductCardsList({onModalOpenClick}: ProductCardsListProps): JSX.Element {
-  const products = useAppSelector(getProductsData);
-
+function ProductCardsList({
+  products,
+  onModalOpenClick,
+  productsListOption,
+  isActive,
+}: ProductCardsListProps): JSX.Element {
   return (
-    <div className="cards catalog__cards" data-testid="product-cards-list">
-      {
-        products.map ((product) => (
-          <ProductCard
-            onModalOpenClick={onModalOpenClick}
-            key={product.id}
-            card={product}
-          />
-        ))
+    <div
+      className={
+        productsListOption === ProductsListOption.CatalogList
+          ? 'cards catalog__cards'
+          : 'product-similar__slider-list'
       }
+      data-testid="product-cards-list"
+    >
+      {products.map((product) => (
+        <ProductCard
+          onModalOpenClick={onModalOpenClick}
+          key={product.id}
+          card={product}
+          isActive={isActive}
+        />
+      ))}
     </div>
   );
 }

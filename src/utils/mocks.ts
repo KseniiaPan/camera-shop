@@ -59,9 +59,11 @@ export const mockStore = {
   [NameSpace.Product]: {
     products: mockProducts,
     currentProduct: mockProduct,
+    similarProducts: [],
     isProductsDataLoading: false,
     isCurrentProductLoading: false,
     isDataLoadingError: false,
+    isSimilarProductsDataLoading: false,
   },
   [NameSpace.Review]: {
     reviews: mockReviews,

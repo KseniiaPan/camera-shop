@@ -1,14 +1,20 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {NameSpace} from '../../consts';
-import {toast} from 'react-toastify';
-import {ProductsProcess} from '../../types/state-types';
-import {fetchProductsAction, fetchCurrentProductAction} from '../api-actions';
+import { createSlice } from '@reduxjs/toolkit';
+import { NameSpace } from '../../consts';
+import { toast } from 'react-toastify';
+import { ProductsProcess } from '../../types/state-types';
+import {
+  fetchProductsAction,
+  fetchCurrentProductAction,
+  fetchSimilarProductsAction,
+} from '../api-actions';
 
 const initialState: ProductsProcess = {
   products: [],
   currentProduct: null,
+  similarProducts: [],
   isProductsDataLoading: false,
   isCurrentProductLoading: false,
+  isSimilarProductsDataLoading: false,
   isDataLoadingError: false,
 };
 
@@ -46,5 +52,19 @@ export const productProcess = createSlice({
         state.isDataLoadingError = true;
         toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
       });
-  }
+    builder
+      .addCase(fetchSimilarProductsAction.pending, (state) => {
+        state.isSimilarProductsDataLoading = true;
+      })
+      .addCase(fetchSimilarProductsAction.fulfilled, (state, action) => {
+        state.similarProducts = action.payload;
+        state.isSimilarProductsDataLoading = false;
+      })
+      .addCase(fetchSimilarProductsAction.rejected, (state) => {
+        state.isSimilarProductsDataLoading = false;
+        toast.error(
+          'Ошибка при загрузке информации о похожих товарах. Попробуйте перезагрузить страницу.'
+        );
+      });
+  },
 });

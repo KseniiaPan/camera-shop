@@ -1,6 +1,6 @@
-import {Helmet} from 'react-helmet-async';
-import {useParams} from 'react-router-dom';
-import {useEffect} from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import LoadingPage from '../loading-page/loading-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
@@ -9,31 +9,60 @@ import ProductTabs from '../../components/product-tabs/product-tabs';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ScrollUpButton from '../../components/scroll-up-button/scroll-up-button';
 import ErrorMessage from '../../components/errorMessage/error-message';
-import {useAppDispatch, useAppSelector} from '../../hooks/index';
-import {RatingOption} from '../../consts';
-import {fetchCurrentProductAction, fetchReviewsAction} from '../../store/api-actions';
-import {getCurrentProductData, getCurrentProductLoadingStatus, getDataLoadingErrorStatus} from '../../store/product-process/selectors';
+import ProductCardsSimilar from '../../components/product-cards-similar/product-cards-similar';
+import { useAppDispatch, useAppSelector } from '../../hooks/index';
+import { RatingOption } from '../../consts';
+import { ProductModalData } from '../../types/product-types';
+import Modal from '../../components/modal/modal';
+
+import {
+  fetchCurrentProductAction,
+  fetchReviewsAction,
+  fetchSimilarProductsAction,
+} from '../../store/api-actions';
+import {
+  getCurrentProductData,
+  getCurrentProductLoadingStatus,
+  getDataLoadingErrorStatus,
+  getSimilarProductsData,
+} from '../../store/product-process/selectors';
+
+const initialState: ProductModalData = {
+  isModalOpen: false,
+  openedCameraId: null,
+};
 
 function ProductPage(): JSX.Element {
+  const [modalData, setModalData] = useState(initialState);
+
   const isDetailedProductLoading = useAppSelector(
     getCurrentProductLoadingStatus
   );
+  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const currentProduct = useAppSelector(getCurrentProductData);
-
+  const similarProducts = useAppSelector(getSimilarProductsData);
   const params = useParams();
   const currentProductId = Number(params.id);
   const dispatch = useAppDispatch();
-  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
 
   useEffect(() => {
     if (currentProductId) {
       dispatch(fetchCurrentProductAction(currentProductId)).then((response) => {
         if (response.meta.requestStatus === 'fulfilled') {
           dispatch(fetchReviewsAction(currentProductId));
+          dispatch(fetchSimilarProductsAction(currentProductId));
         }
       });
     }
   }, [currentProductId, dispatch]);
+
+  const handleModalOpenClick = (id: number | null) => {
+    setModalData({ isModalOpen: true, openedCameraId: id });
+  };
+
+  const handleModalClose = () => {
+    setModalData({ ...modalData, isModalOpen: false });
+  };
 
   const handleScrollUpButtonClick = () => {
     window.scrollTo({
@@ -51,7 +80,16 @@ function ProductPage(): JSX.Element {
   }
 
   if (!isDetailedProductLoading && currentProduct) {
-    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
+    const {
+      previewImgWebp,
+      previewImgWebp2x,
+      previewImg,
+      previewImg2x,
+      name,
+      rating,
+      price,
+      reviewCount,
+    } = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
     return (
       <>
@@ -101,10 +139,17 @@ function ProductPage(): JSX.Element {
                 </div>
               </section>
             </div>
+            <ProductCardsSimilar
+              similarProducts={similarProducts}
+              onModalOpenClick={handleModalOpenClick}
+            />
             <div className="page-content__section">
               <ReviewsList />
             </div>
           </div>
+          {modalData.isModalOpen && (
+            <Modal onModalClose={handleModalClose} modalData={modalData} />
+          )}
         </main>
         <ScrollUpButton onScrollUpButtonClick={handleScrollUpButtonClick} />
       </>

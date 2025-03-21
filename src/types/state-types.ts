@@ -9,8 +9,10 @@ export type AppDispatch = typeof store.dispatch;
 export type ProductsProcess = {
   products: ProductInfo[];
   currentProduct: null | ProductInfo;
+  similarProducts: ProductInfo[];
   isProductsDataLoading: boolean;
   isCurrentProductLoading: boolean;
+  isSimilarProductsDataLoading: boolean;
   isDataLoadingError: boolean;
 };
 

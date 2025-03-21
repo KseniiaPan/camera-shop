@@ -43,6 +43,18 @@ export enum NavigationOption {
   main = 'main-nav',
   footer = 'footer',
 }
+
+export enum ProductsListOption {
+  CatalogList = 'catalog',
+  SimilarList = 'similar',
+}
+
+export const SimilarProductsSlider = {
+  DefaultFisrstIndex: 0,
+  DefaultLastIndex: 3,
+  Step: 3,
+};
+
 export const MAX_RATING = 5;
 export const COMMENTS_COUNT_STEP = 3;
 export const COMMENTS_DEFAULT_COUNT = 0;
