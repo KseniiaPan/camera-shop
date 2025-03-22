@@ -72,6 +72,10 @@ export const mockStore = {
   [NameSpace.Order]: {
     isOrderPosting: false,
   },
+  [NameSpace.Promo]: {
+    promoProducts: mockProducts,
+    isPromoProductsDataLoading: false,
+  },
 };
 
 export type AppThunkDispatch = ThunkDispatch<

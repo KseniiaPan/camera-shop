@@ -19,6 +19,7 @@ function Banner(): JSX.Element {
         clickable: true,
       }}
       autoplay={{ delay: 3000 }}
+      data-testid="banner"
     >
       {promoProducts.map((promoProduct) => (
         <SwiperSlide key={promoProduct.id}>
