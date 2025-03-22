@@ -25,23 +25,23 @@ export enum TabOption {
 }
 
 export enum ProductCategory {
-  videoCamera = 'Видеокамера',
-  photoCamera = 'Фотокамера',
+  VideoCamera = 'Видеокамера',
+  PhotoCamera = 'Фотокамера',
 }
 export enum RatingOption {
-  reviewCard = 'review-card',
-  productCard = 'product-card',
-  product = 'product',
+  ReviewCard = 'review-card',
+  ProductCard = 'product-card',
+  Product = 'product',
 }
 
 export enum LogoOption {
-  footer = 'footer',
-  header = 'header',
+  Footer = 'footer',
+  Header = 'header',
 }
 
 export enum NavigationOption {
-  main = 'main-nav',
-  footer = 'footer',
+  Main = 'main-nav',
+  Footer = 'footer',
 }
 
 export enum ProductsListOption {

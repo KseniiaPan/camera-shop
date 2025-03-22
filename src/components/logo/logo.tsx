@@ -12,7 +12,7 @@ function Logo({logoOption}: LogoProps): JSX.Element {
       aria-label="Переход на главную"
     >
       <svg width={100} height={36} aria-hidden="true">
-        <use xlinkHref={`#icon-logo${logoOption === LogoOption.footer ? '-mono' : ''}`} />
+        <use xlinkHref={`#icon-logo${logoOption === LogoOption.Footer ? '-mono' : ''}`} />
       </svg>
     </Link>
   );

@@ -122,7 +122,7 @@ function ProductPage(): JSX.Element {
                     <ProductRating
                       rating={rating}
                       reviewCount={reviewCount}
-                      ratingOption={RatingOption.product}
+                      ratingOption={RatingOption.Product}
                     />
                     <p className="product__price">
                       <span className="visually-hidden">Цена:</span>

@@ -52,7 +52,7 @@ function ProductCard({
         <ProductRating
           rating={rating}
           reviewCount={reviewCount}
-          ratingOption={RatingOption.productCard}
+          ratingOption={RatingOption.ProductCard}
         />
         <p className="product-card__title">{name}</p>
         <p className="product-card__price">

@@ -8,7 +8,7 @@ function FooterNavigation(): JSX.Element {
     <ul className="footer__nav" data-testid="footer-navigation">
       <li className="footer__nav-item">
         <p className="footer__title">Навигация</p>
-        <NavigationList navigationOption={NavigationOption.footer}/>
+        <NavigationList navigationOption={NavigationOption.Footer}/>
       </li>
       <li className="footer__nav-item">
         <p className="footer__title">Ресурсы</p>

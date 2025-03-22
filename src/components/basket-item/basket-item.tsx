@@ -10,7 +10,7 @@ function BasketItem({openedCameraInfo}: BasketItemProps): JSX.Element {
   const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, vendorCode, category, type, level, price} = openedCameraInfo;
 
   const formattedPrice = getFormattedPrice(price);
-  const basketItemName = `${type} ${category === ProductCategory.videoCamera ? ProductCategory.videoCamera.toLowerCase() : ProductCategory.photoCamera.toLowerCase() }`;
+  const basketItemName = `${type} ${category === ProductCategory.VideoCamera ? ProductCategory.VideoCamera.toLowerCase() : ProductCategory.PhotoCamera.toLowerCase() }`;
 
   return (
     <div className="basket-item basket-item--short" data-testid="basket-item">

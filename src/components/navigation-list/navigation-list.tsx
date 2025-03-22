@@ -4,7 +4,7 @@ type NavigationListProps = {
   navigationOption: string;
 }
 function NavigationList({navigationOption}: NavigationListProps): JSX.Element {
-  const linkClassName = `${navigationOption === NavigationOption.main ? 'main-nav__link' : 'link'}`;
+  const linkClassName = `${navigationOption === NavigationOption.Main ? 'main-nav__link' : 'link'}`;
   return (
     <ul className={`${navigationOption}__list`} data-testid="navigation-list">
       <li className={`${navigationOption}__item`}>

@@ -6,9 +6,9 @@ function Header(): JSX.Element {
   return (
     <header className="header" id="header" data-testid="header">
       <div className="container">
-        <Logo logoOption={LogoOption.header}/>
+        <Logo logoOption={LogoOption.Header}/>
         <nav className="main-nav header__main-nav">
-          <NavigationList navigationOption={NavigationOption.main}/>
+          <NavigationList navigationOption={NavigationOption.Main}/>
         </nav>
       </div>
     </header>

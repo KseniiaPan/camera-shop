@@ -9,7 +9,7 @@ describe('Component: ProductRating', () => {
     render(
       <ProductRating
         rating={mockProduct.rating}
-        ratingOption={RatingOption.product}
+        ratingOption={RatingOption.Product}
         reviewCount={mockProduct.reviewCount}
       />
     );
@@ -21,7 +21,7 @@ describe('Component: ProductRating', () => {
     render(
       <ProductRating
         rating={mockProduct.rating}
-        ratingOption={RatingOption.productCard}
+        ratingOption={RatingOption.ProductCard}
         reviewCount={mockProduct.reviewCount}
       />
     );
@@ -33,7 +33,7 @@ describe('Component: ProductRating', () => {
     render(
       <ProductRating
         rating={mockProduct.rating}
-        ratingOption={RatingOption.reviewCard}
+        ratingOption={RatingOption.ReviewCard}
         reviewCount={mockProduct.reviewCount}
       />
     );

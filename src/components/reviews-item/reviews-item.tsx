@@ -23,7 +23,7 @@ function ReviewsItem({ userReview }: ReviewsItemProps): JSX.Element {
       </div>
       <ProductRating
         rating={rating}
-        ratingOption={RatingOption.reviewCard}
+        ratingOption={RatingOption.ReviewCard}
       />
       <ul className="review-card__list">
         <li className="item-list">

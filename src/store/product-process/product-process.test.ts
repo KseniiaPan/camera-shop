@@ -19,6 +19,7 @@ describe('ProductProcess Slice', () => {
       ...initialState,
       products: mockProducts,
       currentProduct: mockProduct,
+      isCurrentProductLoading: false,
     };
     const result = productProcess.reducer(expectedState, emptyAction);
     expect(result).toEqual(expectedState);
@@ -71,7 +72,7 @@ describe('ProductProcess Slice', () => {
   });
 
   it('should set "isCurrentProductLoading" to "false", "currentProduct" to an object with full offer information with "fetchCurrentProductAction.fulfilled"', () => {
-    const expectedState = { ...initialState, currentProduct: mockProduct };
+    const expectedState = { ...initialState, currentProduct: mockProduct, isCurrentProductLoading: false };
     const result = productProcess.reducer(
       undefined,
       fetchCurrentProductAction.fulfilled(mockProduct, '', mockProduct.id)
@@ -80,7 +81,7 @@ describe('ProductProcess Slice', () => {
   });
 
   it('should set "isCurrentProductLoading" to "false", "isDataLoadingError" to "true" with "fetchCurrentProductAction.rejected"', () => {
-    const expectedState = { ...initialState, isDataLoadingError: true };
+    const expectedState = { ...initialState, isCurrentProductLoading: false, isDataLoadingError: true };
     const result = productProcess.reducer(
       undefined,
       fetchCurrentProductAction.rejected
