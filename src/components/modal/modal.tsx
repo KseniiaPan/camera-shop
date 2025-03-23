@@ -68,6 +68,9 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
       active={modalData.isModalOpen}
       focusTrapOptions={{
         initialFocus: '#phone',
+        tabbableOptions: {
+          displayCheck: 'none'
+        }
       }}
     >
       <div className={`modal ${modalData.isModalOpen ? 'is-active' : ''}`}>

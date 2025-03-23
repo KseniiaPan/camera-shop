@@ -55,6 +55,12 @@ export const mockUserOrder = {
   tel: datatype.string(),
 };
 
+export const mockProductModalData = {
+  isModalOpen: true,
+  openedCameraId: datatype.number(),
+};
+
+
 export const mockStore = {
   [NameSpace.Product]: {
     products: mockProducts,

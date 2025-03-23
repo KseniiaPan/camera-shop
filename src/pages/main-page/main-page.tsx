@@ -31,7 +31,7 @@ function MainPage(): JSX.Element {
   };
 
   const handleModalClose = () => {
-    setModalData({ ...modalData, isModalOpen: false });
+    setModalData({ isModalOpen: false, openedCameraId: null });
   };
 
   if (isProductsDataLoading) {
