@@ -9,24 +9,22 @@ import {AppRoute} from '../../consts';
 function App(): JSX.Element {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Layout />}>
-            <Route
-              path={AppRoute.Main}
-              element={<MainPage />}
-            />
-            <Route
-              path={AppRoute.Product}
-              element={<ProductPage />}
-            />
-            <Route
-              path={AppRoute.NotFound}
-              element={<NotFoundPage />}
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route
+            path={AppRoute.Main}
+            element={<MainPage />}
+          />
+          <Route
+            path={AppRoute.Product}
+            element={<ProductPage />}
+          />
+          <Route
+            path={AppRoute.NotFound}
+            element={<NotFoundPage />}
+          />
+        </Route>
+      </Routes>
     </HelmetProvider>
   );
 }
