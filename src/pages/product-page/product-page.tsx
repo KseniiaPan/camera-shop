@@ -97,7 +97,7 @@ function ProductPage(): JSX.Element {
           <Helmet>
             <title>Продукт - Фотошоп</title>
           </Helmet>
-          <div className="page-content">
+          <div className="page-content" data-testid="prouct-page">
             <Breadcrumbs cameraName={name} />
             <div className="page-content__section">
               <section className="product">
