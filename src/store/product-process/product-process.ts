@@ -36,7 +36,7 @@ export const productProcess = createSlice({
       .addCase(fetchProductsAction.rejected, (state) => {
         state.isProductsDataLoading = false;
         state.isDataLoadingError = true;
-        toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
+        toast.error('Ошибка при загрузке информации о товарах. Попробуйте перезагрузить страницу.');
       })
       .addCase(fetchCurrentProductAction.pending, (state) => {
         state.isCurrentProductLoading = true;
@@ -50,7 +50,7 @@ export const productProcess = createSlice({
       .addCase(fetchCurrentProductAction.rejected, (state) => {
         state.isCurrentProductLoading = false;
         state.isDataLoadingError = true;
-        toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
+        toast.error('Ошибка при загрузке информации о товаре. Попробуйте перезагрузить страницу.');
       });
     builder
       .addCase(fetchSimilarProductsAction.pending, (state) => {

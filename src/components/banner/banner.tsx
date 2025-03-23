@@ -21,7 +21,7 @@ function Banner(): JSX.Element {
       autoplay={{ delay: 3000 }}
       data-testid="banner"
     >
-      {promoProducts.map((promoProduct) => (
+      {promoProducts.length > 0 && promoProducts.map((promoProduct) => (
         <SwiperSlide key={promoProduct.id}>
           <div className="banner">
             <picture>

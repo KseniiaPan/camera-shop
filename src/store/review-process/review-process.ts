@@ -24,7 +24,7 @@ export const reviewProcess = createSlice({
       })
       .addCase(fetchReviewsAction.rejected, (state) => {
         state.isReviewsDataLoading = false;
-        toast.error('Ошибка при загрузке информации. Попробуйте еще раз.');
+        toast.error('Ошибка при загрузке отзывов о товаре. Попробуйте перезагрузить страницу.');
       });
   },
 });

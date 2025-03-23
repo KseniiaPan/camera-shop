@@ -1,5 +1,5 @@
 import {productProcess} from './product-process';
-import {fetchProductsAction, fetchCurrentProductAction} from '../api-actions';
+import {fetchProductsAction, fetchCurrentProductAction, fetchSimilarProductsAction} from '../api-actions';
 import {mockProducts, mockProduct} from '../../utils/mocks';
 
 const initialState = {
@@ -71,7 +71,7 @@ describe('ProductProcess Slice', () => {
     expect(result).toEqual(expectedState);
   });
 
-  it('should set "isCurrentProductLoading" to "false", "currentProduct" to an object with full offer information with "fetchCurrentProductAction.fulfilled"', () => {
+  it('should set "isCurrentProductLoading" to "false", "currentProduct" to an object with full product information with "fetchCurrentProductAction.fulfilled"', () => {
     const expectedState = { ...initialState, currentProduct: mockProduct, isCurrentProductLoading: false };
     const result = productProcess.reducer(
       undefined,
@@ -85,6 +85,37 @@ describe('ProductProcess Slice', () => {
     const result = productProcess.reducer(
       undefined,
       fetchCurrentProductAction.rejected
+    );
+    expect(result).toEqual(expectedState);
+  });
+
+
+  it('should set "isSimilarProductsDataLoading" to "true" with "fetchSimilarProductsAction.pending"', () => {
+    const expectedState = {
+      ...initialState,
+      isSimilarProductsDataLoading: true,
+    };
+    const result = productProcess.reducer(
+      undefined,
+      fetchSimilarProductsAction.pending
+    );
+    expect(result).toEqual(expectedState);
+  });
+
+  it('should set "isSimilarProductsDataLoading" to "false", "similarProducts" to an array with similar products information with "fetchSimilarProductsAction.fulfilled"', () => {
+    const expectedState = { ...initialState, similarProducts: mockProducts, isSimilarProductsDataLoading: false };
+    const result = productProcess.reducer(
+      undefined,
+      fetchSimilarProductsAction.fulfilled(mockProducts, '', mockProduct.id)
+    );
+    expect(result).toEqual(expectedState);
+  });
+
+  it('should set "isSimilarProductsDataLoading" to "false", "isDataLoadingError" to "true" with "fetchSimilarProductsAction.rejected"', () => {
+    const expectedState = { ...initialState, isSimilarProductsDataLoading: false};
+    const result = productProcess.reducer(
+      undefined,
+      fetchSimilarProductsAction.rejected
     );
     expect(result).toEqual(expectedState);
   });
