@@ -61,7 +61,8 @@ function ProductCardsSimilar({
                 className="slider-controls slider-controls--prev"
                 type="button"
                 aria-label="Предыдущий слайд"
-                onMouseDown={handlePreviousSlideButtonClick}
+                onClick={handlePreviousSlideButtonClick}
+                style={{pointerEvents: isPreviousButtonDisabled ? 'none' : 'auto'}}
                 disabled={isPreviousButtonDisabled}
               >
                 <svg width={7} height={12} aria-hidden="true">
@@ -72,7 +73,8 @@ function ProductCardsSimilar({
                 className="slider-controls slider-controls--next"
                 type="button"
                 aria-label="Следующий слайд"
-                onMouseDown={handleNextSlideButtonClick}
+                onClick={handleNextSlideButtonClick}
+                style={{pointerEvents: isNextButtonDisabled ? 'none' : 'auto'}}
                 disabled={isNextButtonDisabled}
               >
                 <svg width={7} height={12} aria-hidden="true">

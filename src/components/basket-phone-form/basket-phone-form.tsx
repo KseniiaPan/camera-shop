@@ -52,7 +52,7 @@ function BasketPhoneForm({ onModalClose, openedCameraId }: BasketPhoneFormProps)
 
   return (
     <>
-      <div className="custom-input form-review__item">
+      <div className={`custom-input form-review__item ${isValidationError ? 'is-invalid' : ''}`}>
         <label>
           <span className="custom-input__label">
             Телефон
@@ -69,19 +69,14 @@ function BasketPhoneForm({ onModalClose, openedCameraId }: BasketPhoneFormProps)
             defaultValue={phoneNumber}
             minLength={10}
             pattern="^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$"
-            data-error-message="Номер должен иметь формат +7(9XX)XXX-XX-XX"
+            data-error-message="Номер должен иметь формат +7(9XX)XXX-XX-XX или 8(9XX)XXX-XX-XX"
             onChange={() => handlePhoneValueChange(phoneRef.current?.value)}
             required
             data-testid="phoneElement"
           />
         </label>
-        <p className="custom-input__error">Нужно указать номер</p>
+        {isValidationError && (<p className="custom-input__error">Формат: +7(9XX)XXX-XX-XX / 8(9XX)XXX-XX-XX</p>)}
       </div>
-      {isValidationError && (
-        <div style={{ color: 'red', marginBottom: 15 }}>
-          Номер должен иметь формат +7(9XX)XXX-XX-XX или 8(9XX)XXX-XX-XX
-        </div>
-      )}
       <div className="modal__buttons">
         <button
           className="btn btn--purple modal__btn modal__btn--fit-width"
