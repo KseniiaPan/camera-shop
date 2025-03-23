@@ -1,4 +1,4 @@
-import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import {HelmetProvider} from 'react-helmet-async';
 import MainPage from '../../pages/main-page/main-page';
 import ProductPage from '../../pages/product-page/product-page';

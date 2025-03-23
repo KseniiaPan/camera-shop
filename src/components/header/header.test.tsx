@@ -5,12 +5,12 @@ import { AppRoute } from '../../consts';
 
 describe('Component: Header', () => {
   it('should render correctly', () => {
-    const headerTeastId = 'header';
+    const headerTestId = 'header';
     render(
       <MemoryRouter initialEntries={['#', AppRoute.Main]}>
         <Header />
       </MemoryRouter>
     );
-    expect(screen.getByTestId(headerTeastId)).toBeInTheDocument();
+    expect(screen.getByTestId(headerTestId)).toBeInTheDocument();
   });
 });

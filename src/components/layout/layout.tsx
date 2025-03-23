@@ -5,7 +5,7 @@ import Footer from '../../components/footer/footer';
 function Layout(): JSX.Element {
 
   return (
-    <div className="wrapper">
+    <div className="wrapper" data-testid="app-wrapper">
       <Header />
       <Outlet />
       <Footer />
