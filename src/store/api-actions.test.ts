@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import {Action} from 'redux';
 import {AppThunkDispatch, extractActionsTypes, mockProducts, mockProduct, mockReviews, mockUserOrder} from '../utils/mocks';
 import {State} from '../types/state-types';
-import {fetchProductsAction, fetchCurrentProductAction, fetchReviewsAction, postOrderAction} from './api-actions';
+import {fetchProductsAction, fetchCurrentProductAction, fetchReviewsAction, postOrderAction, fetchSimilarProductsAction, fetchPromoProductsAction} from './api-actions';
 import { APIRoute } from '../consts';
 
 describe('Async actions', () => {
@@ -24,7 +24,7 @@ describe('Async actions', () => {
   });
 
   describe('fetchProductsAction', () => {
-    it('should dispatch "fetchProductsAction.pending", "fetchProductsAction.fulfilled", when server response 200', async () => {
+    it('should dispatch "fetchProductsAction.pending", "fetchProductsAction.fulfilled", when server response is 200', async () => {
       mockAxiosAdapter.onGet(APIRoute.Cameras).reply(200, mockProducts);
 
       await store.dispatch(fetchProductsAction());
@@ -43,7 +43,7 @@ describe('Async actions', () => {
       expect(fetchProductsActionFulfilled.payload).toEqual(mockProducts);
     });
 
-    it('should dispatch "fetchProductsAction.pending", "fetchProductsAction.rejected" when server response 400', async () => {
+    it('should dispatch "fetchProductsAction.pending", "fetchProductsAction.rejected" when server response is 400', async () => {
       mockAxiosAdapter.onGet(APIRoute.Cameras).reply(400, []);
 
       await store.dispatch(fetchProductsAction());
@@ -57,7 +57,7 @@ describe('Async actions', () => {
   });
 
   describe('fetchCurrentProductAction', () => {
-    it('should dispatch "fetchCurrentProductAction.pending", "fetchCurrentProductAction.fulfilled", when server response 200', async () => {
+    it('should dispatch "fetchCurrentProductAction.pending", "fetchCurrentProductAction.fulfilled", when server response is 200', async () => {
       const mockId = 1;
       mockAxiosAdapter
         .onGet(`${APIRoute.Cameras}/${mockId}`)
@@ -79,7 +79,7 @@ describe('Async actions', () => {
       expect(fetchCurrentProductActionFulfilled.payload).toEqual(mockProduct);
     });
 
-    it('should dispatch "fetchCurrentProductAction.pending", "fetchCurrentProductAction.rejected" when server response 400', async () => {
+    it('should dispatch "fetchCurrentProductAction.pending", "fetchCurrentProductAction.rejected" when server response is 400', async () => {
       const mockId = 1;
       mockAxiosAdapter.onGet(`${APIRoute.Cameras}/${mockId}`).reply(400, []);
 
@@ -94,7 +94,7 @@ describe('Async actions', () => {
   });
 
   describe('fetchReviewsAction', () => {
-    it('should dispatch "fetchReviewsAction.pending", "fetchReviewsAction.fulfilled", when server response 200', async () => {
+    it('should dispatch "fetchReviewsAction.pending", "fetchReviewsAction.fulfilled", when server response is 200', async () => {
       const mockId = 1;
       mockAxiosAdapter
         .onGet(`${APIRoute.Cameras}/${mockId}${APIRoute.Reviews}`)
@@ -116,7 +116,7 @@ describe('Async actions', () => {
       expect(fetchReviewsActionFulfilled.payload).toEqual(mockReviews);
     });
 
-    it('should dispatch "fetchReviewsAction.pending", "fetchReviewsAction.rejected" when server response 400', async () => {
+    it('should dispatch "fetchReviewsAction.pending", "fetchReviewsAction.rejected" when server response is 400', async () => {
       const mockId = 1;
       mockAxiosAdapter
         .onGet(`${APIRoute.Cameras}/${mockId}${APIRoute.Reviews}`)
@@ -133,7 +133,7 @@ describe('Async actions', () => {
   });
 
   describe('postOrderAction', () => {
-    it('should dispatch "postOrderAction.pending", "postOrderAction.fulfilled", when server response 200', async () => {
+    it('should dispatch "postOrderAction.pending", "postOrderAction.fulfilled", when server response is 200', async () => {
       mockAxiosAdapter.onPost(APIRoute.Order).reply(200);
 
       await store.dispatch(postOrderAction(mockUserOrder));
@@ -147,7 +147,7 @@ describe('Async actions', () => {
       ]);
     });
 
-    it('should dispatch "postOrderAction.pending", "postOrderAction.rejected" when server response 400', async () => {
+    it('should dispatch "postOrderAction.pending", "postOrderAction.rejected" when server response is 400', async () => {
       mockAxiosAdapter.onPost(APIRoute.Order).reply(400);
 
       await store.dispatch(postOrderAction(mockUserOrder));
@@ -156,6 +156,77 @@ describe('Async actions', () => {
       expect(actions).toEqual([
         postOrderAction.pending.type,
         postOrderAction.rejected.type,
+      ]);
+    });
+  });
+
+  describe('fetchSimilarProductsAction', () => {
+    it('should dispatch "fetchSimilarProductsAction.pending", "fetchSimilarProductsAction.fulfilled", when server response is 200', async () => {
+      const mockId = 1;
+      mockAxiosAdapter
+        .onGet(`${APIRoute.Cameras}/${mockId}${APIRoute.SimilarCameras}`)
+        .reply(200, mockProducts);
+
+      await store.dispatch(fetchSimilarProductsAction(mockId));
+
+      const emittedActions = store.getActions();
+      const extractedActionsTypes = extractActionsTypes(emittedActions);
+      const fetchSimilarProductsActionFulfilled = emittedActions.at(1) as ReturnType<
+        typeof fetchSimilarProductsAction.fulfilled
+      >;
+
+      expect(extractedActionsTypes).toEqual([
+        fetchSimilarProductsAction.pending.type,
+        fetchSimilarProductsAction.fulfilled.type,
+      ]);
+
+      expect(fetchSimilarProductsActionFulfilled.payload).toEqual(mockProducts);
+    });
+
+    it('should dispatch "fetchSimilarProductsAction.pending", "fetchSimilarProductsAction.rejected" when server response is 400', async () => {
+      const mockId = 1;
+      mockAxiosAdapter
+        .onGet(`${APIRoute.Cameras}/${mockId}${APIRoute.SimilarCameras}`)
+        .reply(400, []);
+
+      await store.dispatch(fetchSimilarProductsAction(mockId));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        fetchSimilarProductsAction.pending.type,
+        fetchSimilarProductsAction.rejected.type,
+      ]);
+    });
+  });
+  describe('fetchPromoProductsAction', () => {
+    it('should dispatch "fetchPromoProductsAction.pending", "fetchPromoProductsAction.fulfilled", when server response is 200', async () => {
+      mockAxiosAdapter.onGet(APIRoute.Promo).reply(200, mockProducts);
+
+      await store.dispatch(fetchPromoProductsAction());
+
+      const emittedActions = store.getActions();
+      const extractedActionsTypes = extractActionsTypes(emittedActions);
+      const fetchPromoProductsActionFulfilled = emittedActions.at(1) as ReturnType<
+        typeof fetchPromoProductsAction.fulfilled
+      >;
+
+      expect(extractedActionsTypes).toEqual([
+        fetchPromoProductsAction.pending.type,
+        fetchPromoProductsAction.fulfilled.type,
+      ]);
+
+      expect(fetchPromoProductsActionFulfilled.payload).toEqual(mockProducts);
+    });
+
+    it('should dispatch "fetchPromoProductsAction.pending", "fetchPromoProductsAction.rejected" when server response is 400', async () => {
+      mockAxiosAdapter.onGet(APIRoute.Promo).reply(400, []);
+
+      await store.dispatch(fetchPromoProductsAction());
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        fetchPromoProductsAction.pending.type,
+        fetchPromoProductsAction.rejected.type,
       ]);
     });
   });
