@@ -1,4 +1,4 @@
-import {NavigationOption} from '../../consts';
+import { NavigationOption } from '../../consts';
 import NavigationList from '../../components/navigation-list/navigation-list';
 import FooterNavigationResources from '../../components/footer-navigation-resources/footer-navigation-resources';
 import FooterNavigationSupport from '../../components/footer-navigation-support/footer-navigation-support';

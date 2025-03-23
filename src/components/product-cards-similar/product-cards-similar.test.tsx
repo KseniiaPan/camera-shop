@@ -1,8 +1,8 @@
-import {render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProductCardsSimilar from './product-cards-similar';
-import {mockProducts} from '../../utils/mocks';
+import { mockProducts } from '../../utils/mocks';
 import { MemoryRouter } from 'react-router-dom';
-import {AppRoute} from '../../consts';
+import { AppRoute } from '../../consts';
 
 describe('Component: ProductCardsSimilar', () => {
   it('should render correctly', () => {

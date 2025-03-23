@@ -1,7 +1,7 @@
 import styles from './not-found.module.css';
-import {Link} from 'react-router-dom';
-import {Helmet} from 'react-helmet-async';
-import {AppRoute} from '../../consts';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { AppRoute } from '../../consts';
 
 function NotFoundPage(): JSX.Element{
   return (

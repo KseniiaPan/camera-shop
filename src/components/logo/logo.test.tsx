@@ -1,7 +1,7 @@
-import {render, screen} from '@testing-library/react';
-import {MemoryRouter} from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Logo from './logo';
-import {AppRoute, LogoOption} from '../../consts';
+import { AppRoute, LogoOption } from '../../consts';
 
 describe('Component: Logo', () => {
   it('should render correctly when used in header', () => {

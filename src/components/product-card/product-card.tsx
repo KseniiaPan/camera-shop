@@ -10,22 +10,8 @@ type ProductCardProps = {
   isActive: boolean | undefined;
 };
 
-function ProductCard({
-  card,
-  onModalOpenClick,
-  isActive,
-}: ProductCardProps): JSX.Element {
-  const {
-    previewImgWebp,
-    previewImgWebp2x,
-    previewImg,
-    previewImg2x,
-    name,
-    rating,
-    price,
-    reviewCount,
-    id,
-  } = card;
+function ProductCard({card, onModalOpenClick, isActive}: ProductCardProps): JSX.Element {
+  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
   const formattedPrice = getFormattedPrice(price);
 
   return (

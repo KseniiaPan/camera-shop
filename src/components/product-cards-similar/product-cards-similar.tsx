@@ -8,10 +8,7 @@ type ProductCardsSimilarProps = {
   onModalOpenClick: (id: number | null) => void;
 };
 
-function ProductCardsSimilar({
-  similarProducts,
-  onModalOpenClick,
-}: ProductCardsSimilarProps): JSX.Element {
+function ProductCardsSimilar({similarProducts, onModalOpenClick}: ProductCardsSimilarProps): JSX.Element {
   const [firstCount, setFirstCount] = useState<number>(
     SimilarProductsSlider.DefaultFisrstIndex
   );
@@ -20,10 +17,7 @@ function ProductCardsSimilar({
   );
 
   const displaySimilarProducts = () => {
-    const displayedSimilarProducts = similarProducts.slice(
-      firstCount,
-      lastCount
-    );
+    const displayedSimilarProducts = similarProducts.slice(firstCount, lastCount);
     return displayedSimilarProducts;
   };
 

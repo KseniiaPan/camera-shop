@@ -1,5 +1,5 @@
-import {Link} from 'react-router-dom';
-import {AppRoute} from '../../consts';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../consts';
 
 type BreadcrumbsProps = {
   cameraName?: string;

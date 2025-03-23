@@ -1,5 +1,5 @@
-import {Link} from 'react-router-dom';
-import {AppRoute, NavigationOption} from '../../consts';
+import { Link } from 'react-router-dom';
+import { AppRoute, NavigationOption } from '../../consts';
 type NavigationListProps = {
   navigationOption: string;
 }

@@ -1,9 +1,9 @@
-import {render, screen} from '@testing-library/react';
-import {MemoryRouter} from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import NavigationList from './navigation-list';
-import {AppRoute, NavigationOption} from '../../consts';
+import { AppRoute, NavigationOption } from '../../consts';
 
-describe('Component: Navigation List', () => {
+describe('Component: NavigationList', () => {
   it('should render correctly when used in header', () => {
     const navigationListTestId = 'navigation-list';
     const navigationOption = NavigationOption.Main;

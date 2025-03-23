@@ -1,6 +1,6 @@
-import {render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import BasketItem from './basket-item';
-import {mockProduct} from '../../utils/mocks';
+import { mockProduct } from '../../utils/mocks';
 
 describe('Component: BasketItem', () => {
   it('should render correctly', () => {

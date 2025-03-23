@@ -1,8 +1,8 @@
-import {render, screen} from '@testing-library/react';
-import {MemoryRouter} from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Breadcrumbs from './breadcrumbs';
-import {AppRoute} from '../../consts';
-import {mockProduct} from '../../utils/mocks';
+import { AppRoute } from '../../consts';
+import { mockProduct } from '../../utils/mocks';
 
 describe('Component: Breadcrumbs', () => {
   it('should render correctly when used on the main page', () => {

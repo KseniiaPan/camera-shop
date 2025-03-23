@@ -6,7 +6,7 @@ import MainPage from './main-page';
 import { AppRoute } from '../../consts';
 import { mockStore } from '../../utils/mocks';
 
-describe('Component: ProductCardsList', () => {
+describe('Component: MainPage', () => {
   it('should render correctly', () => {
     const expectedText = /Каталог фото- и видеотехники/i;
 

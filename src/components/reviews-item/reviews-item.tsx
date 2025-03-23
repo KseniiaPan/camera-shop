@@ -1,7 +1,7 @@
-import {Review} from '../../types/review-types';
+import { Review } from '../../types/review-types';
 import ProductRating from '../product-rating/product-rating';
-import {RatingOption} from '../../consts';
-import {humanizeCommentDate, getDateWithoutTime} from '../../utils/common';
+import { RatingOption } from '../../consts';
+import { humanizeCommentDate, getDateWithoutTime } from '../../utils/common';
 
 type ReviewsItemProps = {
   userReview: Review;

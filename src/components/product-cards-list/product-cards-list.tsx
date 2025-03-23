@@ -9,12 +9,7 @@ type ProductCardsListProps = {
   isActive?: boolean | undefined;
 };
 
-function ProductCardsList({
-  products,
-  onModalOpenClick,
-  productsListOption,
-  isActive,
-}: ProductCardsListProps): JSX.Element {
+function ProductCardsList({products, onModalOpenClick, productsListOption, isActive}: ProductCardsListProps): JSX.Element {
   return (
     <div
       className={

@@ -8,11 +8,7 @@ import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import { ProductModalData } from '../../types/product-types';
 import { useAppSelector } from '../../hooks/index';
-import {
-  getDataLoadingErrorStatus,
-  getProductsLoadingStatus,
-  getProductsData
-} from '../../store/product-process/selectors';
+import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData } from '../../store/product-process/selectors';
 import { ProductsListOption } from '../../consts';
 
 const initialState: ProductModalData = {
@@ -22,6 +18,7 @@ const initialState: ProductModalData = {
 
 function MainPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
+
   const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
   const products = useAppSelector(getProductsData);

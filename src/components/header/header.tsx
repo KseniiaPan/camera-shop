@@ -1,4 +1,4 @@
-import {NavigationOption, LogoOption} from '../../consts';
+import { NavigationOption, LogoOption } from '../../consts';
 import Logo from '../../components/logo/logo';
 import NavigationList from '../../components/navigation-list/navigation-list';
 

@@ -1,6 +1,6 @@
-import {render, screen, fireEvent} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import Modal from './modal';
-import {mockProductModalData, mockStore} from '../../utils/mocks';
+import { mockProductModalData, mockStore } from '../../utils/mocks';
 import { withStore } from '../../utils/mock-component';
 
 describe('Component: Modal', () => {

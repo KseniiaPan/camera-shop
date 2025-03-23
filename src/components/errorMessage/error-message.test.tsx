@@ -1,4 +1,4 @@
-import {render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ErrorMessage from './error-message';
 
 describe('Component: ErrorMessage', () => {

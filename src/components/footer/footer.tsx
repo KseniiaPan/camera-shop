@@ -1,4 +1,4 @@
-import {LogoOption} from '../../consts';
+import { LogoOption } from '../../consts';
 import Logo from '../../components/logo/logo';
 import FooterSocials from '../../components/footer-socials/footer-socials';
 import FooterNavigation from '../../components/footer-navigation/footer-navigation';

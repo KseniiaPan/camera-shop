@@ -9,10 +9,8 @@ function ReviewsList(): JSX.Element {
   const [reviewsCount, setReviewsCount] = useState<number>(COMMENTS_COUNT_STEP);
 
   const reviews = useAppSelector(getReviewsData);
-  const visibleReviews = sortReviews(reviews).slice(
-    COMMENTS_DEFAULT_COUNT,
-    reviewsCount
-  );
+  const visibleReviews = sortReviews(reviews).slice(COMMENTS_DEFAULT_COUNT, reviewsCount);
+
   const handleReviewsLoadingButtonClick = () =>
     setReviewsCount(reviewsCount + COMMENTS_COUNT_STEP);
 

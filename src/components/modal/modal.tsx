@@ -1,10 +1,10 @@
-import {useEffect, useRef} from 'react';
-import {FocusTrap} from 'focus-trap-react';
+import { useEffect, useRef } from 'react';
+import { FocusTrap } from 'focus-trap-react';
 import BasketItem from '../../components/basket-item/basket-item';
 import BasketPhoneForm from '../../components/basket-phone-form/basket-phone-form';
-import {useAppSelector} from '../../hooks/index';
-import {getProductsData} from '../../store/product-process/selectors';
-import {ProductModalData} from '../../types/product-types';
+import { useAppSelector } from '../../hooks/index';
+import { getProductsData } from '../../store/product-process/selectors';
+import { ProductModalData } from '../../types/product-types';
 
 type ModalProps = {
   modalData: ProductModalData;
@@ -59,9 +59,7 @@ function Modal({ onModalClose, modalData }: ModalProps): JSX.Element {
   }, [modalData.isModalOpen]);
 
   const products = useAppSelector(getProductsData);
-  const openedCameraInfo = products.find(
-    (product) => modalData.openedCameraId === product.id
-  );
+  const openedCameraInfo = products.find((product) => modalData.openedCameraId === product.id);
 
   return (
     <FocusTrap
