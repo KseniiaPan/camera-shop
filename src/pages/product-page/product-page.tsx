@@ -126,7 +126,7 @@ function ProductPage(): JSX.Element {
                     />
                     <p className="product__price">
                       <span className="visually-hidden">Цена:</span>
-                      {formattedPrice}
+                      {formattedPrice} ₽
                     </p>
                     <button className="btn btn--purple" type="button">
                       <svg width={24} height={16} aria-hidden="true">
