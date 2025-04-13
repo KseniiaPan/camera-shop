@@ -1,0 +1,5 @@
+.form-search__reset.is-active {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
