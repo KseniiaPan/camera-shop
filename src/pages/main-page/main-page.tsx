@@ -6,6 +6,7 @@ import ProductCardsList from '../../components/product-cards-list/product-cards-
 import Modal from '../../components/modal/modal';
 import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
+import ProductsFilter from '../../components/products-filter/products-filter';
 import { ProductModalData } from '../../types/product-types';
 import { useAppSelector } from '../../hooks/index';
 import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData } from '../../store/product-process/selectors';
@@ -52,7 +53,7 @@ function MainPage(): JSX.Element {
             <h1 className="title title--h2">Каталог фото- и видеотехники</h1>
             <div className="page-content__columns">
               <div className="catalog__aside">
-                <img src="img/banner.png" />
+                <ProductsFilter />
               </div>
               <div className="catalog__content">
                 <ProductCardsList
