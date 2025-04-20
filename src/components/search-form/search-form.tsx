@@ -8,7 +8,7 @@ import {
 } from '../../consts';
 import { useAppSelector } from '../../hooks/index';
 import { getProductsData } from '../../store/product-process/selectors';
-import { getSearchedProducts } from '../../utils/common';
+import { getSearchedProducts } from '../../utils/filtering';
 import { ProductInfo } from '../../types/product-types';
 import SearchSelectItem from '../../components/search-select-item/search-select-item';
 

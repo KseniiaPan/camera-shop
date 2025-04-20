@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { Review } from '../types/review-types';
-import { ProductInfo } from '../types/product-types';
 import { PHONE_REGEXP } from '../consts';
 
 const getFormattedPrice = (price:number) => price.toLocaleString('ru-RU');
@@ -19,11 +17,4 @@ const humanizeCommentDate = (commentDate: string) =>
 
 const getDateWithoutTime = (date: string): string => date.split('T')[0];
 
-const sortReviews = (reviews: Review[]) => [...reviews].sort((reviewA, reviewB) => Date.parse(reviewB.createAt) - Date.parse(reviewA.createAt));
-
-const getSearchedProducts = (
-  products: ProductInfo[],
-  searchText: string
-): ProductInfo[] => products.filter((product) => product.name.toLowerCase().includes(searchText.toLowerCase()));
-
-export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime, sortReviews, getSearchedProducts};
+export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime};

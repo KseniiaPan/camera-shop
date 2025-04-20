@@ -3,7 +3,7 @@ import { useAppSelector } from '../../hooks/index';
 import { getReviewsData } from '../../store/review-process/selectos';
 import ReviewsItem from '../../components/reviews-item/reviews-item';
 import { COMMENTS_COUNT_STEP, COMMENTS_DEFAULT_COUNT } from '../../consts';
-import { sortReviews } from '../../utils/common';
+import { sortReviews } from '../../utils/sorting';
 
 function ReviewsList(): JSX.Element {
   const [reviewsCount, setReviewsCount] = useState<number>(COMMENTS_COUNT_STEP);

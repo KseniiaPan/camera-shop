@@ -1,15 +1,13 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Trocchi&display=swap');
 
-.error{
-  font-family: "Trocchi", serif;
+.error {
+  font-family: 'Trocchi', serif;
   color: black;
   font-size: 25px;
-  min-height: 100vh;
+  min-height: 50vh;
   align-items: center;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-

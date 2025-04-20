@@ -1,10 +1,10 @@
 import styles from './error-message.module.css';
 
-function ErrorMessage(): JSX.Element{
-  return (
-    <div className={styles.error}>
-      Произошла ошибка при загрузке данных с сервера, попробуйте еще раз
-    </div>
-  );
+type ErrorMessageProps = {
+  message: string;
+};
+
+function ErrorMessage({ message }: ErrorMessageProps): JSX.Element {
+  return <div className={styles.error}>{message}</div>;
 }
 export default ErrorMessage;
