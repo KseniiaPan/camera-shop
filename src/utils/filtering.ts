@@ -22,9 +22,7 @@ const filterProducts = (
   category: ProductFilters['category'],
   types: ProductFilters['type'][],
   levels: ProductFilters['level'][],
-  minPrice: ProductFilters['minPrice'],
-  maxPrice: ProductFilters['maxPrice']
-): ProductInfo[] => {
+) => {
   let filteredProducts: ProductInfo[] = products;
   if (category) {
     const categoryRuName = translateFilterItemName(category);
@@ -63,20 +61,27 @@ const filterProducts = (
     }
     filteredProducts = filteredByLevelProducts;
   }
+  return filteredProducts;
+};
 
+const filterProductsbyPrice = (
+  products: ProductInfo[],
+  minPrice: ProductFilters['minPrice'],
+  maxPrice: ProductFilters['maxPrice']
+) => {
+  let filteredByPriceProducts: ProductInfo[] = products;
   if (minPrice) {
-    filteredProducts = filteredProducts.filter(
+    filteredByPriceProducts = products.filter(
       (product) => product.price >= Number(minPrice)
     );
   }
 
   if (maxPrice) {
-    filteredProducts = filteredProducts.filter(
+    filteredByPriceProducts = filteredByPriceProducts.filter(
       (product) => product.price <= Number(maxPrice)
     );
   }
 
-  return filteredProducts;
+  return filteredByPriceProducts;
 };
-
-export { getSearchedProducts, filterProducts };
+export { getSearchedProducts, filterProducts, filterProductsbyPrice };

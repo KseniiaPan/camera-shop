@@ -12,51 +12,67 @@ export function useProductFilters() {
   const levels = searchParams.getAll('level') as ProductFilters['level'][];
   const minPrice = searchParams.get('minPrice')
     ? (searchParams.get('minPrice') as string)
-    : undefined;
+    : '';
   const maxPrice = searchParams.get('maxPrice')
     ? (searchParams.get('maxPrice') as string)
-    : undefined;
+    : '';
 
-  const setFilters = useCallback((filters: ProductFilters) => {
+  const setFilters = useCallback(
+    (filters: ProductFilters) => {
+      setSearchParams((params) => {
+        if (filters.category !== undefined) {
+          params.set('category', filters.category);
+        }
+
+        if (filters.type !== undefined) {
+          const isTypeIncluded = types.includes(filters.type);
+          if (isTypeIncluded) {
+            params.delete('type', filters.type);
+          } else {
+            params.append('type', filters.type);
+          }
+        }
+
+        if (filters.level !== undefined) {
+          const isLevelIncluded = levels.includes(filters.level);
+
+          if (isLevelIncluded) {
+            params.delete('level', filters.level);
+          } else {
+            params.append('level', filters.level);
+          }
+        }
+
+        if (filters.minPrice !== undefined) {
+          if (minPrice !== undefined) {
+            params.delete('minPrice');
+          }
+          params.set('minPrice', filters.minPrice.toString());
+        }
+
+        if (filters.maxPrice !== undefined) {
+          params.set('maxPrice', filters.maxPrice.toString());
+        }
+
+        return params;
+      });
+    },
+    [setSearchParams, levels, types, minPrice]
+  );
+
+  const removeMinPriceFilters = useCallback(() => {
     setSearchParams((params) => {
-      if (filters.category !== undefined) {
-        params.set('category', filters.category);
-      }
-
-      if (filters.type !== undefined) {
-        const isTypeIncluded = searchParams
-          .getAll('type')
-          .includes(filters.type);
-        if (isTypeIncluded) {
-          params.delete('type', filters.type);
-        } else {
-          params.append('type', filters.type);
-        }
-      }
-
-      if (filters.level !== undefined) {
-        const isLevelIncluded = searchParams
-          .getAll('level')
-          .includes(filters.level);
-
-        if (isLevelIncluded) {
-          params.delete('level', filters.level);
-        } else {
-          params.append('level', filters.level);
-        }
-      }
-
-      if (filters.minPrice !== undefined) {
-        params.set('minPrice', filters.minPrice.toString());
-      }
-
-      if (filters.maxPrice !== undefined) {
-        params.set('maxPrice', filters.maxPrice.toString());
-      }
-
+      params.delete('minPrice');
       return params;
     });
-  }, [searchParams, setSearchParams]);
+  }, [setSearchParams]);
+
+  const removeMaxPriceFilters = useCallback(() => {
+    setSearchParams((params) => {
+      params.delete('maxPrice');
+      return params;
+    });
+  }, [setSearchParams]);
 
   const removeNonValidFilters = useCallback(() => {
     setSearchParams((params) => {
@@ -94,5 +110,7 @@ export function useProductFilters() {
     setFilters,
     removeFilters,
     removeNonValidFilters,
+    removeMinPriceFilters,
+    removeMaxPriceFilters,
   };
 }

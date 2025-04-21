@@ -44,8 +44,8 @@ function ProductsFilter({
                 <input
                   type="number"
                   name="price"
-                  defaultValue={requiredMinPrice}
-                  placeholder={currentMinPrice}
+                  defaultValue={requiredMinPrice && requiredMinPrice < currentMinPrice ? currentMinPrice : requiredMinPrice}
+                  placeholder={currentMinPrice ? currentMinPrice : 'от'}
                   onBlur={onMinPriceChange}
                 />
               </label>
@@ -55,8 +55,8 @@ function ProductsFilter({
                 <input
                   type="number"
                   name="priceUp"
-                  defaultValue={requiredMaxPrice}
-                  placeholder={currentMaxPrice}
+                  defaultValue={requiredMaxPrice ? requiredMaxPrice : ''}
+                  placeholder={currentMaxPrice ? currentMaxPrice : 'до'}
                   onBlur={onMaxPriceChange}
                 />
               </label>

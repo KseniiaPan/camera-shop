@@ -22,7 +22,7 @@ import {
   FilterSection,
 } from '../../consts';
 import { useProductFilters } from '../../hooks/use-products-filter';
-import { filterProducts } from '../../utils/filtering';
+import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 
 const initialState: ProductModalData = {
@@ -40,6 +40,8 @@ function MainPage(): JSX.Element {
     setFilters,
     removeFilters,
     removeNonValidFilters,
+    removeMinPriceFilters,
+    removeMaxPriceFilters,
     category,
     types,
     levels,
@@ -47,21 +49,20 @@ function MainPage(): JSX.Element {
     maxPrice,
   } = useProductFilters();
 
-  const filteredProducts = filterProducts(
+  const filteredByCharacteristicsProducts = filterProducts(
     allProducts,
     category,
     types,
     levels,
-    minPrice,
-    maxPrice
   );
 
+  const filteredProducts = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
   const minPriceFirstProductsList = sortProducts(
-    filteredProducts,
+    filteredByCharacteristicsProducts,
     SortingOption.MinPriceFirst
   );
   const maxPriceFirstProductsList = sortProducts(
-    filteredProducts,
+    filteredByCharacteristicsProducts,
     SortingOption.MaxPriceFirst
   );
   const currentMinPrice =
@@ -78,6 +79,7 @@ function MainPage(): JSX.Element {
   const handleModalClose = () => {
     setModalData({ isModalOpen: false, openedCameraId: null });
   };
+
   const handleCategoryFilterClick = (
     evt: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -101,21 +103,28 @@ function MainPage(): JSX.Element {
     });
 
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.value < currentMinPrice) {
-      setFilters({
-        minPrice: currentMinPrice as ProductFilters['minPrice'],
-      });
-    } else {
-      setFilters({
-        minPrice: evt.target.value as ProductFilters['minPrice'],
-      });
+    const displayedMinPrice =
+      evt.target.value !== undefined &&
+      Number(evt.target.value) < Number(currentMinPrice)
+        ? currentMinPrice
+        : evt.target.value;
+    setFilters({
+      minPrice: displayedMinPrice as ProductFilters['minPrice'],
+    });
+
+    if (evt.target.value.length === 0) {
+      removeMinPriceFilters();
     }
   };
 
-  const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) =>
+  const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setFilters({
       maxPrice: evt.target.value as ProductFilters['maxPrice'],
     });
+    if (evt.target.value.length === 0) {
+      removeMaxPriceFilters();
+    }
+  };
 
   const handleResetFilterClick = () => {
     removeFilters();
