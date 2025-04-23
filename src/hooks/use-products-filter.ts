@@ -44,9 +44,6 @@ export function useProductFilters() {
         }
 
         if (filters.minPrice !== undefined) {
-          if (minPrice !== undefined) {
-            params.delete('minPrice');
-          }
           params.set('minPrice', filters.minPrice.toString());
         }
 
@@ -57,7 +54,7 @@ export function useProductFilters() {
         return params;
       });
     },
-    [setSearchParams, levels, types, minPrice]
+    [setSearchParams, levels, types]
   );
 
   const removeMinPriceFilters = useCallback(() => {

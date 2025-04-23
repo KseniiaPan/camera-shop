@@ -7,7 +7,7 @@ import Modal from '../../components/modal/modal';
 import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductsFilter from '../../components/products-filter/products-filter';
-import { ProductModalData } from '../../types/product-types';
+import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { useAppSelector } from '../../hooks/index';
 import {
@@ -56,12 +56,12 @@ function MainPage(): JSX.Element {
     levels,
   );
 
-  const filteredProducts = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
+  const filteredProducts: ProductInfo[] = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
   const minPriceFirstProductsList = sortProducts(
     filteredByCharacteristicsProducts,
     SortingOption.MinPriceFirst
   );
-  const maxPriceFirstProductsList = sortProducts(
+  const maxPriceFirstProductsList: ProductInfo[] = sortProducts(
     filteredByCharacteristicsProducts,
     SortingOption.MaxPriceFirst
   );
@@ -103,21 +103,50 @@ function MainPage(): JSX.Element {
     });
 
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const displayedMinPrice =
+    if (
       evt.target.value !== undefined &&
-      Number(evt.target.value) < Number(currentMinPrice)
-        ? currentMinPrice
-        : evt.target.value;
+        evt.target.value.length > 0 &&
+        Number(evt.target.value) > Number(currentMaxPrice)
+    ) {
+      evt.target.value = currentMaxPrice;
+    }
+    if (
+      evt.target.value !== undefined &&
+        evt.target.value.length > 0 && maxPrice &&
+        Number(evt.target.value) > Number(maxPrice)
+    ) {
+      evt.target.value = maxPrice;
+    }
+    if (
+      evt.target.value !== undefined &&
+        evt.target.value.length > 0 &&
+        Number(evt.target.value) < Number(currentMinPrice)
+    ) {
+      evt.target.value = currentMinPrice;
+    }
     setFilters({
-      minPrice: displayedMinPrice as ProductFilters['minPrice'],
+      minPrice: evt.target.value as ProductFilters['minPrice'],
     });
-
     if (evt.target.value.length === 0) {
       removeMinPriceFilters();
     }
   };
 
   const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      evt.target.value !== undefined &&
+        evt.target.value.length > 0 &&
+        Number(evt.target.value) < Number(minPrice)
+    ) {
+      evt.target.value = minPrice;
+    }
+    if (
+      evt.target.value !== undefined &&
+        evt.target.value.length > 0 &&
+        Number(evt.target.value) > Number(currentMaxPrice)
+    ) {
+      evt.target.value = currentMaxPrice;
+    }
     setFilters({
       maxPrice: evt.target.value as ProductFilters['maxPrice'],
     });
