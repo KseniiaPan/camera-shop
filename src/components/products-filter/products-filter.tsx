@@ -71,7 +71,7 @@ function ProductsFilter({
                 type="radio"
                 name="category"
                 defaultValue={FilterSection.Category.photocamera}
-                checked={FilterSection.Category.photocamera === category}
+                defaultChecked={FilterSection.Category.photocamera === category}
                 onChange={onCategoryFilterClick}
               />
               <span className="custom-radio__icon" />
@@ -84,7 +84,7 @@ function ProductsFilter({
                 type="radio"
                 name="category"
                 defaultValue={FilterSection.Category.videocamera}
-                checked={FilterSection.Category.videocamera === category}
+                defaultChecked={FilterSection.Category.videocamera === category}
                 onChange={onCategoryFilterClick}
               />
               <span className="custom-radio__icon" />
@@ -100,7 +100,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="digital"
                 value={FilterSection.Type.digital}
-                checked={types.includes(FilterSection.Type.digital)}
+                defaultChecked={types.includes(FilterSection.Type.digital)}
                 onChange={onTypeFilterClick}
               />
               <span className="custom-checkbox__icon" />
@@ -113,7 +113,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="film"
                 value={FilterSection.Type.film}
-                checked={types.includes(FilterSection.Type.film)}
+                defaultChecked={types.includes(FilterSection.Type.film) && category !== FilterSection.Category.videocamera}
                 disabled={category === FilterSection.Category.videocamera}
                 onChange={onTypeFilterClick}
               />
@@ -127,7 +127,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="snapshot"
                 value={FilterSection.Type.snapshot}
-                checked={types.includes(FilterSection.Type.snapshot)}
+                defaultChecked={types.includes(FilterSection.Type.snapshot) && category !== FilterSection.Category.videocamera}
                 disabled={category === FilterSection.Category.videocamera}
                 onChange={onTypeFilterClick}
               />
@@ -141,7 +141,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="collection"
                 value={FilterSection.Type.collection}
-                checked={types.includes(FilterSection.Type.collection)}
+                defaultChecked={types.includes(FilterSection.Type.collection)}
                 onChange={onTypeFilterClick}
               />
               <span className="custom-checkbox__icon" />
@@ -157,7 +157,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="zero"
                 value={FilterSection.Level.zero}
-                checked={levels.includes(FilterSection.Level.zero)}
+                defaultChecked={levels.includes(FilterSection.Level.zero)}
                 onChange={onLevelFilterClick}
               />
               <span className="custom-checkbox__icon" />
@@ -170,7 +170,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="non-professional"
                 value={FilterSection.Level.nonProfessional}
-                checked={levels.includes(FilterSection.Level.nonProfessional)}
+                defaultChecked={levels.includes(FilterSection.Level.nonProfessional)}
                 onChange={onLevelFilterClick}
               />
               <span className="custom-checkbox__icon" />
@@ -183,7 +183,7 @@ function ProductsFilter({
                 type="checkbox"
                 name="professional"
                 value={FilterSection.Level.professional}
-                checked={levels.includes(FilterSection.Level.professional)}
+                defaultChecked={levels.includes(FilterSection.Level.professional)}
                 onChange={onLevelFilterClick}
               />
               <span className="custom-checkbox__icon" />
