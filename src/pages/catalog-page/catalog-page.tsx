@@ -8,6 +8,7 @@ import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductsFilter from '../../components/products-filter/products-filter';
 import ProductsSorting from '../../components/products-sorting/products-sorting';
+import CatalogPagination from '../../components/catalog-pagination/catalog-pagination';
 import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
@@ -169,6 +170,7 @@ function CatalogPage(): JSX.Element {
                 ) : (
                   <ErrorMessage message={ErrorText.FilterError} />
                 )}
+                <CatalogPagination />
               </div>
             </div>
           </div>
