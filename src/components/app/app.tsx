@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import MainPage from '../../pages/main-page/main-page';
+import CatalogPage from '../../pages/catalog-page/catalog-page';
 import ProductPage from '../../pages/product-page/product-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
 import Layout from '../../components/layout/layout';
@@ -13,7 +13,7 @@ function App(): JSX.Element {
         <Route path='/' element={<Layout />}>
           <Route
             path={AppRoute.Main}
-            element={<MainPage />}
+            element={<CatalogPage />}
           />
           <Route
             path={AppRoute.Product}

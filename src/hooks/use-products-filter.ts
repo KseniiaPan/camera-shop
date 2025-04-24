@@ -9,12 +9,8 @@ export function useProductFilters() {
   const category = searchParams.get('category') as ProductFilters['category'];
   const types = searchParams.getAll('type') as ProductFilters['type'][];
   const levels = searchParams.getAll('level') as ProductFilters['level'][];
-  const minPrice = searchParams.get('minPrice')
-    ? (searchParams.get('minPrice') as string)
-    : '';
-  const maxPrice = searchParams.get('maxPrice')
-    ? (searchParams.get('maxPrice') as string)
-    : '';
+  const minPrice = searchParams.get('minPrice') ? (searchParams.get('minPrice') as string) : '';
+  const maxPrice = searchParams.get('maxPrice') ? (searchParams.get('maxPrice') as string) : '';
 
   const setFilters = useCallback(
     (filters: ProductFilters) => {
@@ -97,16 +93,5 @@ export function useProductFilters() {
     });
   }, [setSearchParams]);
 
-  return {
-    category,
-    types,
-    levels,
-    minPrice,
-    maxPrice,
-    setFilters,
-    removeFilters,
-    removeNonValidFilters,
-    removeMinPriceFilters,
-    removeMaxPriceFilters,
-  };
+  return {category, types, levels, minPrice, maxPrice, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters};
 }

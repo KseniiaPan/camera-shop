@@ -2,16 +2,16 @@ import { render, screen } from '@testing-library/react';
 import { withStore } from '../../utils/mock-component';
 import { MemoryRouter } from 'react-router-dom';
 import {HelmetProvider} from 'react-helmet-async';
-import MainPage from './main-page';
+import CatalogPage from './catalog-page';
 import { AppRoute } from '../../consts';
 import { mockStore } from '../../utils/mocks';
 
-describe('Component: MainPage', () => {
+describe('Component: CatalogPage', () => {
   it('should render correctly', () => {
     const expectedText = /Каталог фото- и видеотехники/i;
 
     const { withStoreComponent } = withStore(
-      <MainPage/>,
+      <CatalogPage />,
       mockStore
     );
 

@@ -1,5 +1,6 @@
 import {SortingSection} from '../../consts';
 import { ProductSorting } from '../../types/sorting-types';
+
 type ProductsSortingProps = {
   onSortClick: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   onSortDirectionClick: (evt: React.ChangeEvent<HTMLInputElement>) => void;

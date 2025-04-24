@@ -24,7 +24,7 @@ const initialState: ProductModalData = {
   openedCameraId: null,
 };
 
-function MainPage(): JSX.Element {
+function CatalogPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
 
   const {setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useProductFilters();
@@ -181,4 +181,4 @@ function MainPage(): JSX.Element {
   );
 }
 
-export default MainPage;
+export default CatalogPage;
