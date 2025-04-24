@@ -12,17 +12,8 @@ import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
 import { useAppSelector } from '../../hooks/index';
-import {
-  getDataLoadingErrorStatus,
-  getProductsLoadingStatus,
-  getProductsData,
-} from '../../store/product-process/selectors';
-import {
-  ProductsListOption,
-  ErrorText,
-  SortingOption,
-  FilterSection,
-} from '../../consts';
+import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData} from '../../store/product-process/selectors';
+import { ProductsListOption, ErrorText, FilterSection, SortingSection } from '../../consts';
 import { useProductFilters } from '../../hooks/use-products-filter';
 import {useProductSorting} from '../../hooks/use-products-sorting';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
@@ -35,49 +26,25 @@ const initialState: ProductModalData = {
 
 function MainPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
-  const {
-    setFilters,
-    removeFilters,
-    removeNonValidFilters,
-    removeMinPriceFilters,
-    removeMaxPriceFilters,
-    category,
-    types,
-    levels,
-    minPrice,
-    maxPrice,
-  } = useProductFilters();
 
-  const {
-    sort,
-    direction,
-    setSorting} = useProductSorting();
+  const {setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useProductFilters();
+
+  const {sort, direction, setSorting} = useProductSorting();
 
   const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
   const allProducts = useAppSelector(getProductsData);
-  const filteredByCharacteristicsProducts = filterProducts(
-    allProducts,
-    category,
-    types,
-    levels,
-  );
+
+  const sortedProducts = sortProducts(sort, direction, allProducts);
+
+  const filteredByCharacteristicsProducts = filterProducts(sortedProducts, category, types, levels);
 
   const filteredProducts: ProductInfo[] = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
-  const minPriceFirstProductsList = sortProducts(
-    filteredByCharacteristicsProducts,
-    SortingOption.MinPriceFirst
-  );
-  const maxPriceFirstProductsList: ProductInfo[] = sortProducts(
-    filteredByCharacteristicsProducts,
-    SortingOption.MaxPriceFirst
-  );
-  const currentMinPrice =
-    minPriceFirstProductsList[0] &&
-    minPriceFirstProductsList[0].price.toString();
-  const currentMaxPrice =
-    maxPriceFirstProductsList[0] &&
-    maxPriceFirstProductsList[0].price.toString();
+
+  const minPriceFirstProductsList: ProductInfo[] = sortProducts(SortingSection.Sort.price, SortingSection.Direction.up, filteredByCharacteristicsProducts);
+
+  const currentMinPrice = minPriceFirstProductsList[0] && minPriceFirstProductsList[0].price;
+  const currentMaxPrice = minPriceFirstProductsList[minPriceFirstProductsList.length - 1] && minPriceFirstProductsList[minPriceFirstProductsList.length - 1].price;
 
   const handleModalOpenClick = (id: number | null) => {
     setModalData({ isModalOpen: true, openedCameraId: id });
@@ -87,9 +54,17 @@ function MainPage(): JSX.Element {
     setModalData({ isModalOpen: false, openedCameraId: null });
   };
 
-  const handleCategoryFilterClick = (
-    evt: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+    setSorting({
+      sort: evt.target.value as ProductSorting['sort'],
+    });
+
+  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+    setSorting({
+      direction: evt.target.value as ProductSorting['direction'],
+    });
+
+  const handleCategoryFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (evt.target.value === FilterSection.Category.videocamera) {
       removeNonValidFilters();
     }
@@ -98,11 +73,10 @@ function MainPage(): JSX.Element {
     });
   };
 
-  const handleTypeFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTypeFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
     setFilters({
       type: evt.target.value as ProductFilters['type'],
     });
-  };
 
   const handleLevelFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
     setFilters({
@@ -110,26 +84,14 @@ function MainPage(): JSX.Element {
     });
 
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      evt.target.value !== undefined &&
-        evt.target.value.length > 0 &&
-        Number(evt.target.value) > Number(currentMaxPrice)
-    ) {
-      evt.target.value = currentMaxPrice;
+    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
+      evt.target.value = currentMaxPrice.toString();
     }
-    if (
-      evt.target.value !== undefined &&
-        evt.target.value.length > 0 && maxPrice &&
-        Number(evt.target.value) > Number(maxPrice)
-    ) {
+    if (evt.target.value !== undefined && evt.target.value.length > 0 && maxPrice && Number(evt.target.value) > Number(maxPrice)) {
       evt.target.value = maxPrice;
     }
-    if (
-      evt.target.value !== undefined &&
-        evt.target.value.length > 0 &&
-        Number(evt.target.value) < Number(currentMinPrice)
-    ) {
-      evt.target.value = currentMinPrice;
+    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) < currentMinPrice) {
+      evt.target.value = currentMinPrice.toString();
     }
     setFilters({
       minPrice: evt.target.value as ProductFilters['minPrice'],
@@ -140,19 +102,11 @@ function MainPage(): JSX.Element {
   };
 
   const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      evt.target.value !== undefined &&
-        evt.target.value.length > 0 &&
-        Number(evt.target.value) < Number(minPrice)
-    ) {
+    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) < Number(minPrice)) {
       evt.target.value = minPrice;
     }
-    if (
-      evt.target.value !== undefined &&
-        evt.target.value.length > 0 &&
-        Number(evt.target.value) > Number(currentMaxPrice)
-    ) {
-      evt.target.value = currentMaxPrice;
+    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
+      evt.target.value = currentMaxPrice.toString();
     }
     setFilters({
       maxPrice: evt.target.value as ProductFilters['maxPrice'],
@@ -165,18 +119,6 @@ function MainPage(): JSX.Element {
   const handleResetFilterClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     evt.preventDefault();
     removeFilters();
-  };
-
-  const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setSorting({
-      sort: evt.target.value as ProductSorting['sort'],
-    });
-  };
-
-  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setSorting({
-      direction: evt.target.value as ProductSorting['direction'],
-    });
   };
 
   if (isProductsDataLoading) {

@@ -128,14 +128,6 @@ export const SortingSection = {
   }
 } as const;
 
-
-export enum SortingOption {
-  MinPriceFirst = 'min-price-first',
-  MaxPriceFirst = 'max-price-first',
-  LeastRatedFirst = 'least-rated-first',
-  TopRatedFirst = 'top-rated-first',
-}
-
 export const MAX_RATING = 5;
 export const COMMENTS_COUNT_STEP = 3;
 export const COMMENTS_DEFAULT_COUNT = 0;

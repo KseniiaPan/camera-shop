@@ -1,4 +1,5 @@
-import { SortingOption } from '../consts';
+import { SortingSection } from '../consts';
+import { ProductSorting } from '../types/sorting-types';
 import { Review } from '../types/review-types';
 import { ProductInfo } from '../types/product-types';
 
@@ -8,30 +9,34 @@ const sortReviews = (reviews: Review[]) =>
       Date.parse(reviewB.createAt) - Date.parse(reviewA.createAt)
   );
 
-const sortProductsBy = {
-  [SortingOption.MinPriceFirst]: (products: ProductInfo[]) =>
-    [...products].sort(
+
+const sortProducts = (currentSortOption: ProductSorting['sort'], currentSortDirection: ProductSorting['direction'], products: ProductInfo[]) => {
+  let sortedPoducts = products;
+  if (currentSortOption === SortingSection.Sort.price && currentSortDirection === SortingSection.Direction.up) {
+    sortedPoducts = [...products].sort(
       (firstProduct, secondProduct) => firstProduct.price - secondProduct.price
-    ),
-  [SortingOption.MaxPriceFirst]: (products: ProductInfo[]) =>
-    [...products].sort(
+    );
+  }
+
+  if (currentSortOption === SortingSection.Sort.price && currentSortDirection === SortingSection.Direction.down) {
+    sortedPoducts = [...products].sort(
       (firstProduct, secondProduct) => secondProduct.price - firstProduct.price
-    ),
-  [SortingOption.LeastRatedFirst]: (products: ProductInfo[]) =>
-    [...products].sort(
+    );
+  }
+
+  if (currentSortOption === SortingSection.Sort.popular && currentSortDirection === SortingSection.Direction.up) {
+    sortedPoducts = [...products].sort(
       (firstProduct, secondProduct) =>
         firstProduct.rating - secondProduct.rating
-    ),
-  [SortingOption.TopRatedFirst]: (products: ProductInfo[]) =>
-    [...products].sort(
+    );
+  }
+  if (currentSortOption === SortingSection.Sort.popular && currentSortDirection === SortingSection.Direction.down) {
+    sortedPoducts = [...products].sort(
       (firstProduct, secondProduct) =>
         secondProduct.rating - firstProduct.rating
-    ),
+    );
+  }
+  return sortedPoducts;
 };
-
-const sortProducts = (
-  products: ProductInfo[],
-  chosenSortingOption: SortingOption
-) => sortProductsBy[chosenSortingOption](products);
 
 export { sortReviews, sortProducts };
