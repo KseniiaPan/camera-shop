@@ -7,8 +7,10 @@ import Modal from '../../components/modal/modal';
 import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductsFilter from '../../components/products-filter/products-filter';
+import ProductsSorting from '../../components/products-sorting/products-sorting';
 import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
+import { ProductSorting } from '../../types/sorting-types';
 import { useAppSelector } from '../../hooks/index';
 import {
   getDataLoadingErrorStatus,
@@ -22,6 +24,7 @@ import {
   FilterSection,
 } from '../../consts';
 import { useProductFilters } from '../../hooks/use-products-filter';
+import {useProductSorting} from '../../hooks/use-products-sorting';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 
@@ -32,10 +35,6 @@ const initialState: ProductModalData = {
 
 function MainPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialState);
-
-  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
-  const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
-  const allProducts = useAppSelector(getProductsData);
   const {
     setFilters,
     removeFilters,
@@ -49,6 +48,14 @@ function MainPage(): JSX.Element {
     maxPrice,
   } = useProductFilters();
 
+  const {
+    sort,
+    direction,
+    setSorting} = useProductSorting();
+
+  const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
+  const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
+  const allProducts = useAppSelector(getProductsData);
   const filteredByCharacteristicsProducts = filterProducts(
     allProducts,
     category,
@@ -160,6 +167,18 @@ function MainPage(): JSX.Element {
     removeFilters();
   };
 
+  const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setSorting({
+      sort: evt.target.value as ProductSorting['sort'],
+    });
+  };
+
+  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setSorting({
+      direction: evt.target.value as ProductSorting['direction'],
+    });
+  };
+
   if (isProductsDataLoading) {
     return <LoadingPage />;
   }
@@ -198,6 +217,7 @@ function MainPage(): JSX.Element {
                 />
               </div>
               <div className="catalog__content">
+                <ProductsSorting onSortClick={handleSortClick} onSortDirectionClick={handleSortDirectionClick} sort={sort} direction={direction}/>
                 {filteredProducts && filteredProducts.length > 0 ? (
                   <ProductCardsList
                     products={filteredProducts}

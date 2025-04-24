@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-
 import { ProductFilters } from '../types/filter-types';
 import { FilterSection } from '../consts';
 

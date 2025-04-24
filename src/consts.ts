@@ -117,11 +117,23 @@ export const FilterSection = {
   },
 } as const;
 
+export const SortingSection = {
+  Sort: {
+    price: 'price',
+    popular: 'popular',
+  },
+  Direction: {
+    up: 'up',
+    down: 'down',
+  }
+} as const;
+
+
 export enum SortingOption {
-  MinPriceFirst = 'Price: low to high',
-  MaxPriceFirst = 'Price: high to low',
-  TopRatedFirst = 'Rating: high to low',
-  LeastRatedFirst = 'Rating: low to high',
+  MinPriceFirst = 'min-price-first',
+  MaxPriceFirst = 'max-price-first',
+  LeastRatedFirst = 'least-rated-first',
+  TopRatedFirst = 'top-rated-first',
 }
 
 export const MAX_RATING = 5;
