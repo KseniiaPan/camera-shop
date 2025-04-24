@@ -5,7 +5,7 @@ type ProductsFilterProps = {
   onCategoryFilterClick: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   onTypeFilterClick: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   onLevelFilterClick: (evt: React.ChangeEvent<HTMLInputElement>) => void;
-  onResetFilterClick: () => void;
+  onResetFilterClick: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onMinPriceChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   onMaxPriceChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
   category: ProductFilters['category'];
@@ -32,6 +32,7 @@ function ProductsFilter({
   requiredMinPrice,
   requiredMaxPrice,
 }: ProductsFilterProps): JSX.Element {
+
   return (
     <div className="catalog-filter">
       <form action="#">

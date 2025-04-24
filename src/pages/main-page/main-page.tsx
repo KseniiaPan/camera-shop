@@ -155,7 +155,8 @@ function MainPage(): JSX.Element {
     }
   };
 
-  const handleResetFilterClick = () => {
+  const handleResetFilterClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    evt.preventDefault();
     removeFilters();
   };
 
