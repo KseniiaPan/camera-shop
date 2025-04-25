@@ -99,6 +99,8 @@ export const filterItems = [
   },
 ];
 
+export const initialPaginationItems = [1, 2, 3];
+
 export const FilterSection = {
   Category: {
     photocamera: 'photocamera',
@@ -133,6 +135,7 @@ export const COMMENTS_COUNT_STEP = 3;
 export const COMMENTS_DEFAULT_COUNT = 0;
 export const SEARCH_VALUE_MIN_LENGTH = 3;
 export const RESET_VALUE_MIN_LENGTH = 1;
+export const START_PAGE = 1;
 
 export const PHONE_REGEXP =
   /^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$/;

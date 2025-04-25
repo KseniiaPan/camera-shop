@@ -1,24 +1,25 @@
-function CatalogPagination(): JSX.Element {
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../consts';
+import { initialPaginationItems } from '../../consts';
+
+type CatalogPaginationProps = {
+  pageNumber: number;
+  onPageNumberClick: (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+}
+function CatalogPagination({pageNumber, onPageNumberClick}: CatalogPaginationProps): JSX.Element {
+
   return (
     <div className="pagination">
       <ul className="pagination__list">
+        {initialPaginationItems.map((paginationItem) => (
+          <li className="pagination__item" key={paginationItem}>
+            <Link className={`pagination__link ${paginationItem === pageNumber ? 'pagination__link--active' : ''}`} to={AppRoute.Main} data-id={paginationItem} onClick={onPageNumberClick}>
+              {paginationItem}
+            </Link>
+          </li>
+        ))}
         <li className="pagination__item">
-          <a className="pagination__link pagination__link--active" href={'1'}>
-        1
-          </a>
-        </li>
-        <li className="pagination__item">
-          <a className="pagination__link" href={'2'}>
-        2
-          </a>
-        </li>
-        <li className="pagination__item">
-          <a className="pagination__link" href={'3'}>
-        3
-          </a>
-        </li>
-        <li className="pagination__item">
-          <a className="pagination__link pagination__link--text" href={'2'}>
+          <a className="pagination__link pagination__link--text" href={'3'}>
         Далее
           </a>
         </li>

@@ -2,13 +2,10 @@ import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductSorting } from '../types/sorting-types';
 
+
 export function useProductSorting() {
 
-  const defaultSortingState: ProductSorting = {
-    sort: 'price',
-    direction: 'up'
-  };
-  const [searchParams, setSearchParams] = useSearchParams(defaultSortingState);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const sort = searchParams.get('sort') as ProductSorting['sort'];
   const direction = searchParams.get('direction') as ProductSorting['direction'];
@@ -23,7 +20,6 @@ export function useProductSorting() {
         if (sorting.direction !== undefined) {
           params.set('direction', sorting.direction);
         }
-
         return params;
       });
     },

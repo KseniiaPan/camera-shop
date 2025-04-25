@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
@@ -12,25 +12,49 @@ import CatalogPagination from '../../components/catalog-pagination/catalog-pagin
 import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
+import { ProductsCatalogPagination } from '../../types/pagination-types';
 import { useAppSelector } from '../../hooks/index';
 import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData} from '../../store/product-process/selectors';
-import { ProductsListOption, ErrorText, FilterSection, SortingSection } from '../../consts';
+import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE } from '../../consts';
 import { useProductFilters } from '../../hooks/use-products-filter';
-import {useProductSorting} from '../../hooks/use-products-sorting';
+import { useProductSorting } from '../../hooks/use-products-sorting';
+import { useCatalogPagination } from '../../hooks/use-catalog-pagination';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 
-const initialState: ProductModalData = {
+const initialModalState: ProductModalData = {
   isModalOpen: false,
   openedCameraId: null,
 };
 
-function CatalogPage(): JSX.Element {
-  const [modalData, setModalData] = useState(initialState);
+const initialSortingState: ProductSorting = {
+  sort: 'price',
+  direction: 'up'
+};
 
-  const {setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useProductFilters();
+const initialPaginationState: ProductsCatalogPagination = {
+  page: START_PAGE.toString()
+};
+
+function CatalogPage(): JSX.Element {
+  const [modalData, setModalData] = useState(initialModalState);
+
+  const {page, setPagination} = useCatalogPagination();
+  useEffect(() => {
+    if (page === null) {
+      setPagination(initialPaginationState);
+    }
+  }, [page, setPagination]);
 
   const {sort, direction, setSorting} = useProductSorting();
+  const {setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useProductFilters();
+
+
+  useEffect(() => {
+    if (sort === null && direction === null) {
+      setSorting(initialSortingState);
+    }
+  }, [sort, direction, setSorting]);
 
   const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const isProductsDataLoading = useAppSelector(getProductsLoadingStatus);
@@ -53,6 +77,15 @@ function CatalogPage(): JSX.Element {
 
   const handleModalClose = () => {
     setModalData({ isModalOpen: false, openedCameraId: null });
+  };
+
+  const handlePageNumberClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    evt.preventDefault();
+    if (evt.currentTarget.dataset.id !== undefined) {
+      setPagination({
+        page: evt.currentTarget.dataset.id
+      });
+    }
   };
 
   const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
@@ -170,7 +203,7 @@ function CatalogPage(): JSX.Element {
                 ) : (
                   <ErrorMessage message={ErrorText.FilterError} />
                 )}
-                <CatalogPagination />
+                <CatalogPagination pageNumber={Number(page)} onPageNumberClick={handlePageNumberClick}/>
               </div>
             </div>
           </div>
