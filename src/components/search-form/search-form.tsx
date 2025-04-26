@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './search-form.css';
-import { SEARCH_VALUE_MIN_LENGTH, RESET_VALUE_MIN_LENGTH, AppRoute, ErrorText } from '../../consts';
+import {
+  SEARCH_VALUE_MIN_LENGTH,
+  RESET_VALUE_MIN_LENGTH,
+  AppRoute,
+} from '../../consts';
 import { useAppSelector } from '../../hooks/index';
 import { getProductsData } from '../../store/product-process/selectors';
 import { getSearchedProducts } from '../../utils/filtering';
@@ -34,7 +38,8 @@ function SearchForm(): JSX.Element {
     );
 
     if (
-      searchText.length >= SEARCH_VALUE_MIN_LENGTH
+      searchText.length >= SEARCH_VALUE_MIN_LENGTH &&
+      displayedSearchedProducts.length !== 0
     ) {
       setOptionsListOpened(true);
       setSerchedProductsOptions(displayedSearchedProducts);
@@ -157,19 +162,18 @@ function SearchForm(): JSX.Element {
             onChange={handleSearchValueChange}
           />
         </label>
-
-        <ul className="form-search__select-list">
-          {serchedProductsOptions.length > 0 ? serchedProductsOptions.map((product, index) => (
-            <SearchSelectItem
-              product={product}
-              index={index}
-              currentFocus={currentProductIndex}
-              key={product.id}
-            />
-          )) :
-            <li className="form-search__select-item">{ErrorText.SearchError}</li>}
-        </ul>
-
+        {serchedProductsOptions && (
+          <ul className="form-search__select-list">
+            {serchedProductsOptions.map((product, index) => (
+              <SearchSelectItem
+                product={product}
+                index={index}
+                currentFocus={currentProductIndex}
+                key={product.id}
+              />
+            ))}
+          </ul>
+        )}
       </form>
       <button
         className={`form-search__reset ${

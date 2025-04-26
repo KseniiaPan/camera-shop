@@ -7,9 +7,9 @@ import { ProductTabOption } from '../../types/product-types';
 
 function ProductTabs(): JSX.Element {
   const currentProduct = useAppSelector(getCurrentProductData);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get('tab') as ProductTabOption['tab'];
+
 
   const setActiveTab = useCallback(
     (activeTab: ProductTabOption) => {
