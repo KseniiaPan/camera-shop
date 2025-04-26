@@ -20,8 +20,8 @@ export enum APIRoute {
 }
 
 export enum TabOption {
-  Characteristics = 'Characteristics',
-  Description = 'Description',
+  Characteristics = 'characteristics',
+  Description = 'description',
 }
 
 export enum ProductCategory {

@@ -22,3 +22,7 @@ export type ProductModalData = {
     isModalOpen: boolean;
     openedCameraId: null|number;
   };
+
+export type ProductTabOption = {
+  tab: 'characteristics' | 'description';
+}
