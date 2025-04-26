@@ -52,6 +52,7 @@ export enum ProductsListOption {
 export enum ErrorText {
   ServerError = 'Произошла ошибка при загрузке данных с сервера, попробуйте еще раз',
   FilterError = 'Не удалось найти подходящий продукт, попробуйте изменить параметры поиска',
+  SearchError = 'Совпадения не найдены'
 }
 
 export const SimilarProductsSlider = {
