@@ -64,11 +64,9 @@ function CatalogPage(): JSX.Element {
   const sortedProducts = sortProducts(sort, direction, allProducts);
 
   const filteredByCharacteristicsProducts = filterProducts(sortedProducts, category, types, levels);
-
   const filteredProducts: ProductInfo[] = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
 
   const minPriceFirstProductsList: ProductInfo[] = sortProducts(SortingSection.Sort.price, SortingSection.Direction.up, filteredByCharacteristicsProducts);
-
   const currentMinPrice = minPriceFirstProductsList[0] && minPriceFirstProductsList[0].price;
   const currentMaxPrice = minPriceFirstProductsList[minPriceFirstProductsList.length - 1] && minPriceFirstProductsList[minPriceFirstProductsList.length - 1].price;
 
@@ -78,7 +76,6 @@ function CatalogPage(): JSX.Element {
 
   const pagesCount = Math.ceil(filteredProducts.length / PRODUCTS_COUNT_STEP);
   const allPaginationItems = Array.from({length: pagesCount}, (_, i) => i + 1);
-
   const visiblePaginationItems = allPaginationItems.slice(paginationItems.start, paginationItems.end);
 
   const isNextButtonVisible = visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
@@ -112,7 +109,7 @@ function CatalogPage(): JSX.Element {
     const nextPaginationEnd = paginationItems.end + DISPLAYED_PAGINATION_STEP;
     setPaginationItems({start: nextPaginationStart, end: nextPaginationEnd});
 
-    const nextActivePage = (visiblePaginationItems[0] + 3).toString();
+    const nextActivePage = (visiblePaginationItems.map((item) => item + DISPLAYED_PAGINATION_STEP)[1]).toString();
     setPagination({
       page: nextActivePage
     });
@@ -124,22 +121,21 @@ function CatalogPage(): JSX.Element {
     const previousPaginationEnd = paginationItems.end - DISPLAYED_PAGINATION_STEP;
     setPaginationItems({start: previousPaginationStart, end: previousPaginationEnd});
 
-    const previousActivePage = (visiblePaginationItems[visiblePaginationItems.length - 1] - 3).toString();
-
+    const previousActivePage = (visiblePaginationItems.map((item) => item - DISPLAYED_PAGINATION_STEP)[1]).toString();
     setPagination({
       page: previousActivePage
     });
   };
 
   const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setPagination(initialPaginationState);
+    resetPagination();
     setSorting({
       sort: evt.target.value as ProductSorting['sort'],
     });
   };
 
   const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setPagination(initialPaginationState);
+    resetPagination();
     setSorting({
       direction: evt.target.value as ProductSorting['direction'],
     });
