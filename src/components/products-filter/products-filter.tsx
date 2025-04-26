@@ -13,8 +13,8 @@ type ProductsFilterProps = {
   levels: ProductFilters['level'][];
   currentMinPrice: number;
   currentMaxPrice: number;
-  requiredMinPrice: string | undefined;
-  requiredMaxPrice: string | undefined;
+  requiredMinPrice: string;
+  requiredMaxPrice: string;
 };
 
 function ProductsFilter({
@@ -46,6 +46,7 @@ function ProductsFilter({
                   type="number"
                   name="price"
                   defaultValue={requiredMinPrice}
+                  key={requiredMinPrice}
                   placeholder={currentMinPrice ? currentMinPrice.toString() : 'от'}
                   onBlur={onMinPriceChange}
                 />
@@ -57,6 +58,7 @@ function ProductsFilter({
                   type="number"
                   name="priceUp"
                   defaultValue={requiredMaxPrice}
+                  key={requiredMaxPrice}
                   placeholder={currentMaxPrice ? currentMaxPrice.toString() : 'до'}
                   onBlur={onMaxPriceChange}
                 />
