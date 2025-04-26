@@ -1,16 +1,52 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductFilters } from '../types/filter-types';
+import { ProductsCatalogPagination } from '../types/pagination-types';
+import { ProductSorting } from '../types/sorting-types';
 import { FilterSection } from '../consts';
 
-export function useProductFilters() {
+export function useCatalogSearchParams() {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = searchParams.get('page') as ProductsCatalogPagination['page'];
+
+  const sort = searchParams.get('sort') as ProductSorting['sort'];
+  const direction = searchParams.get('direction') as ProductSorting['direction'];
 
   const category = searchParams.get('category') as ProductFilters['category'];
   const types = searchParams.getAll('type') as ProductFilters['type'][];
   const levels = searchParams.getAll('level') as ProductFilters['level'][];
   const minPrice = searchParams.get('minPrice') ? (searchParams.get('minPrice') as string) : '';
   const maxPrice = searchParams.get('maxPrice') ? (searchParams.get('maxPrice') as string) : '';
+
+  const setPagination = useCallback(
+    (pagination: ProductsCatalogPagination) => {
+      setSearchParams((params) => {
+        if (pagination.page !== undefined) {
+          params.set('page', pagination.page);
+        }
+
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
+
+  const setSorting = useCallback(
+    (sorting: ProductSorting) => {
+      setSearchParams((params) => {
+        if (sorting.sort !== undefined) {
+          params.set('sort', sorting.sort);
+        }
+
+        if (sorting.direction !== undefined) {
+          params.set('direction', sorting.direction);
+        }
+        return params;
+      });
+    },
+    [setSearchParams]
+  );
 
   const setFilters = useCallback(
     (filters: ProductFilters) => {
@@ -93,5 +129,5 @@ export function useProductFilters() {
     });
   }, [setSearchParams]);
 
-  return {category, types, levels, minPrice, maxPrice, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters};
+  return { page, setPagination, sort, direction, setSorting, category, types, levels, minPrice, maxPrice, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters };
 }

@@ -12,13 +12,11 @@ import CatalogPagination from '../../components/catalog-pagination/catalog-pagin
 import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
-import { ProductsCatalogPagination } from '../../types/pagination-types';
+import { ProductsCatalogPagination, PaginationItems } from '../../types/pagination-types';
 import { useAppSelector } from '../../hooks/index';
 import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData} from '../../store/product-process/selectors';
-import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE } from '../../consts';
-import { useProductFilters } from '../../hooks/use-products-filter';
-import { useProductSorting } from '../../hooks/use-products-sorting';
-import { useCatalogPagination } from '../../hooks/use-catalog-pagination';
+import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE, PRODUCTS_COUNT_STEP, DISPLAYED_PAGINATION_STEP, PAGINATION_ITEMS_MIN_COUNT, PAGINATION_ITEMS_MAX_COUNT } from '../../consts';
+import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 
@@ -36,19 +34,22 @@ const initialPaginationState: ProductsCatalogPagination = {
   page: START_PAGE.toString()
 };
 
+const initialPaginationItemsState: PaginationItems = {
+  start: PAGINATION_ITEMS_MIN_COUNT,
+  end: PAGINATION_ITEMS_MAX_COUNT
+};
+
 function CatalogPage(): JSX.Element {
   const [modalData, setModalData] = useState(initialModalState);
+  const [paginationItems, setPaginationItems] = useState(initialPaginationItemsState);
 
-  const {page, setPagination} = useCatalogPagination();
+  const {page, setPagination, sort, direction, setSorting, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useCatalogSearchParams();
+
   useEffect(() => {
     if (page === null) {
       setPagination(initialPaginationState);
     }
   }, [page, setPagination]);
-
-  const {sort, direction, setSorting} = useProductSorting();
-  const {setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useProductFilters();
-
 
   useEffect(() => {
     if (sort === null && direction === null) {
@@ -71,6 +72,23 @@ function CatalogPage(): JSX.Element {
   const currentMinPrice = minPriceFirstProductsList[0] && minPriceFirstProductsList[0].price;
   const currentMaxPrice = minPriceFirstProductsList[minPriceFirstProductsList.length - 1] && minPriceFirstProductsList[minPriceFirstProductsList.length - 1].price;
 
+  const displayedProductsStart = (Number(page) - 1) * PRODUCTS_COUNT_STEP;
+  const displayedProductsEnd = displayedProductsStart + PRODUCTS_COUNT_STEP;
+  const displayedProducts = filteredProducts.length > PRODUCTS_COUNT_STEP ? filteredProducts.slice(displayedProductsStart, displayedProductsEnd) : filteredProducts;
+
+  const pagesCount = Math.ceil(filteredProducts.length / PRODUCTS_COUNT_STEP);
+  const allPaginationItems = Array.from({length: pagesCount}, (_, i) => i + 1);
+
+  const visiblePaginationItems = allPaginationItems.slice(paginationItems.start, paginationItems.end);
+
+  const isNextButtonVisible = visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
+  const isPreviousButtonVisible = visiblePaginationItems[0] > 1;
+
+  const resetPagination = () => {
+    setPagination(initialPaginationState);
+    setPaginationItems(initialPaginationItemsState);
+  };
+
   const handleModalOpenClick = (id: number | null) => {
     setModalData({ isModalOpen: true, openedCameraId: id });
   };
@@ -88,17 +106,48 @@ function CatalogPage(): JSX.Element {
     }
   };
 
-  const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+  const handleNextButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    evt.preventDefault();
+    const nextPaginationStart = paginationItems.start + DISPLAYED_PAGINATION_STEP;
+    const nextPaginationEnd = paginationItems.end + DISPLAYED_PAGINATION_STEP;
+    setPaginationItems({start: nextPaginationStart, end: nextPaginationEnd});
+
+    const nextActivePage = (visiblePaginationItems[0] + 3).toString();
+    setPagination({
+      page: nextActivePage
+    });
+  };
+
+  const handlepPreviousButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    evt.preventDefault();
+    const previousPaginationStart = paginationItems.start - DISPLAYED_PAGINATION_STEP;
+    const previousPaginationEnd = paginationItems.end - DISPLAYED_PAGINATION_STEP;
+    setPaginationItems({start: previousPaginationStart, end: previousPaginationEnd});
+
+    const previousActivePage = (visiblePaginationItems[visiblePaginationItems.length - 1] - 3).toString();
+
+    setPagination({
+      page: previousActivePage
+    });
+  };
+
+  const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setPagination(initialPaginationState);
     setSorting({
       sort: evt.target.value as ProductSorting['sort'],
     });
+  };
 
-  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setPagination(initialPaginationState);
     setSorting({
       direction: evt.target.value as ProductSorting['direction'],
     });
+  };
 
   const handleCategoryFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    resetPagination();
+
     if (evt.target.value === FilterSection.Category.videocamera) {
       removeNonValidFilters();
     }
@@ -107,15 +156,19 @@ function CatalogPage(): JSX.Element {
     });
   };
 
-  const handleTypeFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+  const handleTypeFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    resetPagination();
     setFilters({
       type: evt.target.value as ProductFilters['type'],
     });
+  };
 
-  const handleLevelFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) =>
+  const handleLevelFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    resetPagination();
     setFilters({
       level: evt.target.value as ProductFilters['level'],
     });
+  };
 
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
@@ -127,6 +180,9 @@ function CatalogPage(): JSX.Element {
     if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) < currentMinPrice) {
       evt.target.value = currentMinPrice.toString();
     }
+
+    resetPagination();
+
     setFilters({
       minPrice: evt.target.value as ProductFilters['minPrice'],
     });
@@ -142,6 +198,9 @@ function CatalogPage(): JSX.Element {
     if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
       evt.target.value = currentMaxPrice.toString();
     }
+
+    resetPagination();
+
     setFilters({
       maxPrice: evt.target.value as ProductFilters['maxPrice'],
     });
@@ -153,6 +212,7 @@ function CatalogPage(): JSX.Element {
   const handleResetFilterClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     evt.preventDefault();
     removeFilters();
+    resetPagination();
   };
 
   if (isProductsDataLoading) {
@@ -193,17 +253,32 @@ function CatalogPage(): JSX.Element {
                 />
               </div>
               <div className="catalog__content">
-                <ProductsSorting onSortClick={handleSortClick} onSortDirectionClick={handleSortDirectionClick} sort={sort} direction={direction}/>
-                {filteredProducts && filteredProducts.length > 0 ? (
+                <ProductsSorting
+                  onSortClick={handleSortClick}
+                  onSortDirectionClick={handleSortDirectionClick}
+                  sort={sort}
+                  direction={direction}
+                />
+                {filteredProducts.length > 0 ? (
                   <ProductCardsList
-                    products={filteredProducts}
+                    products={displayedProducts}
                     onModalOpenClick={handleModalOpenClick}
                     productsListOption={ProductsListOption.CatalogList}
                   />
                 ) : (
                   <ErrorMessage message={ErrorText.FilterError} />
                 )}
-                <CatalogPagination pageNumber={Number(page)} onPageNumberClick={handlePageNumberClick}/>
+                {filteredProducts.length > PRODUCTS_COUNT_STEP && (
+                  <CatalogPagination
+                    pageNumber={Number(page)}
+                    paginationItems={visiblePaginationItems}
+                    isNextButtonVisible={isNextButtonVisible}
+                    isPreviousButtonVisible={isPreviousButtonVisible}
+                    onPageNumberClick={handlePageNumberClick}
+                    onNextButtonClick={handleNextButtonClick}
+                    onPreviousButtonClick={handlepPreviousButtonClick}
+                  />
+                )}
               </div>
             </div>
           </div>
