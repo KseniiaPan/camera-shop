@@ -62,17 +62,6 @@ function SearchForm(): JSX.Element {
     };
   }, []);
 
-  const handleSearchValueChange = (
-    evt: ChangeEvent<HTMLInputElement>
-  ): void => {
-    const { value } = evt.target;
-    setSearchText(value);
-  };
-
-  const handleSearchResetButtonClick = () => {
-    resetSearchForm();
-  };
-
   useEffect(() => {
     const handleArrowDownKeyPress = (evt: KeyboardEvent) => {
       if (evt.key === 'ArrowDown') {
@@ -111,9 +100,9 @@ function SearchForm(): JSX.Element {
 
   useEffect(() => {
     const handleEnterKeyPress = (evt: KeyboardEvent) => {
-      if (evt.key === 'Enter') {
-        if (serchedProductsOptions) {
-          const selectedProduct = serchedProductsOptions[currentProductIndex];
+      if (evt.key === 'Enter' && serchedProductsOptions) {
+        const selectedProduct = serchedProductsOptions[currentProductIndex];
+        if (selectedProduct) {
           navigate(AppRoute.Product.replace(':id', String(selectedProduct.id)));
           resetSearchForm();
         }
@@ -134,6 +123,17 @@ function SearchForm(): JSX.Element {
       document.body.style.overflow = 'unset';
     };
   }, [isOptionsListOpened]);
+
+  const handleSearchValueChange = (
+    evt: ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { value } = evt.target;
+    setSearchText(value);
+  };
+
+  const handleSearchResetButtonClick = () => {
+    resetSearchForm();
+  };
 
   return (
     <div className={`form-search ${isOptionsListOpened ? 'list-opened' : ''}`}>
