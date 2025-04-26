@@ -23,11 +23,11 @@ function SearchSelectItem({
   }, [currentFocus, index]);
 
   return (
-    <Link to={AppRoute.Product.replace(':id', String(product.id))}>
-      <li className="form-search__select-item" tabIndex={0} ref={selectItemRef}>
+    <li className="form-search__select-item" tabIndex={0} ref={selectItemRef}>
+      <Link to={AppRoute.Product.replace(':id', String(product.id))}>
         {product.name}
-      </li>
-    </Link>
+      </Link>
+    </li>
   );
 }
 
