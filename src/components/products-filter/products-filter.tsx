@@ -75,6 +75,7 @@ function ProductsFilter({
               <input
                 type="radio"
                 name="category"
+                data-testid="category"
                 defaultValue={FilterSection.Category.photocamera}
                 checked={FilterSection.Category.photocamera === category}
                 onChange={onCategoryFilterClick}
@@ -104,6 +105,7 @@ function ProductsFilter({
               <input
                 type="checkbox"
                 name="digital"
+                data-testid="digital"
                 value={FilterSection.Type.digital}
                 checked={types.includes(FilterSection.Type.digital)}
                 onChange={onTypeFilterClick}
@@ -161,6 +163,7 @@ function ProductsFilter({
               <input
                 type="checkbox"
                 name="zero"
+                data-testid="zero"
                 value={FilterSection.Level.zero}
                 checked={levels.includes(FilterSection.Level.zero)}
                 onChange={onLevelFilterClick}
