@@ -13,32 +13,34 @@ type CatalogPaginationProps = {
 function CatalogPagination({pageNumber, paginationItems, isPreviousButtonVisible, isNextButtonVisible, onPageNumberClick, onNextButtonClick, onPreviousButtonClick}: CatalogPaginationProps): JSX.Element {
 
   return (
-    <div className="pagination">
-      <ul className="pagination__list">
-        {isPreviousButtonVisible && (
-          <li className="pagination__item">
-            <Link className="pagination__link pagination__link--text" to={AppRoute.Main} onClick={onPreviousButtonClick}>
+    <div className="pagination" data-testid="pagination">
+      {
+        paginationItems &&
+        <ul className="pagination__list">
+          {isPreviousButtonVisible && (
+            <li className="pagination__item">
+              <Link className="pagination__link pagination__link--text" to={AppRoute.Main} onClick={onPreviousButtonClick}>
           Назад
-            </Link>
-          </li>
-        )}
-        {paginationItems && paginationItems.map((paginationItem) => (
-          <li className="pagination__item" key={paginationItem}>
-            <Link className={`pagination__link ${paginationItem === pageNumber ? 'pagination__link--active' : ''}`} to={AppRoute.Main} data-id={paginationItem} onClick={onPageNumberClick}>
-              {paginationItem}
-            </Link>
-          </li>
-        ))}
-        {isNextButtonVisible && (
-          <li className="pagination__item">
-            <Link className="pagination__link pagination__link--text" to={AppRoute.Main} onClick={onNextButtonClick}>
+              </Link>
+            </li>
+          )}
+          {paginationItems.map((paginationItem) => (
+            <li className="pagination__item" key={paginationItem}>
+              <Link className={`pagination__link ${paginationItem === pageNumber ? 'pagination__link--active' : ''}`} to={AppRoute.Main} data-id={paginationItem} onClick={onPageNumberClick}>
+                {paginationItem}
+              </Link>
+            </li>
+          ))}
+          {isNextButtonVisible && (
+            <li className="pagination__item">
+              <Link className="pagination__link pagination__link--text" to={AppRoute.Main} onClick={onNextButtonClick}>
         Далее
-            </Link>
-          </li>
-        )}
-      </ul>
+              </Link>
+            </li>
+          )}
+        </ul>
+      }
     </div>
-
   );
 }
 

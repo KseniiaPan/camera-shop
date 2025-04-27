@@ -10,7 +10,6 @@ function ProductTabs(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get('tab') as ProductTabOption['tab'];
 
-
   const setActiveTab = useCallback(
     (activeTab: ProductTabOption) => {
       setSearchParams((params) => {

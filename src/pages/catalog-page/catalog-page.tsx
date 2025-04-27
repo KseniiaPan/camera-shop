@@ -134,7 +134,6 @@ function CatalogPage(): JSX.Element {
 
   const handleCategoryFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
     resetPagination();
-
     if (evt.target.value === FilterSection.Category.videocamera) {
       removeNonValidFilters();
     }

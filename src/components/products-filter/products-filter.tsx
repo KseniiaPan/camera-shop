@@ -49,6 +49,7 @@ function ProductsFilter({
                   key={requiredMinPrice}
                   placeholder={currentMinPrice ? currentMinPrice.toString() : 'от'}
                   onBlur={onMinPriceChange}
+                  onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => evt.key === 'Enter' && (evt.target as HTMLInputElement).blur()}
                 />
               </label>
             </div>
@@ -61,6 +62,7 @@ function ProductsFilter({
                   key={requiredMaxPrice}
                   placeholder={currentMaxPrice ? currentMaxPrice.toString() : 'до'}
                   onBlur={onMaxPriceChange}
+                  onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) => evt.key === 'Enter' && (evt.target as HTMLInputElement).blur()}
                 />
               </label>
             </div>

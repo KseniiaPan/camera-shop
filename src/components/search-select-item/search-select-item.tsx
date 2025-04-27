@@ -9,11 +9,7 @@ type SearchSelectItemProps = {
   currentFocus: number;
 };
 
-function SearchSelectItem({
-  product,
-  index,
-  currentFocus,
-}: SearchSelectItemProps): JSX.Element {
+function SearchSelectItem({product, index, currentFocus}: SearchSelectItemProps): JSX.Element {
   const selectItemRef = useRef<HTMLLIElement | null>(null);
 
   useEffect(() => {
@@ -24,7 +20,7 @@ function SearchSelectItem({
 
   return (
 
-    <li className="form-search__select-item" tabIndex={0} ref={selectItemRef}>
+    <li className="form-search__select-item" tabIndex={0} ref={selectItemRef} data-testid="search-select-item">
       <Link to={AppRoute.Product.replace(':id', String(product.id))}>
         {product.name}
       </Link>

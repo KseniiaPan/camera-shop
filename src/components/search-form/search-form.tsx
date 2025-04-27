@@ -28,10 +28,7 @@ function SearchForm(): JSX.Element {
   };
 
   useEffect(() => {
-    const displayedSearchedProducts = getSearchedProducts(
-      allAvailableProducts,
-      searchText
-    );
+    const displayedSearchedProducts = getSearchedProducts(allAvailableProducts, searchText);
 
     if (
       searchText.length >= SEARCH_VALUE_MIN_LENGTH
@@ -64,7 +61,7 @@ function SearchForm(): JSX.Element {
 
   useEffect(() => {
     const handleArrowDownKeyPress = (evt: KeyboardEvent) => {
-      if (evt.key === 'ArrowDown') {
+      if (evt.key === 'ArrowDown' && serchedProductsOptions) {
         setCurrentProductIndex(
           currentProductIndex === serchedProductsOptions.length - 1
             ? 0
@@ -78,11 +75,11 @@ function SearchForm(): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleArrowDownKeyPress);
     };
-  }, [currentProductIndex, serchedProductsOptions.length]);
+  }, [currentProductIndex, serchedProductsOptions, serchedProductsOptions.length]);
 
   useEffect(() => {
     const handleArrowUpKeyPress = (evt: KeyboardEvent) => {
-      if (evt.key === 'ArrowUp') {
+      if (evt.key === 'ArrowUp' && serchedProductsOptions) {
         setCurrentProductIndex(
           currentProductIndex === 0
             ? serchedProductsOptions.length - 1
@@ -96,7 +93,7 @@ function SearchForm(): JSX.Element {
     return () => {
       document.removeEventListener('keydown', handleArrowUpKeyPress);
     };
-  }, [currentProductIndex, serchedProductsOptions.length]);
+  }, [currentProductIndex, serchedProductsOptions, serchedProductsOptions.length]);
 
   useEffect(() => {
     const handleEnterKeyPress = (evt: KeyboardEvent) => {
