@@ -12,7 +12,7 @@ import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductCardsSimilar from '../../components/product-cards-similar/product-cards-similar';
 import Modal from '../../components/modal/modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/index';
-import { RatingOption } from '../../consts';
+import { RatingOption, ErrorText } from '../../consts';
 import { ProductModalData } from '../../types/product-types';
 import {fetchCurrentProductAction, fetchReviewsAction, fetchSimilarProductsAction} from '../../store/api-actions';
 import {getCurrentProductData, getCurrentProductLoadingStatus, getDataLoadingErrorStatus, getSimilarProductsData} from '../../store/product-process/selectors';
@@ -66,7 +66,7 @@ function ProductPage(): JSX.Element {
   }
 
   if (isDataLoadingError) {
-    return <ErrorMessage />;
+    return <ErrorMessage message={ErrorText.ServerError}/>;
   }
 
   if (!isDetailedProductLoading && currentProduct) {

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import ProductsSorting from './products-sorting';
-import { SortingSection} from '../../consts';
+import { SortingSection } from '../../consts';
 
 describe('Component: ProductsSorting', () => {
   it('should render correctly with initial data', () => {

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { withStore } from '../../utils/mock-component';
 import { MemoryRouter } from 'react-router-dom';
-import {HelmetProvider} from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 import CatalogPage from './catalog-page';
 import { AppRoute } from '../../consts';
 import { mockStore } from '../../utils/mocks';

@@ -14,7 +14,7 @@ import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
 import { ProductsCatalogPagination } from '../../types/pagination-types';
 import { useAppSelector } from '../../hooks/index';
-import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData} from '../../store/product-process/selectors';
+import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData } from '../../store/product-process/selectors';
 import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE, PRODUCTS_COUNT_STEP, DISPLAYED_PAGINATION_STEP } from '../../consts';
 import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
@@ -75,7 +75,7 @@ function CatalogPage(): JSX.Element {
   const visiblePaginationItems = getVisiblePaginationItems(allPaginationItems, page);
 
   const isNextButtonVisible = visiblePaginationItems && visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
-  const isPreviousButtonVisible = visiblePaginationItems && visiblePaginationItems[0] > 1;
+  const isPreviousButtonVisible = visiblePaginationItems && visiblePaginationItems[0] > START_PAGE;
 
   const resetPagination = () => {
     setPagination(initialPaginationState);

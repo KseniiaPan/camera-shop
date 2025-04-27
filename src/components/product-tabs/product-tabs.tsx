@@ -37,8 +37,7 @@ function ProductTabs(): JSX.Element {
     });
   };
 
-  const getActiveClass = (chosenOption: TabOption) =>
-    tab === chosenOption ? 'is-active' : '';
+  const getActiveClass = (chosenOption: TabOption) => tab === chosenOption ? 'is-active' : '';
 
   return (
     <div className="tabs product__tabs">

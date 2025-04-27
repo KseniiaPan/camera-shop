@@ -1,4 +1,4 @@
-import {SortingSection} from '../../consts';
+import { SortingSection } from '../../consts';
 import { ProductSorting } from '../../types/sorting-types';
 
 type ProductsSortingProps = {

@@ -1,6 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import ProductsFilter from './products-filter';
-import { FilterSection} from '../../consts';
 import { ProductFilters } from '../../types/filter-types';
 
 describe('Component: ProductFilters', () => {

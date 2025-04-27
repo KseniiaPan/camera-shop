@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './search-form.css';
-import { SEARCH_VALUE_MIN_LENGTH, RESET_VALUE_MIN_LENGTH, AppRoute, ErrorText} from '../../consts';
+import { SEARCH_VALUE_MIN_LENGTH, RESET_VALUE_MIN_LENGTH, AppRoute, ErrorText } from '../../consts';
 import { useAppSelector } from '../../hooks/index';
 import { getProductsData } from '../../store/product-process/selectors';
 import { getSearchedProducts } from '../../utils/filtering';
