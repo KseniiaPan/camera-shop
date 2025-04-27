@@ -3,9 +3,9 @@ import { AppRoute } from '../../consts';
 
 type CatalogPaginationProps = {
   pageNumber: number;
-  paginationItems: number[];
-  isPreviousButtonVisible: boolean;
-  isNextButtonVisible: boolean;
+  paginationItems: number[] | undefined;
+  isPreviousButtonVisible: boolean | undefined;
+  isNextButtonVisible: boolean | undefined;
   onPageNumberClick: (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   onNextButtonClick: (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   onPreviousButtonClick: (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
@@ -22,7 +22,7 @@ function CatalogPagination({pageNumber, paginationItems, isPreviousButtonVisible
             </Link>
           </li>
         )}
-        {paginationItems.map((paginationItem) => (
+        {paginationItems && paginationItems.map((paginationItem) => (
           <li className="pagination__item" key={paginationItem}>
             <Link className={`pagination__link ${paginationItem === pageNumber ? 'pagination__link--active' : ''}`} to={AppRoute.Main} data-id={paginationItem} onClick={onPageNumberClick}>
               {paginationItem}

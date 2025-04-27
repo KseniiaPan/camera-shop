@@ -19,6 +19,7 @@ import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAG
 import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
+import { getVisiblePaginationItems } from '../../utils/pagination';
 
 const initialModalState: ProductModalData = {
   isModalOpen: false,
@@ -76,10 +77,11 @@ function CatalogPage(): JSX.Element {
 
   const pagesCount = Math.ceil(filteredProducts.length / PRODUCTS_COUNT_STEP);
   const allPaginationItems = Array.from({length: pagesCount}, (_, i) => i + 1);
-  const visiblePaginationItems = allPaginationItems.slice(paginationItems.start, paginationItems.end);
 
-  const isNextButtonVisible = visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
-  const isPreviousButtonVisible = visiblePaginationItems[0] > 1;
+  const visiblePaginationItems = getVisiblePaginationItems(allPaginationItems, paginationItems.start, paginationItems.end, page);
+
+  const isNextButtonVisible = visiblePaginationItems && visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
+  const isPreviousButtonVisible = visiblePaginationItems && visiblePaginationItems[0] > 1;
 
   const resetPagination = () => {
     setPagination(initialPaginationState);
@@ -109,22 +111,26 @@ function CatalogPage(): JSX.Element {
     const nextPaginationEnd = paginationItems.end + DISPLAYED_PAGINATION_STEP;
     setPaginationItems({start: nextPaginationStart, end: nextPaginationEnd});
 
-    const nextActivePage = (visiblePaginationItems.map((item) => item + DISPLAYED_PAGINATION_STEP)[1]).toString();
-    setPagination({
-      page: nextActivePage
-    });
+    const nextActivePage = visiblePaginationItems && (visiblePaginationItems.map((item) => item + DISPLAYED_PAGINATION_STEP)[1]).toString();
+    if (nextActivePage) {
+      setPagination({
+        page: nextActivePage
+      });
+    }
   };
 
-  const handlepPreviousButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handlePreviousButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     evt.preventDefault();
     const previousPaginationStart = paginationItems.start - DISPLAYED_PAGINATION_STEP;
     const previousPaginationEnd = paginationItems.end - DISPLAYED_PAGINATION_STEP;
     setPaginationItems({start: previousPaginationStart, end: previousPaginationEnd});
 
-    const previousActivePage = (visiblePaginationItems.map((item) => item - DISPLAYED_PAGINATION_STEP)[1]).toString();
-    setPagination({
-      page: previousActivePage
-    });
+    const previousActivePage = visiblePaginationItems && (visiblePaginationItems.map((item) => item - DISPLAYED_PAGINATION_STEP)[1]).toString();
+    if (previousActivePage){
+      setPagination({
+        page: previousActivePage
+      });
+    }
   };
 
   const handleSortClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -272,7 +278,7 @@ function CatalogPage(): JSX.Element {
                     isPreviousButtonVisible={isPreviousButtonVisible}
                     onPageNumberClick={handlePageNumberClick}
                     onNextButtonClick={handleNextButtonClick}
-                    onPreviousButtonClick={handlepPreviousButtonClick}
+                    onPreviousButtonClick={handlePreviousButtonClick}
                   />
                 )}
               </div>
