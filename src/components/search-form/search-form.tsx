@@ -13,9 +13,7 @@ function SearchForm(): JSX.Element {
   const navigate = useNavigate();
   const [isOptionsListOpened, setOptionsListOpened] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [serchedProductsOptions, setSerchedProductsOptions] = useState<
-    ProductInfo[]
-  >([]);
+  const [serchedProductsOptions, setSerchedProductsOptions] = useState<ProductInfo[]>([]);
   const [currentProductIndex, setCurrentProductIndex] = useState(0);
 
   const allAvailableProducts = useAppSelector(getProductsData);
@@ -133,7 +131,7 @@ function SearchForm(): JSX.Element {
   };
 
   return (
-    <div className={`form-search ${isOptionsListOpened ? 'list-opened' : ''}`}>
+    <div className={`form-search ${isOptionsListOpened ? 'list-opened' : ''}`} data-testid="search-form">
       <form>
         <label>
           <svg

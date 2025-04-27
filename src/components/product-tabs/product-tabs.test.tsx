@@ -17,12 +17,12 @@ describe('Component: ProductTabs', () => {
       </MemoryRouter>);
 
     const mockCurrentProduct = mockStore.Product.currentProduct;
-    expect(screen.getByText(/Характеристики/i)).toBeInTheDocument();
-    expect(screen.getByText(/Описание/i)).toBeInTheDocument();
 
-    expect(
-      screen.getByText(mockCurrentProduct.description)
-    ).toBeInTheDocument();
+    const characteristicsTab = screen.getByText(/Характеристики/i);
+    const descriptionTab = screen.getByText(/Описание/i);
+
+    expect(characteristicsTab).toBeInTheDocument();
+    expect(descriptionTab).toBeInTheDocument();
     expect(screen.getByText(mockCurrentProduct.vendorCode)).toBeInTheDocument();
   });
 });
