@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
+import {CartProduct} from '../types/product-types';
 
-function getStoredCart(key: string, defaultValue: []) {
+function getStoredCart(key: string) {
   const storedCart = localStorage.getItem(key);
-  if (storedCart) {
-    const cart = JSON.parse(storedCart);
+  if (storedCart !== null) {
+    const cart = JSON.parse(storedCart) as CartProduct[];
     return cart;
   }
 
-  return defaultValue;
+  return undefined;
 }
 
-export const useLocalStorage = (key: string, defaultValue: []) => {
-  const [cart, setCart] = useState(() => {
-    return getStoredCart(key, defaultValue);
-  });
+export const useLocalStorage = (key: string) => {
+  const [cart, setCart] = useState(() => getStoredCart(key));
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(cart));

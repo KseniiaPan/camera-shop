@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
-import Modal from '../../components/modal/modal';
+import AddProductModal from '../../components/add-product-modal/add-product-modal';
+import AddProductSuccessModal from '../../components/add-product-success-modal/add-product-success-modal';
 import LoadingPage from '../loading-page/loading-page';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductsFilter from '../../components/products-filter/products-filter';
@@ -14,31 +15,64 @@ import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
 import { ProductsCatalogPagination } from '../../types/pagination-types';
 import { useAppSelector } from '../../hooks/index';
-import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData } from '../../store/product-process/selectors';
-import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE, PRODUCTS_COUNT_STEP, DISPLAYED_PAGINATION_STEP } from '../../consts';
+import {
+  getDataLoadingErrorStatus,
+  getProductsLoadingStatus,
+  getProductsData,
+} from '../../store/product-process/selectors';
+import {
+  ProductsListOption,
+  ErrorText,
+  FilterSection,
+  SortingSection,
+  START_PAGE,
+  PRODUCTS_COUNT_STEP,
+  DISPLAYED_PAGINATION_STEP,
+} from '../../consts';
 import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 import { getVisiblePaginationItems } from '../../utils/pagination';
 
-const initialModalState: ProductModalData = {
+const initialAddProductModalState: ProductModalData = {
   isModalOpen: false,
   openedCameraId: null,
 };
 
 const initialSortingState: ProductSorting = {
   sort: 'price',
-  direction: 'up'
+  direction: 'up',
 };
 
 const initialPaginationState: ProductsCatalogPagination = {
-  page: START_PAGE.toString()
+  page: START_PAGE.toString(),
 };
 
 function CatalogPage(): JSX.Element {
-  const [modalData, setModalData] = useState(initialModalState);
+  const [addProductModalData, setAddProductModalData] = useState(
+    initialAddProductModalState
+  );
 
-  const {page, setPagination, sort, direction, setSorting, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice} = useCatalogSearchParams();
+  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
+    useState(false);
+
+  const {
+    page,
+    setPagination,
+    sort,
+    direction,
+    setSorting,
+    setFilters,
+    removeFilters,
+    removeNonValidFilters,
+    removeMinPriceFilters,
+    removeMaxPriceFilters,
+    category,
+    types,
+    levels,
+    minPrice,
+    maxPrice,
+  } = useCatalogSearchParams();
 
   useEffect(() => {
     if (page === null) {
@@ -58,62 +92,112 @@ function CatalogPage(): JSX.Element {
 
   const sortedProducts = sortProducts(sort, direction, allProducts);
 
-  const filteredByCharacteristicsProducts = filterProducts(sortedProducts, category, types, levels);
-  const filteredProducts: ProductInfo[] = filterProductsbyPrice(filteredByCharacteristicsProducts, minPrice, maxPrice);
+  const filteredByCharacteristicsProducts = filterProducts(
+    sortedProducts,
+    category,
+    types,
+    levels
+  );
+  const filteredProducts: ProductInfo[] = filterProductsbyPrice(
+    filteredByCharacteristicsProducts,
+    minPrice,
+    maxPrice
+  );
 
-  const minPriceFirstProductsList: ProductInfo[] = sortProducts(SortingSection.Sort.price, SortingSection.Direction.up, filteredByCharacteristicsProducts);
-  const currentMinPrice = minPriceFirstProductsList[0] && minPriceFirstProductsList[0].price;
-  const currentMaxPrice = minPriceFirstProductsList[minPriceFirstProductsList.length - 1] && minPriceFirstProductsList[minPriceFirstProductsList.length - 1].price;
+  const minPriceFirstProductsList: ProductInfo[] = sortProducts(
+    SortingSection.Sort.price,
+    SortingSection.Direction.up,
+    filteredByCharacteristicsProducts
+  );
+  const currentMinPrice =
+    minPriceFirstProductsList[0] && minPriceFirstProductsList[0].price;
+  const currentMaxPrice =
+    minPriceFirstProductsList[minPriceFirstProductsList.length - 1] &&
+    minPriceFirstProductsList[minPriceFirstProductsList.length - 1].price;
 
   const displayedProductsStart = (Number(page) - 1) * PRODUCTS_COUNT_STEP;
   const displayedProductsEnd = displayedProductsStart + PRODUCTS_COUNT_STEP;
-  const displayedProducts = filteredProducts.length > PRODUCTS_COUNT_STEP ? filteredProducts.slice(displayedProductsStart, displayedProductsEnd) : filteredProducts;
+  const displayedProducts =
+    filteredProducts.length > PRODUCTS_COUNT_STEP
+      ? filteredProducts.slice(displayedProductsStart, displayedProductsEnd)
+      : filteredProducts;
 
   const pagesCount = Math.ceil(filteredProducts.length / PRODUCTS_COUNT_STEP);
-  const allPaginationItems = Array.from({length: pagesCount}, (_, i) => i + 1);
+  const allPaginationItems = Array.from(
+    { length: pagesCount },
+    (_, i) => i + 1
+  );
 
-  const visiblePaginationItems = getVisiblePaginationItems(allPaginationItems, page);
+  const visiblePaginationItems = getVisiblePaginationItems(
+    allPaginationItems,
+    page
+  );
 
-  const isNextButtonVisible = visiblePaginationItems && visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
-  const isPreviousButtonVisible = visiblePaginationItems && visiblePaginationItems[0] > START_PAGE;
+  const isNextButtonVisible =
+    visiblePaginationItems &&
+    visiblePaginationItems[visiblePaginationItems.length - 1] < pagesCount;
+  const isPreviousButtonVisible =
+    visiblePaginationItems && visiblePaginationItems[0] > START_PAGE;
 
   const resetPagination = () => {
     setPagination(initialPaginationState);
   };
 
-  const handleModalOpenClick = (id: number | null) => {
-    setModalData({ isModalOpen: true, openedCameraId: id });
+  const handleAddProductModalOpenClick = (id: number | null) => {
+    setAddProductModalData({ isModalOpen: true, openedCameraId: id });
   };
 
-  const handleModalClose = () => {
-    setModalData({ isModalOpen: false, openedCameraId: null });
+  const handleAddProductModalCloseClick = () => {
+    setAddProductModalData({ isModalOpen: false, openedCameraId: null });
   };
 
-  const handlePageNumberClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleSuccessModalOpen = () => {
+    setIsProductSuccessModalOpen(true);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsProductSuccessModalOpen(false);
+  };
+
+  const handlePageNumberClick = (
+    evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     evt.preventDefault();
     if (evt.currentTarget.dataset.id !== undefined) {
       setPagination({
-        page: evt.currentTarget.dataset.id
+        page: evt.currentTarget.dataset.id,
       });
     }
   };
 
-  const handleNextButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handleNextButtonClick = (
+    evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     evt.preventDefault();
-    const nextActivePage = visiblePaginationItems && (visiblePaginationItems.map((item) => item + DISPLAYED_PAGINATION_STEP)[1]).toString();
+    const nextActivePage =
+      visiblePaginationItems &&
+      visiblePaginationItems
+        .map((item) => item + DISPLAYED_PAGINATION_STEP)[1]
+        .toString();
     if (nextActivePage) {
       setPagination({
-        page: nextActivePage
+        page: nextActivePage,
       });
     }
   };
 
-  const handlePreviousButtonClick = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+  const handlePreviousButtonClick = (
+    evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
     evt.preventDefault();
-    const previousActivePage = visiblePaginationItems && (visiblePaginationItems.map((item) => item - DISPLAYED_PAGINATION_STEP)[1]).toString();
-    if (previousActivePage){
+    const previousActivePage =
+      visiblePaginationItems &&
+      visiblePaginationItems
+        .map((item) => item - DISPLAYED_PAGINATION_STEP)[1]
+        .toString();
+    if (previousActivePage) {
       setPagination({
-        page: previousActivePage
+        page: previousActivePage,
       });
     }
   };
@@ -125,14 +209,18 @@ function CatalogPage(): JSX.Element {
     });
   };
 
-  const handleSortDirectionClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSortDirectionClick = (
+    evt: React.ChangeEvent<HTMLInputElement>
+  ) => {
     resetPagination();
     setSorting({
       direction: evt.target.value as ProductSorting['direction'],
     });
   };
 
-  const handleCategoryFilterClick = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCategoryFilterClick = (
+    evt: React.ChangeEvent<HTMLInputElement>
+  ) => {
     resetPagination();
     if (evt.target.value === FilterSection.Category.videocamera) {
       removeNonValidFilters();
@@ -157,13 +245,26 @@ function CatalogPage(): JSX.Element {
   };
 
   const handleMinPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
+    if (
+      evt.target.value !== undefined &&
+      evt.target.value.length > 0 &&
+      Number(evt.target.value) > currentMaxPrice
+    ) {
       evt.target.value = currentMaxPrice.toString();
     }
-    if (evt.target.value !== undefined && evt.target.value.length > 0 && maxPrice && Number(evt.target.value) > Number(maxPrice)) {
+    if (
+      evt.target.value !== undefined &&
+      evt.target.value.length > 0 &&
+      maxPrice &&
+      Number(evt.target.value) > Number(maxPrice)
+    ) {
       evt.target.value = maxPrice;
     }
-    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) < currentMinPrice) {
+    if (
+      evt.target.value !== undefined &&
+      evt.target.value.length > 0 &&
+      Number(evt.target.value) < currentMinPrice
+    ) {
       evt.target.value = currentMinPrice.toString();
     }
 
@@ -178,10 +279,18 @@ function CatalogPage(): JSX.Element {
   };
 
   const handleMaxPriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) < Number(minPrice)) {
+    if (
+      evt.target.value !== undefined &&
+      evt.target.value.length > 0 &&
+      Number(evt.target.value) < Number(minPrice)
+    ) {
       evt.target.value = minPrice;
     }
-    if (evt.target.value !== undefined && evt.target.value.length > 0 && Number(evt.target.value) > currentMaxPrice) {
+    if (
+      evt.target.value !== undefined &&
+      evt.target.value.length > 0 &&
+      Number(evt.target.value) > currentMaxPrice
+    ) {
       evt.target.value = currentMaxPrice.toString();
     }
 
@@ -195,7 +304,9 @@ function CatalogPage(): JSX.Element {
     }
   };
 
-  const handleResetFilterClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleResetFilterClick = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     evt.preventDefault();
     removeFilters();
     resetPagination();
@@ -248,7 +359,7 @@ function CatalogPage(): JSX.Element {
                 {filteredProducts.length > 0 ? (
                   <ProductCardsList
                     products={displayedProducts}
-                    onModalOpenClick={handleModalOpenClick}
+                    onModalOpenClick={handleAddProductModalOpenClick}
                     productsListOption={ProductsListOption.CatalogList}
                   />
                 ) : (
@@ -270,8 +381,18 @@ function CatalogPage(): JSX.Element {
           </div>
         </section>
       </div>
-      {modalData.isModalOpen && (
-        <Modal onModalClose={handleModalClose} modalData={modalData} />
+      {addProductModalData.isModalOpen && (
+        <AddProductModal
+          onAddProductModalClose={handleAddProductModalCloseClick}
+          modalData={addProductModalData}
+          onSuccessModalOpen={handleSuccessModalOpen}
+        />
+      )}
+      {isProductSuccessModalOpen && (
+        <AddProductSuccessModal
+          onSuccessModalClose={handleSuccessModalClose}
+          isSuccessModalOpen={isProductSuccessModalOpen}
+        />
       )}
     </main>
   );

@@ -3,6 +3,7 @@ import ProductRating from '../product-rating/product-rating';
 import { ProductInfo } from '../../types/product-types';
 import { AppRoute, RatingOption } from '../../consts';
 import { getFormattedPrice } from '../../utils/common';
+import { CartProduct } from '../../types/product-types';
 
 type ProductCardProps = {
   card: ProductInfo;
@@ -10,10 +11,35 @@ type ProductCardProps = {
   isActive: boolean | undefined;
 };
 
-function ProductCard({card, onModalOpenClick, isActive}: ProductCardProps): JSX.Element {
-  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = card;
+function ProductCard({
+  card,
+  onModalOpenClick,
+  isActive,
+}: ProductCardProps): JSX.Element {
+  const {
+    previewImgWebp,
+    previewImgWebp2x,
+    previewImg,
+    previewImg2x,
+    name,
+    rating,
+    price,
+    reviewCount,
+    id,
+  } = card;
   const formattedPrice = getFormattedPrice(price);
 
+  const getCurrentCart = () => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      const cart = JSON.parse(storedCart) as CartProduct[];
+      return cart;
+    }
+  };
+  const currentCartProducts = getCurrentCart();
+  const isInCart =
+    currentCartProducts &&
+    currentCartProducts.find((cardItem) => cardItem.id === id);
   return (
     <div
       className={`product-card ${isActive ? 'is-active' : ''}`}
@@ -47,13 +73,25 @@ function ProductCard({card, onModalOpenClick, isActive}: ProductCardProps): JSX.
         </p>
       </div>
       <div className="product-card__buttons">
-        <button
-          className="btn btn--purple product-card__btn"
-          type="button"
-          onClick={() => onModalOpenClick && onModalOpenClick(id)}
-        >
-          Купить
-        </button>
+        {isInCart ? (
+          <Link
+            className="btn btn--purple-border product-card__btn product-card__btn--in-cart"
+            to={AppRoute.Cart}
+          >
+            <svg width="16" height="16" aria-hidden="true">
+              <use xlinkHref="#icon-basket"></use>
+            </svg>
+            В корзине
+          </Link>
+        ) : (
+          <button
+            className="btn btn--purple product-card__btn"
+            type="button"
+            onClick={() => onModalOpenClick && onModalOpenClick(id)}
+          >
+            Купить
+          </button>
+        )}
         <Link
           className="btn btn--transparent"
           to={AppRoute.Product.replace(':id', String(id))}

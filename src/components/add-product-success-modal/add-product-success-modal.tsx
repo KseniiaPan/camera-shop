@@ -1,0 +1,77 @@
+import { useRef } from 'react';
+import { FocusTrap } from 'focus-trap-react';
+import useClickOutside from '../../hooks/use-click-outside';
+import useEscKeyClick from '../../hooks/use-esc-key-click';
+import useDisableBackground from '../../hooks/use-disable-background';
+
+type AddProductSuccessModalProps = {
+  isSuccessModalOpen: boolean;
+  onSuccessModalClose: () => void;
+};
+
+function AddProductSuccessModal({
+  onSuccessModalClose,
+  isSuccessModalOpen,
+}: AddProductSuccessModalProps): JSX.Element {
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  useClickOutside(isSuccessModalOpen, modalRef, onSuccessModalClose);
+  useEscKeyClick(onSuccessModalClose);
+  useDisableBackground(isSuccessModalOpen);
+
+  return (
+    <FocusTrap
+      active={isSuccessModalOpen}
+      focusTrapOptions={{
+        initialFocus: '.btn--purple',
+        tabbableOptions: {
+          displayCheck: 'none',
+        },
+      }}
+    >
+      <div
+        className={`modal modal--narrow ${
+          isSuccessModalOpen ? 'is-active' : ''
+        }`}
+      >
+        <div className="modal__wrapper">
+          <div className="modal__overlay" />
+          <div className="modal__content" ref={modalRef}>
+            <p className="title title--h4">Товар успешно добавлен в корзину</p>
+            <svg
+              className="modal__icon"
+              width={86}
+              height={80}
+              aria-hidden="true"
+            >
+              <use xlinkHref="#icon-success" />
+            </svg>
+            <div className="modal__buttons">
+              <button
+                className="btn btn--transparent modal__btn"
+                onClick={onSuccessModalClose}
+              >
+                Продолжить покупки
+              </button>
+              <button className="btn btn--purple modal__btn modal__btn--fit-width">
+                Перейти в корзину
+              </button>
+            </div>
+            <button
+              className="cross-btn"
+              type="button"
+              aria-label="Закрыть попап"
+              onClick={onSuccessModalClose}
+            >
+              <svg width={10} height={10} aria-hidden="true">
+                <use xlinkHref="#icon-close" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </FocusTrap>
+  );
+}
+
+export default AddProductSuccessModal;
