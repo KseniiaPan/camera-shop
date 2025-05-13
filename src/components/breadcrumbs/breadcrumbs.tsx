@@ -3,8 +3,9 @@ import { AppRoute } from '../../consts';
 
 type BreadcrumbsProps = {
   cameraName?: string;
+  isBasket?: boolean;
 };
-function Breadcrumbs({ cameraName }: BreadcrumbsProps): JSX.Element {
+function Breadcrumbs({ cameraName, isBasket }: BreadcrumbsProps): JSX.Element {
   return (
     <div className="breadcrumbs" data-testid="breadcrumbs">
       <div className="container">
@@ -18,7 +19,7 @@ function Breadcrumbs({ cameraName }: BreadcrumbsProps): JSX.Element {
             </Link>
           </li>
           <li className="breadcrumbs__item">
-            {cameraName ? (
+            {cameraName || isBasket ? (
               <Link className="breadcrumbs__link" to={AppRoute.Main}>
                 Каталог
                 <svg width={5} height={8} aria-hidden="true">
@@ -35,6 +36,13 @@ function Breadcrumbs({ cameraName }: BreadcrumbsProps): JSX.Element {
             <li className="breadcrumbs__item">
               <span className="breadcrumbs__link breadcrumbs__link--active">
                 {cameraName}
+              </span>
+            </li>
+          )}
+          {isBasket && (
+            <li className="breadcrumbs__item">
+              <span className="breadcrumbs__link breadcrumbs__link--active">
+                Корзина
               </span>
             </li>
           )}

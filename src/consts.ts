@@ -1,6 +1,7 @@
 export enum AppRoute {
   Main = '/',
   Product = '/camera/:id',
+  Cart = '/card',
   NotFound = '*',
 }
 
