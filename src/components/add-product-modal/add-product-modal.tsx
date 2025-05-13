@@ -33,7 +33,7 @@ function AddProductModal({
   );
 
   const handleAddToCartClick = (product: ProductInfo) => {
-    let newCart = [...cart];
+    const newCart = [...cart];
     let productInCart = newCart.find((item) => product.name === item.name);
     if (productInCart) {
       productInCart.quantity++;
@@ -46,7 +46,7 @@ function AddProductModal({
     }
     setCart(newCart);
     onSuccessModalOpen();
-    onAddProductModalClose();
+
   };
 
   return (
