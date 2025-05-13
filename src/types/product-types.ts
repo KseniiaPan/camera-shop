@@ -26,3 +26,8 @@ export type ProductModalData = {
 export type ProductTabOption = {
   tab: 'characteristics' | 'description';
 }
+
+export type CardProduct = ProductInfo & {
+  quantity: number;
+};
+
