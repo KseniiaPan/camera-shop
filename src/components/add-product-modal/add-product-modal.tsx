@@ -3,11 +3,12 @@ import { FocusTrap } from 'focus-trap-react';
 import BasketItem from '../../components/basket-item/basket-item';
 import { useAppSelector } from '../../hooks/index';
 import { getProductsData } from '../../store/product-process/selectors';
-import { ProductModalData, ProductInfo, CartProduct } from '../../types/product-types';
+import { ProductModalData, ProductInfo } from '../../types/product-types';
 import useClickOutside from '../../hooks/use-click-outside';
 import useEscKeyClick from '../../hooks/use-esc-key-click';
 import useDisableBackground from '../../hooks/use-disable-background';
 import { useLocalStorage } from '../../hooks/use-local-storage';
+import { BasketCardOption } from '../../consts';
 
 type AddProductModalProps = {
   modalData: ProductModalData;
@@ -21,7 +22,7 @@ function AddProductModal({
   onSuccessModalOpen,
 }: AddProductModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [cart, setCart] = useLocalStorage('cart');
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
 
   useClickOutside(modalData.isModalOpen, modalRef, onAddProductModalClose);
   useEscKeyClick(onAddProductModalClose);
@@ -33,9 +34,11 @@ function AddProductModal({
   );
 
   const handleAddToCartClick = (product: ProductInfo) => {
-    const newCart = [...cart];
+    const newCart = cart
+      ? cart.map((cartItem) => ({ ...cartItem }))
+      : [];
     let productInCart = newCart.find((item) => product.name === item.name);
-    if (productInCart) {
+    if (productInCart && productInCart.quantity) {
       productInCart.quantity++;
     } else {
       productInCart = {
@@ -46,7 +49,7 @@ function AddProductModal({
     }
     setCart(newCart);
     onSuccessModalOpen();
-
+    onAddProductModalClose();
   };
 
   return (
@@ -64,9 +67,14 @@ function AddProductModal({
           <div className="modal__overlay" />
           <div className="modal__content" ref={modalRef}>
             <p className="title title--h4">Добавить товар в корзину</p>
-            {openedCameraInfo && (
-              <BasketItem openedCameraInfo={openedCameraInfo} />
-            )}
+            <div className="basket-item basket-item--short">
+              {openedCameraInfo && (
+                <BasketItem
+                  openedCameraInfo={openedCameraInfo}
+                  basketCardOption={BasketCardOption.Modal}
+                />
+              )}
+            </div>
             <div className="modal__buttons">
               {openedCameraInfo && (
                 <button

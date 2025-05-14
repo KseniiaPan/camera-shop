@@ -10,20 +10,34 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ScrollUpButton from '../../components/scroll-up-button/scroll-up-button';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import ProductCardsSimilar from '../../components/product-cards-similar/product-cards-similar';
-import Modal from '../../components/modal/modal';
+import AddProductModal from '../../components/add-product-modal/add-product-modal';
+import AddProductSuccessModal from '../../components/add-product-success-modal/add-product-success-modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import { RatingOption, ErrorText } from '../../consts';
 import { ProductModalData } from '../../types/product-types';
-import {fetchCurrentProductAction, fetchReviewsAction, fetchSimilarProductsAction} from '../../store/api-actions';
-import {getCurrentProductData, getCurrentProductLoadingStatus, getDataLoadingErrorStatus, getSimilarProductsData} from '../../store/product-process/selectors';
+import {
+  fetchCurrentProductAction,
+  fetchReviewsAction,
+  fetchSimilarProductsAction,
+} from '../../store/api-actions';
+import {
+  getCurrentProductData,
+  getCurrentProductLoadingStatus,
+  getDataLoadingErrorStatus,
+  getSimilarProductsData,
+} from '../../store/product-process/selectors';
 
-const initialState: ProductModalData = {
+const initialAddProductModalState: ProductModalData = {
   isModalOpen: false,
   openedCameraId: null,
 };
 
 function ProductPage(): JSX.Element {
-  const [modalData, setModalData] = useState(initialState);
+  const [addProductModalData, setAddProductModalData] = useState(
+    initialAddProductModalState
+  );
+  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
+    useState(false);
 
   const isDetailedProductLoading = useAppSelector(
     getCurrentProductLoadingStatus
@@ -46,14 +60,21 @@ function ProductPage(): JSX.Element {
     }
   }, [currentProductId, dispatch]);
 
-  const handleModalOpenClick = (id: number | null) => {
-    setModalData({ isModalOpen: true, openedCameraId: id });
+  const handleAddProductModalOpenClick = (id: number | null) => {
+    setAddProductModalData({ isModalOpen: true, openedCameraId: id });
   };
 
-  const handleModalClose = () => {
-    setModalData({ ...modalData, isModalOpen: false });
+  const handleAddProductModalCloseClick = () => {
+    setAddProductModalData({ isModalOpen: false, openedCameraId: null });
   };
 
+  const handleSuccessModalOpen = () => {
+    setIsProductSuccessModalOpen(true);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsProductSuccessModalOpen(false);
+  };
   const handleScrollUpButtonClick = () => {
     window.scrollTo({
       top: 0,
@@ -66,11 +87,21 @@ function ProductPage(): JSX.Element {
   }
 
   if (isDataLoadingError) {
-    return <ErrorMessage message={ErrorText.ServerError}/>;
+    return <ErrorMessage message={ErrorText.ServerError} />;
   }
 
   if (!isDetailedProductLoading && currentProduct) {
-    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount} = currentProduct;
+    const {
+      previewImgWebp,
+      previewImgWebp2x,
+      previewImg,
+      previewImg2x,
+      name,
+      rating,
+      price,
+      reviewCount,
+      id,
+    } = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
 
     return (
@@ -110,7 +141,11 @@ function ProductPage(): JSX.Element {
                       <span className="visually-hidden">Цена:</span>
                       {formattedPrice} ₽
                     </p>
-                    <button className="btn btn--purple" type="button">
+                    <button
+                      className="btn btn--purple"
+                      type="button"
+                      onClick={() => handleAddProductModalOpenClick(id)}
+                    >
                       <svg width={24} height={16} aria-hidden="true">
                         <use xlinkHref="#icon-add-basket" />
                       </svg>
@@ -123,14 +158,24 @@ function ProductPage(): JSX.Element {
             </div>
             <ProductCardsSimilar
               similarProducts={similarProducts}
-              onModalOpenClick={handleModalOpenClick}
+              onModalOpenClick={handleAddProductModalOpenClick}
             />
             <div className="page-content__section">
               <ReviewsList />
             </div>
           </div>
-          {modalData.isModalOpen && (
-            <Modal onModalClose={handleModalClose} modalData={modalData} />
+          {addProductModalData.isModalOpen && (
+            <AddProductModal
+              onAddProductModalClose={handleAddProductModalCloseClick}
+              modalData={addProductModalData}
+              onSuccessModalOpen={handleSuccessModalOpen}
+            />
+          )}
+          {isProductSuccessModalOpen && (
+            <AddProductSuccessModal
+              onSuccessModalClose={handleSuccessModalClose}
+              isSuccessModalOpen={isProductSuccessModalOpen}
+            />
           )}
         </main>
         <ScrollUpButton onScrollUpButtonClick={handleScrollUpButtonClick} />

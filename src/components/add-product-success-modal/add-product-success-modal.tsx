@@ -1,8 +1,10 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { FocusTrap } from 'focus-trap-react';
 import useClickOutside from '../../hooks/use-click-outside';
 import useEscKeyClick from '../../hooks/use-esc-key-click';
 import useDisableBackground from '../../hooks/use-disable-background';
+import { AppRoute } from '../../consts';
 
 type AddProductSuccessModalProps = {
   isSuccessModalOpen: boolean;
@@ -53,9 +55,12 @@ function AddProductSuccessModal({
               >
                 Продолжить покупки
               </button>
-              <button className="btn btn--purple modal__btn modal__btn--fit-width">
+              <Link
+                className="btn btn--purple modal__btn modal__btn--fit-width"
+                to={AppRoute.Cart}
+              >
                 Перейти в корзину
-              </button>
+              </Link>
             </div>
             <button
               className="cross-btn"

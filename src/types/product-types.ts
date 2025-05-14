@@ -16,18 +16,14 @@ export type ProductInfo = PrimaryProductInfo & {
   price: number;
   rating: number;
   reviewCount: number;
+  quantity?: number;
 };
 
 export type ProductModalData = {
-    isModalOpen: boolean;
-    openedCameraId: null|number;
-  };
+  isModalOpen: boolean;
+  openedCameraId: null | number;
+};
 
 export type ProductTabOption = {
   tab: 'characteristics' | 'description';
-}
-
-export type CartProduct = ProductInfo & {
-  quantity: number;
 };
-

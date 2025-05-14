@@ -1,22 +1,20 @@
-import { useState, useEffect } from 'react';
-import {CartProduct} from '../types/product-types';
+import { useState, useCallback } from 'react';
+import { getStoredCart } from '../utils/common';
 
-function getStoredCart(key: string, defaultValue: CartProduct[]) {
-  const storedCart = localStorage.getItem(key);
-  if (storedCart !== null) {
-    const cart = JSON.parse(storedCart) as CartProduct[];
-    return cart;
-  }
+export const useLocalStorage = <T>(key: string, defaultValue: T) => {
+  const [storedCart, setStroredCart] = useState<T | undefined>(() =>
+    getStoredCart<T>(key, defaultValue)
+  );
 
-  return defaultValue;
-}
+  const setCart = useCallback(
+    (newValue: T) => {
+      try {
+        setStroredCart(newValue);
+        localStorage.setItem(key, JSON.stringify(newValue));
+      } catch (error) {}
+    },
+    [key]
+  );
 
-export const useLocalStorage = (key: string) => {
-  const [cart, setCart] = useState<CartProduct[]>(() => getStoredCart(key, []));
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(cart));
-  }, [key, cart]);
-
-  return [cart, setCart];
+  return [storedCart, setCart] as const;
 };

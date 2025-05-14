@@ -3,7 +3,7 @@ import ProductRating from '../product-rating/product-rating';
 import { ProductInfo } from '../../types/product-types';
 import { AppRoute, RatingOption } from '../../consts';
 import { getFormattedPrice } from '../../utils/common';
-import { CartProduct } from '../../types/product-types';
+import { getStoredCart } from '../../utils/common';
 
 type ProductCardProps = {
   card: ProductInfo;
@@ -29,15 +29,8 @@ function ProductCard({
   } = card;
   const formattedPrice = getFormattedPrice(price);
 
-  const getCurrentCart = () => {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      const cart = JSON.parse(storedCart) as CartProduct[];
-      return cart;
-    }
-  };
-  const currentCartProducts = getCurrentCart();
-  const isInCart =
+  const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
+  const productInCart =
     currentCartProducts &&
     currentCartProducts.find((cardItem) => cardItem.id === id);
   return (
@@ -73,7 +66,7 @@ function ProductCard({
         </p>
       </div>
       <div className="product-card__buttons">
-        {isInCart ? (
+        {productInCart ? (
           <Link
             className="btn btn--purple-border product-card__btn product-card__btn--in-cart"
             to={AppRoute.Cart}

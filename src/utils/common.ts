@@ -17,4 +17,13 @@ const humanizeCommentDate = (commentDate: string) =>
 
 const getDateWithoutTime = (date: string): string => date.split('T')[0];
 
-export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime};
+function parseJSON<T>(value: string): T|undefined{
+  return value === 'undefined' ? undefined : JSON.parse(value);
+}
+
+function getStoredCart<T>(key: string, defaultValue: T): T {
+  const storedCart = localStorage.getItem(key);
+  return storedCart !== null ? parseJSON(storedCart) : defaultValue;
+}
+
+export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime, getStoredCart};

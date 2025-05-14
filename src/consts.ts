@@ -50,6 +50,11 @@ export enum ProductsListOption {
   SimilarList = 'similar',
 }
 
+export enum BasketCardOption {
+  Modal = 'modal',
+  Basket = 'basket',
+}
+
 export enum ErrorText {
   ServerError = 'Произошла ошибка при загрузке данных с сервера, попробуйте еще раз',
   FilterError = 'Не удалось найти подходящий продукт, попробуйте изменить параметры поиска',
