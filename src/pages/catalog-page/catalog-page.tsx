@@ -319,7 +319,6 @@ function CatalogPage(): JSX.Element {
   if (isDataLoadingError) {
     return <ErrorMessage message={ErrorText.ServerError} />;
   }
-
   return (
     <main>
       <Helmet>

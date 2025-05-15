@@ -1,12 +1,31 @@
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import BasketItem from '../../components/basket-item/basket-item';
+import RemoveProductModal from '../../components/remove-product-modal/remove-product-modal';
 import { getStoredCart } from '../../utils/common';
-import { ProductInfo } from '../../types/product-types';
+import { ProductInfo, ProductModalData } from '../../types/product-types';
 import { BasketCardOption } from '../../consts';
 
+const initialRemoveProductModalState: ProductModalData = {
+  isModalOpen: false,
+  openedCameraId: null,
+};
+
 function BasketPage(): JSX.Element {
+  const [removeProductModalData, setDeleteProductModalData] = useState(
+    initialRemoveProductModalState
+  );
   const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
+
+  const handleRemoveProductModalOpen = (id: number | null) => {
+    setDeleteProductModalData({ isModalOpen: true, openedCameraId: id });
+  };
+
+  const handleRemoveProductModalClose = () => {
+    setDeleteProductModalData({ isModalOpen: false, openedCameraId: null });
+  };
+
   return (
     <main>
       <Helmet>
@@ -23,6 +42,7 @@ function BasketPage(): JSX.Element {
                   <BasketItem
                     openedCameraInfo={product}
                     basketCardOption={BasketCardOption.Basket}
+                    onRemoveProductModalOpen={handleRemoveProductModalOpen}
                   />
                 </li>
               ))}
@@ -79,6 +99,12 @@ function BasketPage(): JSX.Element {
           </div>
         </section>
       </div>
+      {removeProductModalData.isModalOpen && (
+        <RemoveProductModal
+          onRemoveProductModalClose={handleRemoveProductModalClose}
+          modalData={removeProductModalData}
+        />
+      )}
     </main>
   );
 }

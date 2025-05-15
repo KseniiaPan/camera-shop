@@ -46,6 +46,7 @@ function ProductPage(): JSX.Element {
   const currentProduct = useAppSelector(getCurrentProductData);
   const similarProducts = useAppSelector(getSimilarProductsData);
   const params = useParams();
+
   const currentProductId = Number(params.id);
   const dispatch = useAppDispatch();
 

@@ -5,11 +5,13 @@ import { getFormattedPrice } from '../../utils/common';
 type BasketItemProps = {
   openedCameraInfo: ProductInfo;
   basketCardOption: string;
+  onRemoveProductModalOpen?: (id: number | null) => void;
 };
 
 function BasketItem({
   openedCameraInfo,
   basketCardOption,
+  onRemoveProductModalOpen,
 }: BasketItemProps): JSX.Element {
   const {
     previewImgWebp,
@@ -23,6 +25,7 @@ function BasketItem({
     level,
     price,
     quantity,
+    id,
   } = openedCameraInfo;
 
   const formattedPrice = getFormattedPrice(price);
@@ -33,6 +36,7 @@ function BasketItem({
   }`;
   const totalPrice = quantity && price * quantity;
   const formattedTotalPrice = totalPrice && getFormattedPrice(totalPrice);
+
   return (
     <>
       <div className="basket-item__img">
@@ -60,14 +64,14 @@ function BasketItem({
           <li className="basket-item__list-item">{basketItemName}</li>
           <li className="basket-item__list-item">{level} уровень</li>
         </ul>
-        {basketCardOption === BasketCardOption.Modal && (
+        {basketCardOption === BasketCardOption.AddProductModal && (
           <p className="basket-item__price">
             <span className="visually-hidden">Цена:</span>
             {formattedPrice} ₽
           </p>
         )}
       </div>
-      {basketCardOption !== BasketCardOption.Modal && (
+      {basketCardOption === BasketCardOption.Basket && (
         <>
           <p className="basket-item__price">
             <span className="visually-hidden">Цена:</span>
@@ -108,6 +112,7 @@ function BasketItem({
             className="cross-btn"
             type="button"
             aria-label="Удалить товар"
+            onClick={() => onRemoveProductModalOpen && onRemoveProductModalOpen(id)}
           >
             <svg width={10} height={10} aria-hidden="true">
               <use xlinkHref="#icon-close" />

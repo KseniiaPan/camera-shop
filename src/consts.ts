@@ -51,8 +51,9 @@ export enum ProductsListOption {
 }
 
 export enum BasketCardOption {
-  Modal = 'modal',
+  AddProductModal = 'addProductModal',
   Basket = 'basket',
+  DeleteProductModal = 'deleteProductModal',
 }
 
 export enum ErrorText {

@@ -71,7 +71,7 @@ function AddProductModal({
               {openedCameraInfo && (
                 <BasketItem
                   openedCameraInfo={openedCameraInfo}
-                  basketCardOption={BasketCardOption.Modal}
+                  basketCardOption={BasketCardOption.AddProductModal}
                 />
               )}
             </div>

@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FocusTrap } from 'focus-trap-react';
 import useClickOutside from '../../hooks/use-click-outside';
 import useEscKeyClick from '../../hooks/use-esc-key-click';
@@ -16,10 +16,20 @@ function AddProductSuccessModal({
   isSuccessModalOpen,
 }: AddProductSuccessModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useClickOutside(isSuccessModalOpen, modalRef, onSuccessModalClose);
   useEscKeyClick(onSuccessModalClose);
   useDisableBackground(isSuccessModalOpen);
+
+  const handleContinueShoppingClick = () => {
+    onSuccessModalClose();
+
+    if (location.pathname !== AppRoute.Main) {
+      navigate(AppRoute.Main);
+    }
+  };
 
   return (
     <FocusTrap
@@ -51,7 +61,7 @@ function AddProductSuccessModal({
             <div className="modal__buttons">
               <button
                 className="btn btn--transparent modal__btn"
-                onClick={onSuccessModalClose}
+                onClick={handleContinueShoppingClick}
               >
                 Продолжить покупки
               </button>
