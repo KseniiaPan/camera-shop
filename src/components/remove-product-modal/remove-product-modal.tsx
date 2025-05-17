@@ -6,7 +6,7 @@ import { ProductModalData, ProductInfo } from '../../types/product-types';
 import useClickOutside from '../../hooks/use-click-outside';
 import useEscKeyClick from '../../hooks/use-esc-key-click';
 import useDisableBackground from '../../hooks/use-disable-background';
-// import { useLocalStorage } from '../../hooks/use-local-storage';
+import { useLocalStorage } from '../../hooks/use-local-storage';
 import { BasketCardOption, AppRoute } from '../../consts';
 import { getStoredCart } from '../../utils/common';
 
@@ -20,26 +20,26 @@ function RemoveProductModal({
   modalData,
 }: RemoveProductModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  // const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
   useClickOutside(modalData.isModalOpen, modalRef, onRemoveProductModalClose);
   useEscKeyClick(onRemoveProductModalClose);
   useDisableBackground(modalData.isModalOpen);
 
   const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
-  const openedCameraInfo = currentCartProducts && currentCartProducts.find(
-    (product) => modalData.openedCameraId === product.id
-  );
+  const openedCameraInfo =
+    currentCartProducts &&
+    currentCartProducts.find(
+      (product) => modalData.openedCameraId === product.id
+    );
 
-  // const handleRemoveFromCartClick = (product: ProductInfo) => {
-  //   let newCart = cart
-  //     ? cart.map((cartItem) => ({ ...cartItem }))
-  //     : [];
-  //   const productInCart = newCart.find((item) => product.name === item.name);
-  //   const productInCartIndex = productInCart && newCart.indexOf(productInCart);
-  //   newCart = productInCartIndex && newCart.splice(productInCartIndex, 1);
-  //   setCart(newCart);
-  //   onRemoveProductModalClose();
-  // };
+  const handleRemoveFromCartClick = (productToRemove: ProductInfo) => {
+    if (cart) {
+      let newCart = cart.map((cartItem) => ({ ...cartItem }));
+      newCart = newCart.filter((product) => product.id !== productToRemove.id);
+      setCart(newCart);
+      onRemoveProductModalClose();
+    }
+  };
 
   return (
     <FocusTrap
@@ -65,12 +65,15 @@ function RemoveProductModal({
               )}
             </div>
             <div className="modal__buttons">
-              <button
-                className="btn btn--purple modal__btn modal__btn--half-width"
-                type="button"
-              >
-                Удалить
-              </button>
+              {openedCameraInfo && (
+                <button
+                  className="btn btn--purple modal__btn modal__btn--half-width"
+                  type="button"
+                  onClick={() => handleRemoveFromCartClick(openedCameraInfo)}
+                >
+                  Удалить
+                </button>
+              )}
               <Link
                 className="btn btn--transparent modal__btn modal__btn--half-width"
                 to={AppRoute.Main}

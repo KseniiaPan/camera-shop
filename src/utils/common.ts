@@ -18,10 +18,15 @@ const humanizeCommentDate = (commentDate: string) =>
 const getDateWithoutTime = (date: string): string => date.split('T')[0];
 
 function parseJSON<T>(value: string): T|undefined{
-  return value === 'undefined' ? undefined : JSON.parse(value);
+  if (value === 'undefined') {
+    return undefined;
+  } else {
+    const parsedStoredCart = JSON.parse(value) as T;
+    return parsedStoredCart;
+  }
 }
 
-function getStoredCart<T>(key: string, defaultValue: T): T {
+function getStoredCart<T>(key: string, defaultValue: T): T|undefined {
   const storedCart = localStorage.getItem(key);
   return storedCart !== null ? parseJSON(storedCart) : defaultValue;
 }

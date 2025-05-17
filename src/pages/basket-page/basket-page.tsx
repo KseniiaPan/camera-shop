@@ -1,11 +1,12 @@
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
-import BasketItem from '../../components/basket-item/basket-item';
+import BasketProductCard from '../../components/basket-product-card/basket-product-card';
 import RemoveProductModal from '../../components/remove-product-modal/remove-product-modal';
+import ErrorMessage from '../../components/errorMessage/error-message';
 import { getStoredCart } from '../../utils/common';
 import { ProductInfo, ProductModalData } from '../../types/product-types';
-import { BasketCardOption } from '../../consts';
+import { ErrorText } from '../../consts';
 
 const initialRemoveProductModalState: ProductModalData = {
   isModalOpen: false,
@@ -36,17 +37,20 @@ function BasketPage(): JSX.Element {
         <section className="basket">
           <div className="container">
             <h1 className="title title--h2">Корзина</h1>
-            <ul className="basket__list">
-              {currentCartProducts.map((product) => (
-                <li className="basket-item" key={product.id}>
-                  <BasketItem
-                    openedCameraInfo={product}
-                    basketCardOption={BasketCardOption.Basket}
-                    onRemoveProductModalOpen={handleRemoveProductModalOpen}
-                  />
-                </li>
-              ))}
-            </ul>
+            {currentCartProducts && currentCartProducts.length > 0 ? (
+              <ul className="basket__list">
+                {currentCartProducts.map((product) => (
+                  <li className="basket-item" key={product.id}>
+                    <BasketProductCard
+                      openedCameraInfo={product}
+                      onRemoveProductModalOpen={handleRemoveProductModalOpen}
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ErrorMessage message={ErrorText.BasketError} />
+            )}
             <div className="basket__summary">
               <div className="basket__promo">
                 <p className="title title--h4">

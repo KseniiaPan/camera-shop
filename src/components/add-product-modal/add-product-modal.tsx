@@ -34,9 +34,7 @@ function AddProductModal({
   );
 
   const handleAddToCartClick = (product: ProductInfo) => {
-    const newCart = cart
-      ? cart.map((cartItem) => ({ ...cartItem }))
-      : [];
+    const newCart = cart ? cart.map((cartItem) => ({ ...cartItem })) : [];
     let productInCart = newCart.find((item) => product.name === item.name);
     if (productInCart && productInCart.quantity) {
       productInCart.quantity++;

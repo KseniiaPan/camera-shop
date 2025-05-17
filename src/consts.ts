@@ -59,7 +59,8 @@ export enum BasketCardOption {
 export enum ErrorText {
   ServerError = 'Произошла ошибка при загрузке данных с сервера, попробуйте еще раз',
   FilterError = 'Не удалось найти подходящий продукт, попробуйте изменить параметры поиска',
-  SearchError = 'Совпадения не найдены'
+  SearchError = 'Совпадения не найдены',
+  BasketError = 'Ваша корзина пуста',
 }
 
 export const SimilarProductsSlider = {
@@ -146,6 +147,8 @@ export const PRODUCTS_COUNT_STEP = 9;
 export const DISPLAYED_PAGINATION_STEP = 2;
 export const PAGINATION_ITEMS_MIN_COUNT = 0;
 export const PAGINATION_ITEMS_MAX_COUNT = 3;
+export const BASKET_PRODUCTS_MIN_COUNT = 1;
+export const BASKET_PRODUCTS_MAX_COUNT = 99;
 
 export const PHONE_REGEXP =
   /^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$/;

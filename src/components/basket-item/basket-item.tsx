@@ -5,13 +5,11 @@ import { getFormattedPrice } from '../../utils/common';
 type BasketItemProps = {
   openedCameraInfo: ProductInfo;
   basketCardOption: string;
-  onRemoveProductModalOpen?: (id: number | null) => void;
 };
 
 function BasketItem({
   openedCameraInfo,
   basketCardOption,
-  onRemoveProductModalOpen,
 }: BasketItemProps): JSX.Element {
   const {
     previewImgWebp,
@@ -24,8 +22,6 @@ function BasketItem({
     type,
     level,
     price,
-    quantity,
-    id,
   } = openedCameraInfo;
 
   const formattedPrice = getFormattedPrice(price);
@@ -34,8 +30,6 @@ function BasketItem({
       ? ProductCategory.VideoCamera.toLowerCase()
       : ProductCategory.PhotoCamera.toLowerCase()
   }`;
-  const totalPrice = quantity && price * quantity;
-  const formattedTotalPrice = totalPrice && getFormattedPrice(totalPrice);
 
   return (
     <>
@@ -71,55 +65,6 @@ function BasketItem({
           </p>
         )}
       </div>
-      {basketCardOption === BasketCardOption.Basket && (
-        <>
-          <p className="basket-item__price">
-            <span className="visually-hidden">Цена:</span>
-            {formattedPrice} ₽
-          </p>
-          <div className="quantity">
-            <button
-              className="btn-icon btn-icon--prev"
-              aria-label="уменьшить количество товара"
-            >
-              <svg width={7} height={12} aria-hidden="true">
-                <use xlinkHref="#icon-arrow" />
-              </svg>
-            </button>
-            <label className="visually-hidden" htmlFor="counter1" />
-            <input
-              type="number"
-              id="counter1"
-              defaultValue={quantity}
-              min={1}
-              max={99}
-              aria-label="количество товара"
-            />
-            <button
-              className="btn-icon btn-icon--next"
-              aria-label="увеличить количество товара"
-            >
-              <svg width={7} height={12} aria-hidden="true">
-                <use xlinkHref="#icon-arrow" />
-              </svg>
-            </button>
-          </div>
-          <div className="basket-item__total-price">
-            <span className="visually-hidden">Общая цена:</span>
-            {formattedTotalPrice} ₽
-          </div>
-          <button
-            className="cross-btn"
-            type="button"
-            aria-label="Удалить товар"
-            onClick={() => onRemoveProductModalOpen && onRemoveProductModalOpen(id)}
-          >
-            <svg width={10} height={10} aria-hidden="true">
-              <use xlinkHref="#icon-close" />
-            </svg>
-          </button>
-        </>
-      )}
     </>
   );
 }
