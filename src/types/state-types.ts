@@ -23,6 +23,7 @@ export type ReviewsProcess = {
 
 export type OrderProcess = {
   isOrderPosting: boolean;
+  currentCartProductsAmount: number | undefined;
 }
 
 export type PromoProcess = {

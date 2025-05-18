@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ProductInfo } from '../../types/product-types';
 import {
   BasketCardOption,
   BASKET_PRODUCTS_MIN_COUNT,
   BASKET_PRODUCTS_MAX_COUNT,
 } from '../../consts';
-import { getFormattedPrice } from '../../utils/common';
+import { getFormattedPrice, getCartProdutsAmount, getStoredValue } from '../../utils/common';
 import { useLocalStorage } from '../../hooks/use-local-storage';
 import BasketItem from '../../components/basket-item/basket-item';
+import {changeCartProductsAmount} from '../../store/order-process/order-process';
+import {useAppDispatch} from '../../hooks/index';
 
 type BasketProductCardProps = {
   onRemoveProductModalOpen?: (id: number | null) => void;
@@ -18,8 +20,10 @@ function BasketProductCard({
   onRemoveProductModalOpen,
   openedCameraInfo,
 }: BasketProductCardProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const { price, id, quantity } = openedCameraInfo;
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+
   const [productQuantity, setProductQuantity] = useState<number | undefined>(
     quantity
   );
@@ -33,7 +37,7 @@ function BasketProductCard({
   const isIncreaseButtonDisabled =
     productQuantity === BASKET_PRODUCTS_MAX_COUNT;
 
-  const handleIncreaseClick = (product: ProductInfo) => {
+  const handleIncreaseClick = useCallback((product: ProductInfo) => {
     if (cart) {
       const newCart = cart.map((cartItem) => ({ ...cartItem }));
       const productInCart = newCart.find((item) => product.name === item.name);
@@ -43,9 +47,9 @@ function BasketProductCard({
         setProductQuantity(productInCart.quantity);
       }
     }
-  };
+  }, [cart, setCart]);
 
-  const handleDecreaseClick = (product: ProductInfo) => {
+  const handleDecreaseClick = useCallback((product: ProductInfo) => {
     if (cart) {
       const newCart = cart.map((cartItem) => ({ ...cartItem }));
       const productInCart = newCart.find((item) => product.name === item.name);
@@ -55,9 +59,9 @@ function BasketProductCard({
         setCart(newCart);
       }
     }
-  };
+  }, [cart, setCart]);
 
-  const handleProductQuantityChange = (
+  const handleProductQuantityChange = useCallback((
     evt: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (evt.target.value !== undefined && evt.target.value.length > 0 && cart) {
@@ -67,6 +71,7 @@ function BasketProductCard({
       if (Number(evt.target.value) > BASKET_PRODUCTS_MAX_COUNT) {
         evt.target.value = BASKET_PRODUCTS_MAX_COUNT.toString();
       }
+
       const newCart = cart.map((cartItem) => ({ ...cartItem }));
       const productInCart = newCart.find((item) => id === item.id);
       if (productInCart) {
@@ -75,7 +80,14 @@ function BasketProductCard({
         setCart(newCart);
       }
     }
-  };
+  }, [id, cart, setCart]);
+  useEffect(() => {
+    const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+    if (currentCartProducts && currentCartProducts.length > 0) {
+      const currentCartProductsAmount = getCartProdutsAmount(currentCartProducts);
+      dispatch(changeCartProductsAmount(currentCartProductsAmount));
+    }
+  }, [dispatch, handleIncreaseClick, handleDecreaseClick, ]);
   return (
     <>
       <BasketItem

@@ -1,20 +1,20 @@
 import { useState, useCallback } from 'react';
-import { getStoredCart } from '../utils/common';
+import { getStoredValue } from '../utils/common';
 
 export const useLocalStorage = <T>(key: string, defaultValue: T) => {
-  const [storedCart, setStroredCart] = useState<T | undefined>(() =>
-    getStoredCart<T>(key, defaultValue)
+  const [storedValue, setStroredValue] = useState<T | undefined>(() =>
+    getStoredValue<T>(key, defaultValue)
   );
 
-  const setCart = useCallback(
+  const setValue = useCallback(
     (newValue: T) => {
       try {
-        setStroredCart(newValue);
+        setStroredValue(newValue);
         localStorage.setItem(key, JSON.stringify(newValue));
       } catch (error) {}
     },
     [key]
   );
 
-  return [storedCart, setCart] as const;
+  return [storedValue, setValue] as const;
 };

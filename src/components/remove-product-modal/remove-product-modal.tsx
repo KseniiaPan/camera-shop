@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FocusTrap } from 'focus-trap-react';
 import BasketItem from '../basket-item/basket-item';
@@ -8,7 +8,10 @@ import useEscKeyClick from '../../hooks/use-esc-key-click';
 import useDisableBackground from '../../hooks/use-disable-background';
 import { useLocalStorage } from '../../hooks/use-local-storage';
 import { BasketCardOption, AppRoute } from '../../consts';
-import { getStoredCart } from '../../utils/common';
+import { getStoredValue } from '../../utils/common';
+import {useAppDispatch} from '../../hooks/index';
+import { getCartProdutsAmount } from '../../utils/common';
+import {changeCartProductsAmount} from '../../store/order-process/order-process';
 
 type RemoveProductModalProps = {
   modalData: ProductModalData;
@@ -19,27 +22,38 @@ function RemoveProductModal({
   onRemoveProductModalClose,
   modalData,
 }: RemoveProductModalProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
   useClickOutside(modalData.isModalOpen, modalRef, onRemoveProductModalClose);
   useEscKeyClick(onRemoveProductModalClose);
   useDisableBackground(modalData.isModalOpen);
 
-  const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
+  const cartProducts = getStoredValue<ProductInfo[]>('cart', []);
   const openedCameraInfo =
-    currentCartProducts &&
-    currentCartProducts.find(
+    cartProducts &&
+    cartProducts.find(
       (product) => modalData.openedCameraId === product.id
     );
 
-  const handleRemoveFromCartClick = (productToRemove: ProductInfo) => {
+  const handleRemoveFromCartClick = useCallback((productToRemove: ProductInfo) => {
     if (cart) {
       let newCart = cart.map((cartItem) => ({ ...cartItem }));
       newCart = newCart.filter((product) => product.id !== productToRemove.id);
       setCart(newCart);
       onRemoveProductModalClose();
     }
-  };
+  }, [cart, setCart, onRemoveProductModalClose]);
+
+  useEffect(() => {
+    const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+    if (currentCartProducts) {
+      const currentCartProductsAmount = getCartProdutsAmount(currentCartProducts);
+      dispatch(changeCartProductsAmount(currentCartProductsAmount));
+    } else {
+      dispatch(changeCartProductsAmount(0));
+    }
+  }, [dispatch, handleRemoveFromCartClick]);
 
   return (
     <FocusTrap

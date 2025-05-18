@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import BasketProductCard from '../../components/basket-product-card/basket-product-card';
 import RemoveProductModal from '../../components/remove-product-modal/remove-product-modal';
 import ErrorMessage from '../../components/errorMessage/error-message';
-import { getStoredCart } from '../../utils/common';
+import { getStoredValue } from '../../utils/common';
 import { ProductInfo, ProductModalData } from '../../types/product-types';
 import { ErrorText } from '../../consts';
 
@@ -17,7 +17,7 @@ function BasketPage(): JSX.Element {
   const [removeProductModalData, setDeleteProductModalData] = useState(
     initialRemoveProductModalState
   );
-  const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
+  const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
 
   const handleRemoveProductModalOpen = (id: number | null) => {
     setDeleteProductModalData({ isModalOpen: true, openedCameraId: id });

@@ -3,7 +3,7 @@ import ProductRating from '../product-rating/product-rating';
 import { ProductInfo } from '../../types/product-types';
 import { AppRoute, RatingOption } from '../../consts';
 import { getFormattedPrice } from '../../utils/common';
-import { getStoredCart } from '../../utils/common';
+import { getStoredValue } from '../../utils/common';
 
 type ProductCardProps = {
   card: ProductInfo;
@@ -29,7 +29,7 @@ function ProductCard({
   } = card;
   const formattedPrice = getFormattedPrice(price);
 
-  const currentCartProducts = getStoredCart<ProductInfo[]>('cart', []);
+  const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
   const productInCart =
     currentCartProducts &&
     currentCartProducts.find((cardItem) => cardItem.id === id);

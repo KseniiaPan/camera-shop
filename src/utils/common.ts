@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
 import { PHONE_REGEXP } from '../consts';
+import { ProductInfo } from '../types/product-types';
 
 const getFormattedPrice = (price:number) => price.toLocaleString('ru-RU');
 const getFormattedPhoneNumber = (phoneNumber:string) => {
@@ -26,9 +27,14 @@ function parseJSON<T>(value: string): T|undefined{
   }
 }
 
-function getStoredCart<T>(key: string, defaultValue: T): T|undefined {
-  const storedCart = localStorage.getItem(key);
-  return storedCart !== null ? parseJSON(storedCart) : defaultValue;
+function getStoredValue<T>(key: string, defaultValue: T): T|undefined {
+  const storedValue = localStorage.getItem(key);
+  return storedValue !== null ? parseJSON(storedValue) : defaultValue;
 }
 
-export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime, getStoredCart};
+
+const getCartProdutsAmount = (cartProducts:ProductInfo[]): number|undefined => cartProducts.reduce(
+  (accumulator, currentProduct) => currentProduct.quantity ? accumulator + currentProduct.quantity : accumulator, 0);
+
+
+export {getFormattedPrice, getFormattedPhoneNumber, validatePhone, humanizeCommentDate, getDateWithoutTime, getStoredValue, getCartProdutsAmount};
