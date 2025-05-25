@@ -20,6 +20,7 @@ import { changeCartProductsAmount } from '../../store/order-process/order-proces
 import { postOrderAction } from '../../store/api-actions';
 import { getPromoProductsData } from '../../store/promo-process/selectors';
 import { getOrderPostingStatus } from '../../store/order-process/selectors';
+import { getCouponDiscount } from '../../store/order-process/selectors';
 import {
   getBasketProdutsAmount,
   getNonPromoBasketProducts,
@@ -28,6 +29,7 @@ import {
   getDiscountForQuantity,
   getReducedDiscount,
   getOrderedProductsIds,
+  getTotalDiscount
 } from '../../utils/basket-calculation';
 
 const initialRemoveProductModalState: ProductModalData = {
@@ -45,6 +47,8 @@ function BasketPage(): JSX.Element {
 
   const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
   const currentPromoProducts = useAppSelector(getPromoProductsData);
+
+  const couponDiscount = useAppSelector(getCouponDiscount);
 
   const isOrderPosting = useAppSelector(getOrderPostingStatus);
 
@@ -67,23 +71,27 @@ function BasketPage(): JSX.Element {
   const nonPromoBasketProductsQuantity =
     nonPromoBasketProducts && getProductsQuantity(nonPromoBasketProducts);
 
-  const expectedDiscount =
+  const discountForQuantity =
     nonPromoBasketProductsQuantity &&
     getDiscountForQuantity(nonPromoBasketProductsQuantity);
 
-  const reducedDiscount =
-    expectedDiscount &&
+  const reducedDiscountForQuantity =
+    discountForQuantity &&
     nonPromoBasketProductsTotalCost &&
-    getReducedDiscount(expectedDiscount, nonPromoBasketProductsTotalCost);
+    getReducedDiscount(discountForQuantity, nonPromoBasketProductsTotalCost);
 
-  const nonPromoBasketProductsDiscount =
+  const nonPromoQuantityDiscountAmount =
     nonPromoBasketProductsTotalCost &&
-    reducedDiscount &&
-    nonPromoBasketProductsTotalCost * (reducedDiscount / 100);
+    reducedDiscountForQuantity &&
+    nonPromoBasketProductsTotalCost * (reducedDiscountForQuantity / 100);
+
+  const produtsCouponDiscountAmount = basketProductsTotalCost && couponDiscount && basketProductsTotalCost * (couponDiscount / 100);
+
+  const totalDisount = getTotalDiscount(nonPromoQuantityDiscountAmount, produtsCouponDiscountAmount);
 
   const finalCost =
-    basketProductsTotalCost && nonPromoBasketProductsDiscount
-      ? basketProductsTotalCost - nonPromoBasketProductsDiscount
+    basketProductsTotalCost && totalDisount
+      ? basketProductsTotalCost - totalDisount
       : basketProductsTotalCost;
 
   const orderedProductsIds =
@@ -238,7 +246,7 @@ function BasketPage(): JSX.Element {
             )}
             <BasketSummary
               finalCost={finalCost}
-              discount={nonPromoBasketProductsDiscount}
+              discount={totalDisount}
               totalCost={basketProductsTotalCost}
               isOrderButtonDisabled={isOrderButtonDisabled}
               onOrderSubmitButtonClick={handleOrderSubmitButtonClick}

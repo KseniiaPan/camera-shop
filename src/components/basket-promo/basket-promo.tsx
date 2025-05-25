@@ -1,4 +1,25 @@
+import { useLocalStorage } from '../../hooks/use-local-storage';
+import { postCouponAction } from '../../store/api-actions';
+import { useAppDispatch } from '../../hooks/index';
+
 function BasketPromo(): JSX.Element {
+  const [promocode, setPromocode] = useLocalStorage<string>('promocode', '');
+  const dispatch = useAppDispatch();
+  const handlePromocodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      evt.target.value !== undefined
+    ) {
+      setPromocode(evt.target.value);
+    }
+  };
+
+  const handleApplyButtonClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    evt.preventDefault();
+    if (promocode) {
+      dispatch(postCouponAction({coupon: promocode}));
+    }
+  };
+
   return (
     <div className="basket__promo">
       <p className="title title--h4">
@@ -9,12 +30,12 @@ function BasketPromo(): JSX.Element {
           <div className="custom-input">
             <label>
               <span className="custom-input__label">Промокод</span>
-              <input type="text" name="promo" placeholder="Введите промокод" />
+              <input type="text" name="promo" placeholder="Введите промокод" defaultValue={promocode} onBlur={handlePromocodeChange}/>
             </label>
             <p className="custom-input__error">Промокод неверный</p>
             <p className="custom-input__success">Промокод принят!</p>
           </div>
-          <button className="btn" type="submit">
+          <button className="btn" type="submit" onClick={handleApplyButtonClick}>
             Применить
           </button>
         </form>

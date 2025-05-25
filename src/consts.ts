@@ -10,6 +10,7 @@ export enum NameSpace {
   Promo = 'Promo',
   Review = 'Review',
   Order = 'Order',
+  Promocode = 'Promocode',
 }
 
 export enum APIRoute {
@@ -18,6 +19,7 @@ export enum APIRoute {
   Promo = '/promo',
   Reviews = '/reviews',
   Order = '/orders',
+  Coupon = '/coupons',
 }
 
 export enum TabOption {

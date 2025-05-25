@@ -107,6 +107,18 @@ const getOrderedProductsIds = (products: ProductInfo[]) => {
   return orderedProductsIds;
 };
 
+const getTotalDiscount = (quantityDiscount: number | undefined, couponDiscount: number | undefined) => {
+  if (quantityDiscount !== undefined && couponDiscount !== undefined) {
+    return quantityDiscount + couponDiscount;
+  } else
+  if (quantityDiscount !== undefined && couponDiscount === undefined) {
+    return quantityDiscount;
+  } else
+  if (quantityDiscount === undefined && couponDiscount !== undefined) {
+    return couponDiscount;
+  }
+};
+
 export {
   getBasketProdutsAmount,
   getNonPromoBasketProducts,
@@ -115,4 +127,5 @@ export {
   getDiscountForQuantity,
   getReducedDiscount,
   getOrderedProductsIds,
+  getTotalDiscount
 };

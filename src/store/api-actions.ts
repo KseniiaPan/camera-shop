@@ -5,6 +5,7 @@ import {APIRoute} from '../consts';
 import {ProductInfo, PrimaryProductInfo} from '../types/product-types';
 import {Review} from '../types/review-types';
 import {Order} from '../types/order-types';
+import {Coupon} from '../types/coupon-types';
 
 export const fetchProductsAction = createAsyncThunk<ProductInfo[], undefined, {
   dispatch: AppDispatch;
@@ -82,5 +83,18 @@ export const fetchSimilarProductsAction = createAsyncThunk<
   const { data } = await api.get<ProductInfo[]>(
     `${APIRoute.Cameras}/${id}${APIRoute.SimilarCameras}`
   );
+  return data;
+});
+
+export const postCouponAction = createAsyncThunk<
+number,
+Coupon,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/postCoupon', async (coupon, { extra: api }) => {
+  const { data } = await api.post<number>(APIRoute.Coupon, coupon);
   return data;
 });
