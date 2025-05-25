@@ -31,7 +31,7 @@ function OrderSuccessModal({
     <FocusTrap
       active={isSuccessModalOpen}
       focusTrapOptions={{
-        initialFocus: '.btn--purple',
+        initialFocus: '#continue-shopping',
         tabbableOptions: {
           displayCheck: 'none',
         },
@@ -57,6 +57,7 @@ function OrderSuccessModal({
             <div className="modal__buttons">
               <button
                 className="btn btn--purple modal__btn modal__btn--fit-width"
+                id="#continue-shopping"
                 type="button"
                 onClick={handleContinueShoppingClick}
               >

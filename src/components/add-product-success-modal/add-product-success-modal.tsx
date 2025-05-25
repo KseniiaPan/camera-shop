@@ -35,7 +35,7 @@ function AddProductSuccessModal({
     <FocusTrap
       active={isSuccessModalOpen}
       focusTrapOptions={{
-        initialFocus: '.btn--purple',
+        initialFocus: '#continue-shopping',
         tabbableOptions: {
           displayCheck: 'none',
         },
@@ -61,6 +61,7 @@ function AddProductSuccessModal({
             <div className="modal__buttons">
               <button
                 className="btn btn--transparent modal__btn"
+                id="#continue-shopping"
                 onClick={handleContinueShoppingClick}
               >
                 Продолжить покупки

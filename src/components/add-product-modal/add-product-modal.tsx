@@ -35,7 +35,7 @@ function AddProductModal({
     <FocusTrap
       active={modalData.isModalOpen}
       focusTrapOptions={{
-        initialFocus: '.btn--purple',
+        initialFocus: '#add-product',
         tabbableOptions: {
           displayCheck: 'none',
         },
@@ -58,6 +58,7 @@ function AddProductModal({
               {openedCameraInfo && (
                 <button
                   className="btn btn--purple modal__btn modal__btn--fit-width"
+                  id="#add-product"
                   type="button"
                   onClick={() => onAddToCartClick(openedCameraInfo)}
                 >
