@@ -134,7 +134,41 @@ export const SortingSection = {
   Direction: {
     up: 'up',
     down: 'down',
-  }
+  },
+} as const;
+
+export const DiscountOption = {
+  MinimalDiscount: {
+    quantity: 2,
+    discount: 3,
+  },
+  MediumDiscount: {
+    quantity: 5,
+    discount: 5,
+  },
+  MediumPlusDiscount: {
+    quantity: 6,
+    discount: 10,
+  },
+  MaximalDiscount: {
+    quantity: 10,
+    discount: 15,
+  },
+} as const;
+
+export const DiscountReductionOption = {
+  MinimalDiscountReduction: {
+    sum: 10000,
+    discountReductionStep: 1,
+  },
+  MediumDiscountReduction: {
+    sum: 20000,
+    discountReductionStep: 2,
+  },
+  MaximalDiscountReduction: {
+    sum: 30000,
+    discountReductionStep: 3,
+  },
 } as const;
 
 export const MAX_RATING = 5;
@@ -149,7 +183,4 @@ export const PAGINATION_ITEMS_MIN_COUNT = 0;
 export const PAGINATION_ITEMS_MAX_COUNT = 3;
 export const BASKET_PRODUCTS_MIN_COUNT = 1;
 export const BASKET_PRODUCTS_MAX_COUNT = 99;
-
-export const PHONE_REGEXP =
-  /^((\+7|8)((\(\d{3}\)|( )?\d{3})( )?)\d{3}(-| )?\d{2}(-| )?\d{2}(-| )?)$/;
-export const PHONE_INITIAL_VALUE = '';
+export const PRODUCT_DEFAULT_QUANTITY = 1;

@@ -13,9 +13,13 @@ export const orderProcess = createSlice({
   name: NameSpace.Order,
   initialState,
   reducers: {
-    changeCartProductsAmount: (state, action: PayloadAction<number|undefined>) => {
+    changeCartProductsAmount: (
+      state,
+      action: PayloadAction<number | undefined>
+    ) => {
       state.currentCartProductsAmount = action.payload;
-    }},
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(postOrderAction.pending, (state) => {
@@ -23,12 +27,12 @@ export const orderProcess = createSlice({
       })
       .addCase(postOrderAction.fulfilled, (state) => {
         state.isOrderPosting = false;
-        toast.success('Ваш запрос успешно отправлен. Наш менеджер свяжется с вами в ближайшее время.');
+        toast.success('Ваш заказ успешно оофрмлен.');
       })
       .addCase(postOrderAction.rejected, (state) => {
         state.isOrderPosting = false;
-        toast.error('Ошибка при отправке запроса. Попробуйте еще раз.');
+        toast.error('Ошибка при отправке заказа. Попробуйте еще раз.');
       });
   },
 });
-export const {changeCartProductsAmount} = orderProcess.actions;
+export const { changeCartProductsAmount } = orderProcess.actions;

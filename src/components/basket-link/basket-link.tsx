@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../consts';
-import {getCurrentCartProductsAmount} from '../../store/order-process/selectors';
-import {useAppSelector} from '../../hooks/index';
-
+import { getCurrentCartProductsAmount } from '../../store/order-process/selectors';
+import { useAppSelector } from '../../hooks/index';
 
 function BasketLink(): JSX.Element {
-  const currentCartProductsAmount = useAppSelector(getCurrentCartProductsAmount);
+  const currentCartProductsAmount = useAppSelector(
+    getCurrentCartProductsAmount
+  );
   return (
     <Link
       className="header__basket-link"
@@ -15,7 +16,12 @@ function BasketLink(): JSX.Element {
       <svg width={16} height={16} aria-hidden="true">
         <use xlinkHref="#icon-basket" />
       </svg>
-      {currentCartProductsAmount && currentCartProductsAmount > 0 && (<span className="header__basket-count">{currentCartProductsAmount}</span>)}
+      {currentCartProductsAmount !== undefined &&
+        currentCartProductsAmount !== 0 && (
+        <span className="header__basket-count">
+          {currentCartProductsAmount}
+        </span>
+      )}
     </Link>
   );
 }

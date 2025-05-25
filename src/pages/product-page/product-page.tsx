@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import ReviewsList from '../../components/reviews-list/reviews-list';
 import LoadingPage from '../loading-page/loading-page';
 import NotFoundPage from '../../pages/not-found-page/not-found-page';
@@ -14,7 +14,7 @@ import AddProductModal from '../../components/add-product-modal/add-product-moda
 import AddProductSuccessModal from '../../components/add-product-success-modal/add-product-success-modal';
 import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import { RatingOption, ErrorText } from '../../consts';
-import { ProductModalData } from '../../types/product-types';
+import { ProductModalData, ProductInfo } from '../../types/product-types';
 import {
   fetchCurrentProductAction,
   fetchReviewsAction,
@@ -26,6 +26,10 @@ import {
   getDataLoadingErrorStatus,
   getSimilarProductsData,
 } from '../../store/product-process/selectors';
+import { useLocalStorage } from '../../hooks/use-local-storage';
+import { getStoredValue } from '../../utils/common';
+import { getBasketProdutsAmount } from '../../utils/basket-calculation';
+import { changeCartProductsAmount } from '../../store/order-process/order-process';
 
 const initialAddProductModalState: ProductModalData = {
   isModalOpen: false,
@@ -38,7 +42,8 @@ function ProductPage(): JSX.Element {
   );
   const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
     useState(false);
-
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+  const dispatch = useAppDispatch();
   const isDetailedProductLoading = useAppSelector(
     getCurrentProductLoadingStatus
   );
@@ -48,7 +53,6 @@ function ProductPage(): JSX.Element {
   const params = useParams();
 
   const currentProductId = Number(params.id);
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (currentProductId) {
@@ -82,6 +86,37 @@ function ProductPage(): JSX.Element {
       behavior: 'smooth',
     });
   };
+
+  const handleAddToCartClick = useCallback(
+    (product: ProductInfo) => {
+      const newCart = cart ? cart.map((cartItem) => ({ ...cartItem })) : [];
+      let productInCart = newCart.find((item) => product.name === item.name);
+      if (productInCart && productInCart.quantity) {
+        productInCart.quantity++;
+      } else {
+        productInCart = {
+          ...product,
+          quantity: 1,
+        };
+        newCart.push(productInCart);
+      }
+      setCart(newCart);
+      handleSuccessModalOpen();
+      handleAddProductModalCloseClick();
+    },
+    [cart, setCart]
+  );
+
+  useEffect(() => {
+    const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+    if (currentCartProducts) {
+      const currentCartProductsAmount =
+        getBasketProdutsAmount(currentCartProducts);
+      dispatch(changeCartProductsAmount(currentCartProductsAmount));
+    } else {
+      dispatch(changeCartProductsAmount(undefined));
+    }
+  }, [dispatch, handleAddToCartClick]);
 
   if (isDetailedProductLoading) {
     return <LoadingPage />;
@@ -169,7 +204,7 @@ function ProductPage(): JSX.Element {
             <AddProductModal
               onAddProductModalClose={handleAddProductModalCloseClick}
               modalData={addProductModalData}
-              onSuccessModalOpen={handleSuccessModalOpen}
+              onAddToCartClick={handleAddToCartClick}
             />
           )}
           {isProductSuccessModalOpen && (

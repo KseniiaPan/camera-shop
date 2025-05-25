@@ -7,22 +7,20 @@ import { ProductModalData, ProductInfo } from '../../types/product-types';
 import useClickOutside from '../../hooks/use-click-outside';
 import useEscKeyClick from '../../hooks/use-esc-key-click';
 import useDisableBackground from '../../hooks/use-disable-background';
-import { useLocalStorage } from '../../hooks/use-local-storage';
 import { BasketCardOption } from '../../consts';
 
 type AddProductModalProps = {
   modalData: ProductModalData;
   onAddProductModalClose: () => void;
-  onSuccessModalOpen: () => void;
+  onAddToCartClick: (product: ProductInfo) => void;
 };
 
 function AddProductModal({
   onAddProductModalClose,
+  onAddToCartClick,
   modalData,
-  onSuccessModalOpen,
 }: AddProductModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
-  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
 
   useClickOutside(modalData.isModalOpen, modalRef, onAddProductModalClose);
   useEscKeyClick(onAddProductModalClose);
@@ -32,23 +30,6 @@ function AddProductModal({
   const openedCameraInfo = products.find(
     (product) => modalData.openedCameraId === product.id
   );
-
-  const handleAddToCartClick = (product: ProductInfo) => {
-    const newCart = cart ? cart.map((cartItem) => ({ ...cartItem })) : [];
-    let productInCart = newCart.find((item) => product.name === item.name);
-    if (productInCart && productInCart.quantity) {
-      productInCart.quantity++;
-    } else {
-      productInCart = {
-        ...product,
-        quantity: 1,
-      };
-      newCart.push(productInCart);
-    }
-    setCart(newCart);
-    onSuccessModalOpen();
-    onAddProductModalClose();
-  };
 
   return (
     <FocusTrap
@@ -78,7 +59,7 @@ function AddProductModal({
                 <button
                   className="btn btn--purple modal__btn modal__btn--fit-width"
                   type="button"
-                  onClick={() => handleAddToCartClick(openedCameraInfo)}
+                  onClick={() => onAddToCartClick(openedCameraInfo)}
                 >
                   <svg width={24} height={16} aria-hidden="true">
                     <use xlinkHref="#icon-add-basket" />

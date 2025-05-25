@@ -1,12 +1,34 @@
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import BasketProductCard from '../../components/basket-product-card/basket-product-card';
 import RemoveProductModal from '../../components/remove-product-modal/remove-product-modal';
+import OrderSuccessModal from '../../components/order-success-modal/order-success-modal';
 import ErrorMessage from '../../components/errorMessage/error-message';
-import { getStoredValue } from '../../utils/common';
+import BasketSummary from '../../components/basket-summary/basket-summary';
+import Preloader from '../../components/preloader/preloader';
 import { ProductInfo, ProductModalData } from '../../types/product-types';
-import { ErrorText } from '../../consts';
+import {
+  ErrorText,
+  BASKET_PRODUCTS_MIN_COUNT,
+  BASKET_PRODUCTS_MAX_COUNT,
+} from '../../consts';
+import { useLocalStorage } from '../../hooks/use-local-storage';
+import { getStoredValue } from '../../utils/common';
+import { changeCartProductsAmount } from '../../store/order-process/order-process';
+import { postOrderAction } from '../../store/api-actions';
+import { getPromoProductsData } from '../../store/promo-process/selectors';
+import { getOrderPostingStatus } from '../../store/order-process/selectors';
+import {
+  getBasketProdutsAmount,
+  getNonPromoBasketProducts,
+  getSummedPrice,
+  getProductsQuantity,
+  getDiscountForQuantity,
+  getReducedDiscount,
+  getOrderedProductsIds,
+} from '../../utils/basket-calculation';
 
 const initialRemoveProductModalState: ProductModalData = {
   isModalOpen: false,
@@ -14,17 +36,177 @@ const initialRemoveProductModalState: ProductModalData = {
 };
 
 function BasketPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
   const [removeProductModalData, setDeleteProductModalData] = useState(
     initialRemoveProductModalState
   );
-  const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+  const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false);
+
+  const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
+  const currentPromoProducts = useAppSelector(getPromoProductsData);
+
+  const isOrderPosting = useAppSelector(getOrderPostingStatus);
+
+  const isOrderButtonDisabled =
+    !currentBasketProducts ||
+    currentBasketProducts.length === 0 ||
+    isOrderPosting;
+
+  const basketProductsTotalCost =
+    currentBasketProducts && getSummedPrice(currentBasketProducts);
+
+  const nonPromoBasketProducts =
+    currentBasketProducts &&
+    currentPromoProducts &&
+    getNonPromoBasketProducts(currentBasketProducts, currentPromoProducts);
+
+  const nonPromoBasketProductsTotalCost =
+    nonPromoBasketProducts && getSummedPrice(nonPromoBasketProducts);
+
+  const nonPromoBasketProductsQuantity =
+    nonPromoBasketProducts && getProductsQuantity(nonPromoBasketProducts);
+
+  const expectedDiscount =
+    nonPromoBasketProductsQuantity &&
+    getDiscountForQuantity(nonPromoBasketProductsQuantity);
+
+  const reducedDiscount =
+    expectedDiscount &&
+    nonPromoBasketProductsTotalCost &&
+    getReducedDiscount(expectedDiscount, nonPromoBasketProductsTotalCost);
+
+  const nonPromoBasketProductsDiscount =
+    nonPromoBasketProductsTotalCost &&
+    reducedDiscount &&
+    nonPromoBasketProductsTotalCost * (reducedDiscount / 100);
+
+  const finalCost =
+    basketProductsTotalCost && nonPromoBasketProductsDiscount
+      ? basketProductsTotalCost - nonPromoBasketProductsDiscount
+      : basketProductsTotalCost;
+
+  const orderedProductsIds =
+    currentBasketProducts && getOrderedProductsIds(currentBasketProducts);
 
   const handleRemoveProductModalOpen = (id: number | null) => {
     setDeleteProductModalData({ isModalOpen: true, openedCameraId: id });
   };
 
-  const handleRemoveProductModalClose = () => {
+  const handleRemoveProductModalClose = useCallback(() => {
     setDeleteProductModalData({ isModalOpen: false, openedCameraId: null });
+  },[setDeleteProductModalData]);
+
+  const handleIncreaseClick = useCallback(
+    (product: ProductInfo) => {
+      if (cart) {
+        const newCart = cart.map((cartItem) => ({ ...cartItem }));
+        const productInCart = newCart.find(
+          (item) => product.name === item.name
+        );
+        if (productInCart && productInCart.quantity) {
+          productInCart.quantity++;
+          setCart(newCart);
+        }
+      }
+    },
+    [cart, setCart]
+  );
+
+  const handleDecreaseClick = useCallback(
+    (product: ProductInfo) => {
+      if (cart) {
+        const newCart = cart.map((cartItem) => ({ ...cartItem }));
+        const productInCart = newCart.find(
+          (item) => product.name === item.name
+        );
+        if (productInCart && productInCart.quantity) {
+          productInCart.quantity--;
+          setCart(newCart);
+        }
+      }
+    },
+    [cart, setCart]
+  );
+
+  const handleProductQuantityChange = useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>, product: ProductInfo) => {
+      if (
+        evt.target.value !== undefined &&
+        evt.target.value.length > 0 &&
+        cart
+      ) {
+        if (Number(evt.target.value) < BASKET_PRODUCTS_MIN_COUNT) {
+          evt.target.value = BASKET_PRODUCTS_MIN_COUNT.toString();
+        }
+        if (Number(evt.target.value) > BASKET_PRODUCTS_MAX_COUNT) {
+          evt.target.value = BASKET_PRODUCTS_MAX_COUNT.toString();
+        }
+
+        const newCart = cart.map((cartItem) => ({ ...cartItem }));
+        const productInCart = newCart.find((item) => product.id === item.id);
+        if (productInCart) {
+          productInCart.quantity = Number(evt.target.value);
+          setCart(newCart);
+        }
+      }
+    },
+    [cart, setCart]
+  );
+
+  const handleRemoveFromCartClick = useCallback(
+    (productToRemove: ProductInfo) => {
+      if (cart) {
+        let newCart = cart.map((cartItem) => ({ ...cartItem }));
+        newCart = newCart.filter(
+          (product) => product.id !== productToRemove.id
+        );
+        setCart(newCart);
+        handleRemoveProductModalClose();
+      }
+    },
+    [cart, setCart, handleRemoveProductModalClose]
+  );
+
+  useEffect(() => {
+    const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+    if (currentCartProducts) {
+      const currentCartProductsAmount =
+        getBasketProdutsAmount(currentCartProducts);
+      dispatch(changeCartProductsAmount(currentCartProductsAmount));
+    } else {
+      dispatch(changeCartProductsAmount(undefined));
+    }
+  }, [
+    dispatch,
+    handleRemoveFromCartClick,
+    handleIncreaseClick,
+    handleDecreaseClick,
+    handleProductQuantityChange,
+  ]);
+
+  const handleSuccessModalOpen = () => {
+    setIsOrderSuccessModalOpen(true);
+  };
+
+  const handleSuccessModalClose = () => {
+    setIsOrderSuccessModalOpen(false);
+  };
+
+  const handleOrderSubmitButtonClick = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    evt.preventDefault();
+
+    dispatch(
+      postOrderAction({ camerasIds: orderedProductsIds, coupon: null })
+    ).then((response) => {
+      if (response.meta.requestStatus === 'fulfilled') {
+        localStorage.removeItem('cart');
+        dispatch(changeCartProductsAmount(undefined));
+        handleSuccessModalOpen();
+      }
+    });
   };
 
   return (
@@ -37,13 +219,16 @@ function BasketPage(): JSX.Element {
         <section className="basket">
           <div className="container">
             <h1 className="title title--h2">Корзина</h1>
-            {currentCartProducts && currentCartProducts.length > 0 ? (
+            {currentBasketProducts && currentBasketProducts.length > 0 ? (
               <ul className="basket__list">
-                {currentCartProducts.map((product) => (
+                {currentBasketProducts.map((product) => (
                   <li className="basket-item" key={product.id}>
                     <BasketProductCard
                       openedCameraInfo={product}
                       onRemoveProductModalOpen={handleRemoveProductModalOpen}
+                      onIncreaseClick={handleIncreaseClick}
+                      onDecreaseClick={handleDecreaseClick}
+                      onProductQuantityChange={handleProductQuantityChange}
                     />
                   </li>
                 ))}
@@ -51,55 +236,13 @@ function BasketPage(): JSX.Element {
             ) : (
               <ErrorMessage message={ErrorText.BasketError} />
             )}
-            <div className="basket__summary">
-              <div className="basket__promo">
-                <p className="title title--h4">
-                  Если у вас есть промокод на скидку, примените его в этом поле
-                </p>
-                <div className="basket-form">
-                  <form action="#">
-                    <div className="custom-input">
-                      <label>
-                        <span className="custom-input__label">Промокод</span>
-                        <input
-                          type="text"
-                          name="promo"
-                          placeholder="Введите промокод"
-                        />
-                      </label>
-                      <p className="custom-input__error">Промокод неверный</p>
-                      <p className="custom-input__success">Промокод принят!</p>
-                    </div>
-                    <button className="btn" type="submit">
-                      Применить
-                    </button>
-                  </form>
-                </div>
-              </div>
-              <div className="basket__summary-order">
-                <p className="basket__summary-item">
-                  <span className="basket__summary-text">Всего:</span>
-                  <span className="basket__summary-value">111 390 ₽</span>
-                </p>
-                <p className="basket__summary-item">
-                  <span className="basket__summary-text">Скидка:</span>
-                  <span className="basket__summary-value basket__summary-value--bonus">
-                    0 ₽
-                  </span>
-                </p>
-                <p className="basket__summary-item">
-                  <span className="basket__summary-text basket__summary-text--total">
-                    К оплате:
-                  </span>
-                  <span className="basket__summary-value basket__summary-value--total">
-                    111 390 ₽
-                  </span>
-                </p>
-                <button className="btn btn--purple" type="submit">
-                  Оформить заказ
-                </button>
-              </div>
-            </div>
+            <BasketSummary
+              finalCost={finalCost}
+              discount={nonPromoBasketProductsDiscount}
+              totalCost={basketProductsTotalCost}
+              isOrderButtonDisabled={isOrderButtonDisabled}
+              onOrderSubmitButtonClick={handleOrderSubmitButtonClick}
+            />
           </div>
         </section>
       </div>
@@ -107,8 +250,16 @@ function BasketPage(): JSX.Element {
         <RemoveProductModal
           onRemoveProductModalClose={handleRemoveProductModalClose}
           modalData={removeProductModalData}
+          onRemoveFromCartClick={handleRemoveFromCartClick}
         />
       )}
+      {isOrderSuccessModalOpen && (
+        <OrderSuccessModal
+          isSuccessModalOpen={isOrderSuccessModalOpen}
+          onSuccessModalClose={handleSuccessModalClose}
+        />
+      )}
+      <Preloader />
     </main>
   );
 }

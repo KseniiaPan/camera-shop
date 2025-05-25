@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Banner from '../../components/banner/banner';
 import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import ProductCardsList from '../../components/product-cards-list/product-cards-list';
@@ -14,7 +14,7 @@ import { ProductModalData, ProductInfo } from '../../types/product-types';
 import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
 import { ProductsCatalogPagination } from '../../types/pagination-types';
-import { useAppSelector } from '../../hooks/index';
+import { useAppSelector, useAppDispatch } from '../../hooks/index';
 import {
   getDataLoadingErrorStatus,
   getProductsLoadingStatus,
@@ -33,6 +33,10 @@ import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
 import { getVisiblePaginationItems } from '../../utils/pagination';
+import { useLocalStorage } from '../../hooks/use-local-storage';
+import { getStoredValue } from '../../utils/common';
+import { getBasketProdutsAmount } from '../../utils/basket-calculation';
+import { changeCartProductsAmount } from '../../store/order-process/order-process';
 
 const initialAddProductModalState: ProductModalData = {
   isModalOpen: false,
@@ -55,6 +59,9 @@ function CatalogPage(): JSX.Element {
 
   const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
     useState(false);
+
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+  const dispatch = useAppDispatch();
 
   const {
     page,
@@ -312,6 +319,37 @@ function CatalogPage(): JSX.Element {
     resetPagination();
   };
 
+  const handleAddToCartClick = useCallback(
+    (product: ProductInfo) => {
+      const newCart = cart ? cart.map((cartItem) => ({ ...cartItem })) : [];
+      let productInCart = newCart.find((item) => product.name === item.name);
+      if (productInCart && productInCart.quantity) {
+        productInCart.quantity++;
+      } else {
+        productInCart = {
+          ...product,
+          quantity: 1,
+        };
+        newCart.push(productInCart);
+      }
+      setCart(newCart);
+      handleSuccessModalOpen();
+      handleAddProductModalCloseClick();
+    },
+    [cart, setCart]
+  );
+
+  useEffect(() => {
+    const currentCartProducts = getStoredValue<ProductInfo[]>('cart', []);
+    if (currentCartProducts) {
+      const currentCartProductsAmount =
+        getBasketProdutsAmount(currentCartProducts);
+      dispatch(changeCartProductsAmount(currentCartProductsAmount));
+    } else {
+      dispatch(changeCartProductsAmount(undefined));
+    }
+  }, [dispatch, handleAddToCartClick]);
+
   if (isProductsDataLoading) {
     return <LoadingPage />;
   }
@@ -384,7 +422,7 @@ function CatalogPage(): JSX.Element {
         <AddProductModal
           onAddProductModalClose={handleAddProductModalCloseClick}
           modalData={addProductModalData}
-          onSuccessModalOpen={handleSuccessModalOpen}
+          onAddToCartClick={handleAddToCartClick}
         />
       )}
       {isProductSuccessModalOpen && (
