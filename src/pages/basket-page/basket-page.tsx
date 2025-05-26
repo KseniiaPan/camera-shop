@@ -68,10 +68,6 @@ function BasketPage(): JSX.Element {
   }, [currentBasketProducts]);
 
   useEffect(() => {
-    if (currentCouponValidityStatus === ValidityStatus.Valid && coupon && coupon.length > 0) {
-      setStoredCouponDiscount(currentCouponDiscount);
-      setCouponValidity(ValidityStatus.Valid);
-    } else
     if (currentCouponValidityStatus === ValidityStatus.Invalid && coupon && coupon.length > 0) {
       setStoredCouponDiscount(undefined);
       setCouponValidity(ValidityStatus.Invalid);
@@ -257,7 +253,15 @@ function BasketPage(): JSX.Element {
   const handleApplyButtonClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     evt.preventDefault();
     if (coupon) {
-      dispatch(postCouponAction({coupon: coupon}));
+      dispatch(postCouponAction({coupon: coupon})).then((response) => {
+        if (response.meta.requestStatus === LoadingStatus.Fulfilled) {
+          setStoredCouponDiscount(currentCouponDiscount);
+          setCouponValidity(ValidityStatus.Valid);
+        } else
+        if (response.meta.requestStatus === LoadingStatus.Rejected) {
+          localStorage.removeItem('coupon');
+        }
+      });
     }
   };
 

@@ -22,7 +22,7 @@ function BasketPromo({onCouponChange, onApplyCouponButtonClick}: BasketPromoProp
       </p>
       <div className="basket-form">
         <form action="#">
-          <div className={`custom-input ${coupon && couponValidity === ValidityStatus.Invalid ? 'is-invalid' : ''} ${coupon && couponValidity === ValidityStatus.Valid ? 'is-valid' : ''}`}>
+          <div className={`custom-input ${couponValidity === ValidityStatus.Invalid ? 'is-invalid' : ''} ${coupon && couponValidity === ValidityStatus.Valid ? 'is-valid' : ''}`}>
             <label>
               <span className="custom-input__label">Промокод</span>
               <input type="text" name="promo" placeholder="Введите промокод" defaultValue={coupon ? coupon : ''} onBlur={onCouponChange}/>
