@@ -13,14 +13,16 @@ import {
   ErrorText,
   BASKET_PRODUCTS_MIN_COUNT,
   BASKET_PRODUCTS_MAX_COUNT,
+  LoadingStatus,
+  ValidityStatus
 } from '../../consts';
 import { useLocalStorage } from '../../hooks/use-local-storage';
 import { getStoredValue } from '../../utils/common';
 import { changeCartProductsAmount } from '../../store/order-process/order-process';
-import { postOrderAction } from '../../store/api-actions';
+import { postOrderAction, postCouponAction } from '../../store/api-actions';
 import { getPromoProductsData } from '../../store/promo-process/selectors';
 import { getOrderPostingStatus } from '../../store/order-process/selectors';
-import { getCouponDiscount } from '../../store/order-process/selectors';
+import { getCouponDiscount, getCouponValidityStatus } from '../../store/order-process/selectors';
 import {
   getBasketProdutsAmount,
   getNonPromoBasketProducts,
@@ -40,25 +42,51 @@ const initialRemoveProductModalState: ProductModalData = {
 function BasketPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+  const [storedCouponDiscount, setStoredCouponDiscount] = useLocalStorage<number | undefined>('couponDiscount', undefined);
+  const [coupon, setCoupon] = useLocalStorage<string | null>('coupon', null);
+  const [couponValidity, setCouponValidity] = useLocalStorage<ValidityStatus | undefined>('couponValidity', undefined);
+
   const [removeProductModalData, setDeleteProductModalData] = useState(
     initialRemoveProductModalState
   );
   const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false);
 
-  const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
   const currentPromoProducts = useAppSelector(getPromoProductsData);
-
-  const couponDiscount = useAppSelector(getCouponDiscount);
-
+  const currentCouponDiscount = useAppSelector(getCouponDiscount);
   const isOrderPosting = useAppSelector(getOrderPostingStatus);
+  const currentCouponValidityStatus = useAppSelector(getCouponValidityStatus);
+
+  const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
+  const basketProductsTotalCost = currentBasketProducts && getSummedPrice(currentBasketProducts);
+
+  useEffect(() => {
+    if (!currentBasketProducts || currentBasketProducts.length === 0) {
+      localStorage.removeItem('couponDiscount');
+      localStorage.removeItem('coupon');
+      localStorage.removeItem('couponValidity');
+    }
+  }, [currentBasketProducts]);
+
+  useEffect(() => {
+    if (currentCouponValidityStatus === ValidityStatus.Valid && coupon && coupon.length > 0) {
+      setStoredCouponDiscount(currentCouponDiscount);
+      setCouponValidity(ValidityStatus.Valid);
+    } else
+    if (currentCouponValidityStatus === ValidityStatus.Invalid && coupon && coupon.length > 0) {
+      setStoredCouponDiscount(undefined);
+      setCouponValidity(ValidityStatus.Invalid);
+    } else
+    if (!coupon || coupon.length === 0) {
+      setStoredCouponDiscount(undefined);
+      setCouponValidity(undefined);
+      setCoupon(null);
+    }
+  }, [currentCouponValidityStatus, setStoredCouponDiscount, setCouponValidity, setCoupon, couponValidity, currentCouponDiscount, coupon]);
 
   const isOrderButtonDisabled =
     !currentBasketProducts ||
     currentBasketProducts.length === 0 ||
     isOrderPosting;
-
-  const basketProductsTotalCost =
-    currentBasketProducts && getSummedPrice(currentBasketProducts);
 
   const nonPromoBasketProducts =
     currentBasketProducts &&
@@ -85,7 +113,7 @@ function BasketPage(): JSX.Element {
     reducedDiscountForQuantity &&
     nonPromoBasketProductsTotalCost * (reducedDiscountForQuantity / 100);
 
-  const produtsCouponDiscountAmount = basketProductsTotalCost && couponDiscount && basketProductsTotalCost * (couponDiscount / 100);
+  const produtsCouponDiscountAmount = basketProductsTotalCost && storedCouponDiscount && basketProductsTotalCost * (storedCouponDiscount / 100);
 
   const totalDisount = getTotalDiscount(nonPromoQuantityDiscountAmount, produtsCouponDiscountAmount);
 
@@ -94,8 +122,7 @@ function BasketPage(): JSX.Element {
       ? basketProductsTotalCost - totalDisount
       : basketProductsTotalCost;
 
-  const orderedProductsIds =
-    currentBasketProducts && getOrderedProductsIds(currentBasketProducts);
+  const orderedProductsIds = currentBasketProducts && getOrderedProductsIds(currentBasketProducts);
 
   const handleRemoveProductModalOpen = (id: number | null) => {
     setDeleteProductModalData({ isModalOpen: true, openedCameraId: id });
@@ -205,16 +232,33 @@ function BasketPage(): JSX.Element {
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     evt.preventDefault();
-
     dispatch(
-      postOrderAction({ camerasIds: orderedProductsIds, coupon: null })
+      postOrderAction({ camerasIds: orderedProductsIds, coupon: coupon ? coupon : null})
     ).then((response) => {
-      if (response.meta.requestStatus === 'fulfilled') {
+      if (response.meta.requestStatus === LoadingStatus.Fulfilled) {
         localStorage.removeItem('cart');
+        localStorage.removeItem('couponDiscount');
+        localStorage.removeItem('coupon');
+        localStorage.removeItem('couponValidity');
         dispatch(changeCartProductsAmount(undefined));
         handleSuccessModalOpen();
       }
     });
+  };
+
+  const handlePromocodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    if (
+      evt.target.value !== undefined
+    ) {
+      setCoupon(evt.target.value);
+    }
+  };
+
+  const handleApplyButtonClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    evt.preventDefault();
+    if (coupon) {
+      dispatch(postCouponAction({coupon: coupon}));
+    }
   };
 
   return (
@@ -250,6 +294,8 @@ function BasketPage(): JSX.Element {
               totalCost={basketProductsTotalCost}
               isOrderButtonDisabled={isOrderButtonDisabled}
               onOrderSubmitButtonClick={handleOrderSubmitButtonClick}
+              onCouponChange={handlePromocodeChange}
+              onApplyCouponButtonClick={handleApplyButtonClick}
             />
           </div>
         </section>

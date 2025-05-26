@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NameSpace } from '../../consts';
+import { NameSpace, ValidityStatus } from '../../consts';
 import { toast } from 'react-toastify';
 import { OrderProcess } from '../../types/state-types';
 import { postOrderAction, postCouponAction } from '../api-actions';
@@ -8,6 +8,7 @@ const initialState: OrderProcess = {
   isOrderPosting: false,
   currentCartProductsAmount: undefined,
   isCouponPosting: false,
+  couponValidityStatus: undefined,
   couponDiscount: undefined,
 };
 
@@ -41,10 +42,12 @@ export const orderProcess = createSlice({
       .addCase(postCouponAction.fulfilled, (state, action) => {
         state.isCouponPosting = false;
         state.couponDiscount = action.payload;
+        state.couponValidityStatus = ValidityStatus.Valid;
       })
       .addCase(postCouponAction.rejected, (state) => {
         state.isCouponPosting = false;
-        toast.error('Ошибка при применении промокода. Попробуйте еще раз.');
+        state.couponValidityStatus = ValidityStatus.Invalid;
+        toast.error('Промокод не применен. Проверьте правильность ввода промокода. Возможно отсутствует интернет-соединение.');
       });
   },
 });

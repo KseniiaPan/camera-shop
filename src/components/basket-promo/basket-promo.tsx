@@ -1,24 +1,19 @@
-import { useLocalStorage } from '../../hooks/use-local-storage';
-import { postCouponAction } from '../../store/api-actions';
-import { useAppDispatch } from '../../hooks/index';
+import { ValidityStatus } from '../../consts';
+import { getStoredValue } from '../../utils/common';
 
-function BasketPromo(): JSX.Element {
-  const [promocode, setPromocode] = useLocalStorage<string>('promocode', '');
-  const dispatch = useAppDispatch();
-  const handlePromocodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    if (
-      evt.target.value !== undefined
-    ) {
-      setPromocode(evt.target.value);
-    }
-  };
+type BasketPromoProps = {
+  onCouponChange: (
+    evt: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  onApplyCouponButtonClick: (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
+};
 
-  const handleApplyButtonClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    evt.preventDefault();
-    if (promocode) {
-      dispatch(postCouponAction({coupon: promocode}));
-    }
-  };
+function BasketPromo({onCouponChange, onApplyCouponButtonClick}: BasketPromoProps): JSX.Element {
+
+  const couponValidity = getStoredValue<string | undefined>('couponValidity', undefined);
+  const coupon = getStoredValue<string | null>('coupon', null);
 
   return (
     <div className="basket__promo">
@@ -27,15 +22,15 @@ function BasketPromo(): JSX.Element {
       </p>
       <div className="basket-form">
         <form action="#">
-          <div className="custom-input">
+          <div className={`custom-input ${coupon && couponValidity === ValidityStatus.Invalid ? 'is-invalid' : ''} ${coupon && couponValidity === ValidityStatus.Valid ? 'is-valid' : ''}`}>
             <label>
               <span className="custom-input__label">Промокод</span>
-              <input type="text" name="promo" placeholder="Введите промокод" defaultValue={promocode} onBlur={handlePromocodeChange}/>
+              <input type="text" name="promo" placeholder="Введите промокод" defaultValue={coupon ? coupon : ''} onBlur={onCouponChange}/>
             </label>
             <p className="custom-input__error">Промокод неверный</p>
             <p className="custom-input__success">Промокод принят!</p>
           </div>
-          <button className="btn" type="submit" onClick={handleApplyButtonClick}>
+          <button className="btn" type="submit" onClick={onApplyCouponButtonClick}>
             Применить
           </button>
         </form>

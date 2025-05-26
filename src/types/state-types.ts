@@ -1,6 +1,7 @@
 import {store} from '../store/index';
 import {ProductInfo, PrimaryProductInfo} from './product-types';
 import {Review} from './review-types';
+import { ValidityStatus } from '../consts';
 
 export type State = ReturnType<typeof store.getState>;
 
@@ -25,6 +26,7 @@ export type OrderProcess = {
   isOrderPosting: boolean;
   currentCartProductsAmount: number | undefined;
   isCouponPosting: boolean;
+  couponValidityStatus: ValidityStatus | undefined;
   couponDiscount: number | undefined;
 }
 

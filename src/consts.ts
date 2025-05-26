@@ -10,7 +10,6 @@ export enum NameSpace {
   Promo = 'Promo',
   Review = 'Review',
   Order = 'Order',
-  Promocode = 'Promocode',
 }
 
 export enum APIRoute {
@@ -63,6 +62,16 @@ export enum ErrorText {
   FilterError = 'Не удалось найти подходящий продукт, попробуйте изменить параметры поиска',
   SearchError = 'Совпадения не найдены',
   BasketError = 'Ваша корзина пуста',
+}
+
+export enum LoadingStatus {
+  Fulfilled = 'fulfilled',
+  Rejected = 'rejected',
+}
+
+export enum ValidityStatus {
+  Valid = 'valid',
+  Invalid = 'invalid',
 }
 
 export const SimilarProductsSlider = {

@@ -1,3 +1,3 @@
 export type Coupon = {
-  coupon: string;
+  coupon: string | null;
 };
