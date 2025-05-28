@@ -41,15 +41,16 @@ const initialRemoveProductModalState: ProductModalData = {
 
 function BasketPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
-  const [storedCouponDiscount, setStoredCouponDiscount] = useLocalStorage<number | undefined>('couponDiscount', undefined);
-  const [coupon, setCoupon] = useLocalStorage<string | null>('coupon', null);
-  const [couponValidity, setCouponValidity] = useLocalStorage<ValidityStatus | undefined>('couponValidity', undefined);
-
   const [removeProductModalData, setDeleteProductModalData] = useState(
     initialRemoveProductModalState
   );
   const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false);
+  const [userCoupon, setUserCoupon] = useState<string | null>(null);
+
+  const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+  const [appliedCouponDiscount, setAppliedCouponDiscount] = useLocalStorage<number | undefined>('couponDiscount', undefined);
+  const [appliedCoupon, setAppliedCoupon] = useLocalStorage<string | null>('coupon', null);
+  const [couponValidity, setCouponValidity] = useLocalStorage<ValidityStatus | undefined>('couponValidity', undefined);
 
   const currentPromoProducts = useAppSelector(getPromoProductsData);
   const currentCouponDiscount = useAppSelector(getCouponDiscount);
@@ -57,27 +58,36 @@ function BasketPage(): JSX.Element {
   const currentCouponValidityStatus = useAppSelector(getCouponValidityStatus);
 
   const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
+  const currentAppliedCouponDiscount = getStoredValue<number | undefined>('couponDiscount', undefined);
   const basketProductsTotalCost = currentBasketProducts && getSummedPrice(currentBasketProducts);
+
+  const resetCoupon = useCallback(() => {
+    localStorage.removeItem('couponDiscount');
+    localStorage.removeItem('coupon');
+    localStorage.removeItem('couponValidity');
+  }, []);
 
   useEffect(() => {
     if (!currentBasketProducts || currentBasketProducts.length === 0) {
-      localStorage.removeItem('couponDiscount');
-      localStorage.removeItem('coupon');
-      localStorage.removeItem('couponValidity');
+      resetCoupon();
+      setUserCoupon(null);
     }
-  }, [currentBasketProducts]);
+  }, [currentBasketProducts, resetCoupon]);
+
 
   useEffect(() => {
-    if (currentCouponValidityStatus === ValidityStatus.Invalid && coupon && coupon.length > 0) {
-      setStoredCouponDiscount(undefined);
-      setCouponValidity(ValidityStatus.Invalid);
-    } else
-    if (!coupon || coupon.length === 0) {
-      setStoredCouponDiscount(undefined);
-      setCouponValidity(undefined);
-      setCoupon(null);
+    if (appliedCoupon && currentCouponValidityStatus === ValidityStatus.Valid) {
+      setAppliedCouponDiscount(currentCouponDiscount);
+      setCouponValidity(ValidityStatus.Valid);
     }
-  }, [currentCouponValidityStatus, setStoredCouponDiscount, setCouponValidity, setCoupon, couponValidity, currentCouponDiscount, coupon]);
+  }, [appliedCoupon, appliedCouponDiscount, setAppliedCouponDiscount, setCouponValidity, currentCouponDiscount, currentCouponValidityStatus]);
+
+  useEffect(() => {
+    if (!userCoupon && couponValidity === ValidityStatus.Invalid) {
+      resetCoupon();
+    }
+  }, [resetCoupon, userCoupon, couponValidity]);
+
 
   const isOrderButtonDisabled =
     !currentBasketProducts ||
@@ -109,7 +119,7 @@ function BasketPage(): JSX.Element {
     reducedDiscountForQuantity &&
     nonPromoBasketProductsTotalCost * (reducedDiscountForQuantity / 100);
 
-  const produtsCouponDiscountAmount = basketProductsTotalCost && storedCouponDiscount && basketProductsTotalCost * (storedCouponDiscount / 100);
+  const produtsCouponDiscountAmount = basketProductsTotalCost && currentAppliedCouponDiscount && basketProductsTotalCost * (currentAppliedCouponDiscount / 100);
 
   const totalDisount = getTotalDiscount(nonPromoQuantityDiscountAmount, produtsCouponDiscountAmount);
 
@@ -224,45 +234,45 @@ function BasketPage(): JSX.Element {
     setIsOrderSuccessModalOpen(false);
   };
 
-  const handleOrderSubmitButtonClick = (
-    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    evt.preventDefault();
-    dispatch(
-      postOrderAction({ camerasIds: orderedProductsIds, coupon: coupon ? coupon : null})
-    ).then((response) => {
-      if (response.meta.requestStatus === LoadingStatus.Fulfilled) {
-        localStorage.removeItem('cart');
-        localStorage.removeItem('couponDiscount');
-        localStorage.removeItem('coupon');
-        localStorage.removeItem('couponValidity');
-        dispatch(changeCartProductsAmount(undefined));
-        handleSuccessModalOpen();
-      }
-    });
-  };
-
   const handlePromocodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (
       evt.target.value !== undefined
     ) {
-      setCoupon(evt.target.value);
+      resetCoupon();
+      setUserCoupon(evt.target.value);
     }
   };
 
   const handleApplyButtonClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     evt.preventDefault();
-    if (coupon) {
-      dispatch(postCouponAction({coupon: coupon})).then((response) => {
+    if (userCoupon) {
+      dispatch(postCouponAction({coupon: userCoupon})).then((response) => {
         if (response.meta.requestStatus === LoadingStatus.Fulfilled) {
-          setStoredCouponDiscount(currentCouponDiscount);
-          setCouponValidity(ValidityStatus.Valid);
+          setAppliedCoupon(userCoupon);
+
         } else
         if (response.meta.requestStatus === LoadingStatus.Rejected) {
-          localStorage.removeItem('coupon');
+          setAppliedCoupon(null);
         }
       });
     }
+  };
+
+  const handleOrderSubmitButtonClick = (
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    evt.preventDefault();
+    dispatch(
+      postOrderAction({ camerasIds: orderedProductsIds, coupon: appliedCoupon ? appliedCoupon : null})
+    ).then((response) => {
+      if (response.meta.requestStatus === LoadingStatus.Fulfilled) {
+        localStorage.removeItem('cart');
+        resetCoupon();
+        setUserCoupon(null);
+        dispatch(changeCartProductsAmount(undefined));
+        handleSuccessModalOpen();
+      }
+    });
   };
 
   return (
@@ -296,6 +306,7 @@ function BasketPage(): JSX.Element {
               finalCost={finalCost}
               discount={totalDisount}
               totalCost={basketProductsTotalCost}
+              userCoupon={userCoupon}
               isOrderButtonDisabled={isOrderButtonDisabled}
               onOrderSubmitButtonClick={handleOrderSubmitButtonClick}
               onCouponChange={handlePromocodeChange}

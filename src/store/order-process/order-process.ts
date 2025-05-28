@@ -47,7 +47,7 @@ export const orderProcess = createSlice({
       .addCase(postCouponAction.rejected, (state) => {
         state.isCouponPosting = false;
         state.couponValidityStatus = ValidityStatus.Invalid;
-        toast.error('Промокод не применен. Проверьте правильность ввода промокода. Возможно отсутствует интернет-соединение.');
+        toast.error('К сожалению, промокод не применен.');
       });
   },
 });

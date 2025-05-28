@@ -5,6 +5,7 @@ type BasketSummaryProps = {
   finalCost: number | undefined;
   discount: number | undefined;
   totalCost: number | undefined;
+  userCoupon: string | null;
   isOrderButtonDisabled: boolean;
   onOrderSubmitButtonClick: (
     evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -20,6 +21,7 @@ function BasketSummary({
   finalCost,
   discount,
   totalCost,
+  userCoupon,
   isOrderButtonDisabled,
   onOrderSubmitButtonClick,
   onCouponChange,
@@ -33,7 +35,7 @@ function BasketSummary({
 
   return (
     <div className="basket__summary">
-      <BasketPromo onCouponChange={onCouponChange} onApplyCouponButtonClick={onApplyCouponButtonClick}/>
+      <BasketPromo userCoupon = {userCoupon} onCouponChange={onCouponChange} onApplyCouponButtonClick={onApplyCouponButtonClick}/>
       <div className="basket__summary-order">
         <p className="basket__summary-item">
           <span className="basket__summary-text">Всего:</span>
