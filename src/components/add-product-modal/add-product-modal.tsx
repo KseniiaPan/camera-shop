@@ -58,7 +58,7 @@ function AddProductModal({
               {openedCameraInfo && (
                 <button
                   className="btn btn--purple modal__btn modal__btn--fit-width"
-                  id="#add-product"
+                  id="add-product"
                   type="button"
                   onClick={() => onAddToCartClick(openedCameraInfo)}
                 >

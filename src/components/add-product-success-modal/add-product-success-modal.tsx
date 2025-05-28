@@ -61,7 +61,7 @@ function AddProductSuccessModal({
             <div className="modal__buttons">
               <button
                 className="btn btn--transparent modal__btn"
-                id="#continue-shopping"
+                id="continue-shopping"
                 onClick={handleContinueShoppingClick}
               >
                 Продолжить покупки

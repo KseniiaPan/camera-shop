@@ -58,7 +58,7 @@ function RemoveProductModal({
               {openedCameraInfo && (
                 <button
                   className="btn btn--purple modal__btn modal__btn--half-width"
-                  id="#delete-produt"
+                  id="delete-produt"
                   type="button"
                   onClick={() => onRemoveFromCartClick(openedCameraInfo)}
                 >

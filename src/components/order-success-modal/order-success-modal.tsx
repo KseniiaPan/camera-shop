@@ -57,7 +57,7 @@ function OrderSuccessModal({
             <div className="modal__buttons">
               <button
                 className="btn btn--purple modal__btn modal__btn--fit-width"
-                id="#continue-shopping"
+                id="continue-shopping"
                 type="button"
                 onClick={handleContinueShoppingClick}
               >
