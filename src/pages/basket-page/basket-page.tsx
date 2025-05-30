@@ -22,7 +22,7 @@ import { changeCartProductsAmount } from '../../store/order-process/order-proces
 import { postOrderAction, postCouponAction } from '../../store/api-actions';
 import { getPromoProductsData } from '../../store/promo-process/selectors';
 import { getOrderPostingStatus } from '../../store/order-process/selectors';
-import { getCouponDiscount, getCouponValidityStatus } from '../../store/order-process/selectors';
+import { getCouponDiscount, getCouponValidityStatus, getCouponPostingStatus } from '../../store/order-process/selectors';
 import {
   getBasketProdutsAmount,
   getNonPromoBasketProducts,
@@ -55,6 +55,7 @@ function BasketPage(): JSX.Element {
   const currentPromoProducts = useAppSelector(getPromoProductsData);
   const currentCouponDiscount = useAppSelector(getCouponDiscount);
   const isOrderPosting = useAppSelector(getOrderPostingStatus);
+  const isCouponPosting = useAppSelector(getCouponPostingStatus);
   const currentCouponValidityStatus = useAppSelector(getCouponValidityStatus);
 
   const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
@@ -92,7 +93,7 @@ function BasketPage(): JSX.Element {
   const isOrderButtonDisabled =
     !currentBasketProducts ||
     currentBasketProducts.length === 0 ||
-    isOrderPosting;
+    isOrderPosting || isCouponPosting;
 
   const nonPromoBasketProducts =
     currentBasketProducts &&

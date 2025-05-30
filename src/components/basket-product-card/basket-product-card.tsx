@@ -7,7 +7,7 @@ import {
 import { getFormattedPrice, getStoredValue } from '../../utils/common';
 import BasketItem from '../../components/basket-item/basket-item';
 import { useAppSelector } from '../../hooks/index';
-import { getOrderPostingStatus } from '../../store/order-process/selectors';
+import { getOrderPostingStatus, getCouponPostingStatus } from '../../store/order-process/selectors';
 
 type BasketProductCardProps = {
   onRemoveProductModalOpen: (id: number | null) => void;
@@ -44,15 +44,17 @@ function BasketProductCard({
     totalBasketPrice && getFormattedPrice(totalBasketPrice);
 
   const isOrderPosting = useAppSelector(getOrderPostingStatus);
+  const isCouponPosting = useAppSelector(getCouponPostingStatus);
 
   const isDecreaseButtonDisabled =
     (storedCartProductInfo &&
       storedCartProductInfo.quantity === BASKET_PRODUCTS_MIN_COUNT) ||
-    isOrderPosting;
+    isOrderPosting || isCouponPosting;
   const isIncreaseButtonDisabled =
     (storedCartProductInfo &&
       storedCartProductInfo.quantity === BASKET_PRODUCTS_MAX_COUNT) ||
-    isOrderPosting;
+    isOrderPosting || isCouponPosting;
+  const isProductCounterDisabled = isOrderPosting || isCouponPosting;
 
   return (
     <>
@@ -87,7 +89,7 @@ function BasketProductCard({
           onBlur={(evt) => onProductQuantityChange(evt, openedCameraInfo)}
           onKeyDown={(evt: React.KeyboardEvent<HTMLInputElement>) =>
             evt.key === 'Enter' && (evt.target as HTMLInputElement).blur()}
-          disabled={isOrderPosting}
+          disabled={isProductCounterDisabled}
         />
         <button
           className="btn-icon btn-icon--next"
@@ -109,7 +111,7 @@ function BasketProductCard({
         type="button"
         aria-label="Удалить товар"
         onClick={() => onRemoveProductModalOpen && onRemoveProductModalOpen(id)}
-        disabled={isOrderPosting}
+        disabled={isProductCounterDisabled}
       >
         <svg width={10} height={10} aria-hidden="true">
           <use xlinkHref="#icon-close" />
