@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { getStoredValue } from '../utils/common';
+import { toast } from 'react-toastify';
 
 export const useLocalStorage = <T>(key: string, defaultValue: T) => {
   const [storedValue, setStroredValue] = useState<T | undefined>(() =>
@@ -11,7 +12,9 @@ export const useLocalStorage = <T>(key: string, defaultValue: T) => {
       try {
         setStroredValue(newValue);
         localStorage.setItem(key, JSON.stringify(newValue));
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Ошибка при сохранении в localStorage. Вероятно превышен лимита хранилища.');
+      }
     },
     [key]
   );
