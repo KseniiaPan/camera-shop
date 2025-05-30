@@ -234,12 +234,12 @@ function BasketPage(): JSX.Element {
     setIsOrderSuccessModalOpen(false);
   };
 
-  const handlePromocodeChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCouponChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (
       evt.target.value !== undefined
     ) {
       resetCoupon();
-      setUserCoupon(evt.target.value);
+      setUserCoupon(evt.target.value.trim());
     }
   };
 
@@ -309,7 +309,7 @@ function BasketPage(): JSX.Element {
               userCoupon={userCoupon}
               isOrderButtonDisabled={isOrderButtonDisabled}
               onOrderSubmitButtonClick={handleOrderSubmitButtonClick}
-              onCouponChange={handlePromocodeChange}
+              onCouponChange={handleCouponChange}
               onApplyCouponButtonClick={handleApplyButtonClick}
             />
           </div>
