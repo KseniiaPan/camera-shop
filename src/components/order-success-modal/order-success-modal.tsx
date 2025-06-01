@@ -11,10 +11,7 @@ type OrderSuccessModalProps = {
   onSuccessModalClose: () => void;
 };
 
-function OrderSuccessModal({
-  onSuccessModalClose,
-  isSuccessModalOpen,
-}: OrderSuccessModalProps): JSX.Element {
+function OrderSuccessModal({onSuccessModalClose, isSuccessModalOpen}: OrderSuccessModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 

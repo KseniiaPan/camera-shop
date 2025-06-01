@@ -127,17 +127,7 @@ function ProductPage(): JSX.Element {
   }
 
   if (!isDetailedProductLoading && currentProduct) {
-    const {
-      previewImgWebp,
-      previewImgWebp2x,
-      previewImg,
-      previewImg2x,
-      name,
-      rating,
-      price,
-      reviewCount,
-      id,
-    } = currentProduct;
+    const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, rating, price, reviewCount, id} = currentProduct;
     const formattedPrice = price.toLocaleString('ru-RU');
 
     return (

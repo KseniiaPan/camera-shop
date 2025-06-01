@@ -15,11 +15,7 @@ type RemoveProductModalProps = {
   onRemoveFromCartClick: (productToRemove: ProductInfo) => void;
 };
 
-function RemoveProductModal({
-  onRemoveProductModalClose,
-  modalData,
-  onRemoveFromCartClick,
-}: RemoveProductModalProps): JSX.Element {
+function RemoveProductModal({onRemoveProductModalClose, modalData, onRemoveFromCartClick}: RemoveProductModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useClickOutside(modalData.isModalOpen, modalRef, onRemoveProductModalClose);

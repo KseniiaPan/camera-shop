@@ -10,13 +10,7 @@ import ErrorMessage from '../../components/errorMessage/error-message';
 import BasketSummary from '../../components/basket-summary/basket-summary';
 import Preloader from '../../components/preloader/preloader';
 import { ProductInfo, ProductModalData } from '../../types/product-types';
-import {
-  ErrorText,
-  BASKET_PRODUCTS_MIN_COUNT,
-  BASKET_PRODUCTS_MAX_COUNT,
-  LoadingStatus,
-  ValidityStatus
-} from '../../consts';
+import { ErrorText, BASKET_PRODUCTS_MIN_COUNT, BASKET_PRODUCTS_MAX_COUNT, LoadingStatus, ValidityStatus} from '../../consts';
 import { useLocalStorage } from '../../hooks/use-local-storage';
 import { getStoredValue } from '../../utils/common';
 import { changeCartProductsAmount } from '../../store/order-process/order-process';
@@ -24,16 +18,7 @@ import { postOrderAction, postCouponAction } from '../../store/api-actions';
 import { getPromoProductsData } from '../../store/promo-process/selectors';
 import { getOrderPostingStatus } from '../../store/order-process/selectors';
 import { getCouponDiscount, getCouponValidityStatus, getCouponPostingStatus } from '../../store/order-process/selectors';
-import {
-  getBasketProdutsAmount,
-  getNonPromoBasketProducts,
-  getSummedPrice,
-  getProductsQuantity,
-  getDiscountForQuantity,
-  getReducedDiscount,
-  getOrderedProductsIds,
-  getTotalDiscount
-} from '../../utils/basket-calculation';
+import { getBasketProdutsAmount, getNonPromoBasketProducts, getSummedPrice, getProductsQuantity, getDiscountForQuantity, getReducedDiscount, getOrderedProductsIds, getTotalDiscount} from '../../utils/basket-calculation';
 
 const initialRemoveProductModalState: ProductModalData = {
   isModalOpen: false,
@@ -92,35 +77,19 @@ function BasketPage(): JSX.Element {
   }, [resetCoupon, userCoupon, couponValidity]);
 
 
-  const isOrderButtonDisabled =
-    !currentBasketProducts ||
-    currentBasketProducts.length === 0 ||
-    isOrderPosting || isCouponPosting;
+  const isOrderButtonDisabled = !currentBasketProducts || currentBasketProducts.length === 0 || isOrderPosting || isCouponPosting;
 
-  const nonPromoBasketProducts =
-    currentBasketProducts &&
-    currentPromoProducts &&
-    getNonPromoBasketProducts(currentBasketProducts, currentPromoProducts);
+  const nonPromoBasketProducts = currentBasketProducts && currentPromoProducts && getNonPromoBasketProducts(currentBasketProducts, currentPromoProducts);
 
-  const nonPromoBasketProductsTotalCost =
-    nonPromoBasketProducts && getSummedPrice(nonPromoBasketProducts);
+  const nonPromoBasketProductsTotalCost = nonPromoBasketProducts && getSummedPrice(nonPromoBasketProducts);
 
-  const nonPromoBasketProductsQuantity =
-    nonPromoBasketProducts && getProductsQuantity(nonPromoBasketProducts);
+  const nonPromoBasketProductsQuantity = nonPromoBasketProducts && getProductsQuantity(nonPromoBasketProducts);
 
-  const discountForQuantity =
-    nonPromoBasketProductsQuantity &&
-    getDiscountForQuantity(nonPromoBasketProductsQuantity);
+  const discountForQuantity = nonPromoBasketProductsQuantity && getDiscountForQuantity(nonPromoBasketProductsQuantity);
 
-  const reducedDiscountForQuantity =
-    discountForQuantity &&
-    nonPromoBasketProductsTotalCost &&
-    getReducedDiscount(discountForQuantity, nonPromoBasketProductsTotalCost);
+  const reducedDiscountForQuantity = discountForQuantity && nonPromoBasketProductsTotalCost && getReducedDiscount(discountForQuantity, nonPromoBasketProductsTotalCost);
 
-  const nonPromoQuantityDiscountAmount =
-    nonPromoBasketProductsTotalCost &&
-    reducedDiscountForQuantity &&
-    nonPromoBasketProductsTotalCost * (reducedDiscountForQuantity / 100);
+  const nonPromoQuantityDiscountAmount = nonPromoBasketProductsTotalCost && reducedDiscountForQuantity && nonPromoBasketProductsTotalCost * (reducedDiscountForQuantity / 100);
 
   const produtsCouponDiscountAmount = basketProductsTotalCost && currentAppliedCouponDiscount && basketProductsTotalCost * (currentAppliedCouponDiscount / 100);
 
@@ -221,13 +190,7 @@ function BasketPage(): JSX.Element {
     } else {
       dispatch(changeCartProductsAmount(undefined));
     }
-  }, [
-    dispatch,
-    handleRemoveFromCartClick,
-    handleIncreaseClick,
-    handleDecreaseClick,
-    handleProductQuantityChange,
-  ]);
+  }, [dispatch, handleRemoveFromCartClick, handleIncreaseClick, handleDecreaseClick, handleProductQuantityChange]);
 
   const handleSuccessModalOpen = () => {
     setIsOrderSuccessModalOpen(true);
@@ -293,7 +256,7 @@ function BasketPage(): JSX.Element {
       <Helmet>
         <title>Корзина - Фотошоп</title>
       </Helmet>
-      <div className="page-content">
+      <div className="page-content" data-testid="basket-page">
         <Breadcrumbs isBasket />
         <section className="basket">
           <div className="container">
