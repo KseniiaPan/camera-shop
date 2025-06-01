@@ -7,22 +7,8 @@ type BasketItemProps = {
   basketCardOption: string;
 };
 
-function BasketItem({
-  openedCameraInfo,
-  basketCardOption,
-}: BasketItemProps): JSX.Element {
-  const {
-    previewImgWebp,
-    previewImgWebp2x,
-    previewImg,
-    previewImg2x,
-    name,
-    vendorCode,
-    category,
-    type,
-    level,
-    price,
-  } = openedCameraInfo;
+function BasketItem({openedCameraInfo, basketCardOption}: BasketItemProps): JSX.Element {
+  const {previewImgWebp, previewImgWebp2x, previewImg, previewImg2x, name, vendorCode, category, type, level, price} = openedCameraInfo;
 
   const formattedPrice = getFormattedPrice(price);
   const basketItemName = `${type} ${

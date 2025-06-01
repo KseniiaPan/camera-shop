@@ -1,9 +1,5 @@
 import { ProductInfo } from '../../types/product-types';
-import {
-  BasketCardOption,
-  BASKET_PRODUCTS_MIN_COUNT,
-  BASKET_PRODUCTS_MAX_COUNT,
-} from '../../consts';
+import { BasketCardOption, BASKET_PRODUCTS_MIN_COUNT, BASKET_PRODUCTS_MAX_COUNT} from '../../consts';
 import { getFormattedPrice, getStoredValue } from '../../utils/common';
 import BasketItem from '../../components/basket-item/basket-item';
 import { useAppSelector } from '../../hooks/index';
@@ -14,46 +10,24 @@ type BasketProductCardProps = {
   openedCameraInfo: ProductInfo;
   onIncreaseClick: (product: ProductInfo) => void;
   onDecreaseClick: (product: ProductInfo) => void;
-  onProductQuantityChange: (
-    evt: React.ChangeEvent<HTMLInputElement>,
-    product: ProductInfo
-  ) => void;
+  onProductQuantityChange: (evt: React.ChangeEvent<HTMLInputElement>, product: ProductInfo) => void;
 };
 
-function BasketProductCard({
-  onRemoveProductModalOpen,
-  onIncreaseClick,
-  onDecreaseClick,
-  onProductQuantityChange,
-  openedCameraInfo,
-}: BasketProductCardProps): JSX.Element {
+function BasketProductCard({onRemoveProductModalOpen, onIncreaseClick, onDecreaseClick, onProductQuantityChange, openedCameraInfo}: BasketProductCardProps): JSX.Element {
   const { price, id } = openedCameraInfo;
 
   const storedCartProducts = getStoredValue<ProductInfo[]>('cart', []);
-  const storedCartProductInfo =
-    storedCartProducts &&
-    storedCartProducts.find(
-      (storedCartProductsItem) => storedCartProductsItem.id === id
-    );
+  const storedCartProductInfo = storedCartProducts && storedCartProducts.find((storedCartProductsItem) => storedCartProductsItem.id === id);
+
   const formattedProductPrice = getFormattedPrice(price);
-  const totalBasketPrice =
-    storedCartProductInfo &&
-    storedCartProductInfo.quantity &&
-    price * storedCartProductInfo.quantity;
-  const formattedBasketTotalPrice =
-    totalBasketPrice && getFormattedPrice(totalBasketPrice);
+  const totalBasketPrice = storedCartProductInfo && storedCartProductInfo.quantity && price * storedCartProductInfo.quantity;
+  const formattedBasketTotalPrice = totalBasketPrice && getFormattedPrice(totalBasketPrice);
 
   const isOrderPosting = useAppSelector(getOrderPostingStatus);
   const isCouponPosting = useAppSelector(getCouponPostingStatus);
 
-  const isDecreaseButtonDisabled =
-    (storedCartProductInfo &&
-      storedCartProductInfo.quantity === BASKET_PRODUCTS_MIN_COUNT) ||
-    isOrderPosting || isCouponPosting;
-  const isIncreaseButtonDisabled =
-    (storedCartProductInfo &&
-      storedCartProductInfo.quantity === BASKET_PRODUCTS_MAX_COUNT) ||
-    isOrderPosting || isCouponPosting;
+  const isDecreaseButtonDisabled = (storedCartProductInfo && storedCartProductInfo.quantity === BASKET_PRODUCTS_MIN_COUNT) || isOrderPosting || isCouponPosting;
+  const isIncreaseButtonDisabled = (storedCartProductInfo && storedCartProductInfo.quantity === BASKET_PRODUCTS_MAX_COUNT) || isOrderPosting || isCouponPosting;
   const isProductCounterDisabled = isOrderPosting || isCouponPosting;
 
   return (

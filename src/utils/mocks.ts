@@ -77,6 +77,10 @@ export const mockStore = {
   },
   [NameSpace.Order]: {
     isOrderPosting: false,
+    currentCartProductsAmount: undefined,
+    isCouponPosting: false,
+    couponValidityStatus: undefined,
+    couponDiscount: undefined,
   },
   [NameSpace.Promo]: {
     promoProducts: mockProducts,
