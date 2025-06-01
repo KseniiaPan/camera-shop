@@ -154,7 +154,7 @@ export const DiscountOption = {
     discount: 3,
   },
   MediumDiscount: {
-    quantity: 5,
+    quantity: 3,
     discount: 5,
   },
   MediumPlusDiscount: {

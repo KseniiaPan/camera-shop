@@ -2,9 +2,7 @@ import { PRODUCT_DEFAULT_QUANTITY } from '../consts';
 import { ProductInfo, PrimaryProductInfo } from '../types/product-types';
 import { DiscountOption, DiscountReductionOption } from '../consts';
 
-const getBasketProdutsAmount = (
-  cartProducts: ProductInfo[]
-): number | undefined =>
+const getBasketProdutsAmount = (cartProducts: ProductInfo[]): number | undefined =>
   cartProducts.reduce(
     (accumulator, currentProduct) =>
       currentProduct.quantity
@@ -13,10 +11,7 @@ const getBasketProdutsAmount = (
     0
   );
 
-const getNonPromoBasketProducts = (
-  currentCartProducts: ProductInfo[],
-  currentPromoProducts: PrimaryProductInfo[]
-): ProductInfo[] =>
+const getNonPromoBasketProducts = (currentCartProducts: ProductInfo[],currentPromoProducts: PrimaryProductInfo[]): ProductInfo[] =>
   currentCartProducts.filter(
     (currentCartProductsItem) =>
       !currentPromoProducts.some(
@@ -44,12 +39,12 @@ const getDiscountForQuantity = (productsQuantity: number) => {
   if (productsQuantity === DiscountOption.MinimalDiscount.quantity) {
     discountForQuantity = DiscountOption.MinimalDiscount.discount;
   } else if (
-    productsQuantity > DiscountOption.MinimalDiscount.quantity &&
-    productsQuantity <= DiscountOption.MediumDiscount.quantity
+    productsQuantity >= DiscountOption.MediumDiscount.quantity &&
+    productsQuantity < DiscountOption.MediumPlusDiscount.quantity
   ) {
     discountForQuantity = DiscountOption.MediumDiscount.discount;
   } else if (
-    productsQuantity > DiscountOption.MediumDiscount.quantity &&
+    productsQuantity >= DiscountOption.MediumPlusDiscount.quantity &&
     productsQuantity <= DiscountOption.MaximalDiscount.quantity
   ) {
     discountForQuantity = DiscountOption.MediumPlusDiscount.discount;
@@ -61,10 +56,7 @@ const getDiscountForQuantity = (productsQuantity: number) => {
   return discountForQuantity;
 };
 
-const getReducedDiscount = (
-  expectedDiscount: number,
-  productsTotalCost: number
-) => {
+const getReducedDiscount = (expectedDiscount: number, productsTotalCost: number) => {
   let reducedDiscount: number;
   if (
     productsTotalCost >= DiscountReductionOption.MinimalDiscountReduction.sum &&
