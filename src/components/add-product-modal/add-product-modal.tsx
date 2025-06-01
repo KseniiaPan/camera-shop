@@ -15,11 +15,7 @@ type AddProductModalProps = {
   onAddToCartClick: (product: ProductInfo) => void;
 };
 
-function AddProductModal({
-  onAddProductModalClose,
-  onAddToCartClick,
-  modalData,
-}: AddProductModalProps): JSX.Element {
+function AddProductModal({onAddProductModalClose, onAddToCartClick, modalData}: AddProductModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   useClickOutside(modalData.isModalOpen, modalRef, onAddProductModalClose);

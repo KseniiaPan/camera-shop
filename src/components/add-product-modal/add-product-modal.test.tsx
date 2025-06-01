@@ -1,15 +1,16 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Modal from './modal';
+import AddProductModal from './add-product-modal';
 import { mockProductModalData, mockStore } from '../../utils/mocks';
 import { withStore } from '../../utils/mock-component';
 
-describe('Component: Modal', () => {
+describe('Component: AddProductModal', () => {
   it('should render correctly', () => {
-    const expectedText = /Свяжитесь со мной/i;
-    const mockHandleModalClose = vi.fn();
+    const expectedText = /Добавить товар в корзину/i;
+    const mockHandleAddProductModalClose = vi.fn();
+    const mockHandleAddToCartClick = vi.fn();
 
     const { withStoreComponent } = withStore(
-      <Modal onModalClose={mockHandleModalClose} modalData={mockProductModalData}/>,
+      <AddProductModal onAddProductModalClose={mockHandleAddProductModalClose} onAddToCartClick={mockHandleAddToCartClick} modalData={mockProductModalData}/>,
       mockStore
     );
 
@@ -20,11 +21,12 @@ describe('Component: Modal', () => {
   });
 
   it('should close when close button is clicked', () => {
-    const mockHandleModalClose = vi.fn();
+    const mockHandleAddProductModalClose = vi.fn();
+    const mockHandleAddToCartClick = vi.fn();
     const expectedCloseButtonLabelText = 'Закрыть попап';
 
     const { withStoreComponent } = withStore(
-      <Modal onModalClose={mockHandleModalClose} modalData={mockProductModalData}/>,
+      <AddProductModal onAddProductModalClose={mockHandleAddProductModalClose} onAddToCartClick={mockHandleAddToCartClick} modalData={mockProductModalData}/>,
       mockStore
     );
 
@@ -37,7 +39,7 @@ describe('Component: Modal', () => {
     fireEvent.click(modalCloseButton);
 
     expect(modalCloseButton).toBeInTheDocument();
-    expect(mockHandleModalClose).toBeCalled();
+    expect(mockHandleAddProductModalClose).toBeCalled();
 
   });
 });

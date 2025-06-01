@@ -11,10 +11,7 @@ type AddProductSuccessModalProps = {
   onSuccessModalClose: () => void;
 };
 
-function AddProductSuccessModal({
-  onSuccessModalClose,
-  isSuccessModalOpen,
-}: AddProductSuccessModalProps): JSX.Element {
+function AddProductSuccessModal({onSuccessModalClose, isSuccessModalOpen}: AddProductSuccessModalProps): JSX.Element {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const location = useLocation();

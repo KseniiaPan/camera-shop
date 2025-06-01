@@ -25,7 +25,7 @@ function BasketPromo({userCoupon, onCouponChange, onApplyCouponButtonClick}: Bas
   const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
   const isApplyButtonDisabled = currentBasketProducts && currentBasketProducts.length === 0 || isCouponPosting;
   return (
-    <div className="basket__promo">
+    <div className="basket__promo" data-testid="basket-promo">
       <p className="title title--h4">
         Если у вас есть промокод на скидку, примените его в этом поле
       </p>

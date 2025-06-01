@@ -36,7 +36,7 @@ function BasketProductCard({onRemoveProductModalOpen, onIncreaseClick, onDecreas
         openedCameraInfo={openedCameraInfo}
         basketCardOption={BasketCardOption.Basket}
       />
-      <p className="basket-item__price">
+      <p className="basket-item__price" data-testid="basket-product-card">
         <span className="visually-hidden">Цена:</span>
         {formattedProductPrice} ₽
       </p>
