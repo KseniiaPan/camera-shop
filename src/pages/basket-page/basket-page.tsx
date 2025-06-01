@@ -5,6 +5,7 @@ import Breadcrumbs from '../../components/breadcrumbs/breadcrumbs';
 import BasketProductCard from '../../components/basket-product-card/basket-product-card';
 import RemoveProductModal from '../../components/remove-product-modal/remove-product-modal';
 import OrderSuccessModal from '../../components/order-success-modal/order-success-modal';
+import OrderFailureModal from '../../components/order-failure-modal/order-failure-modal';
 import ErrorMessage from '../../components/errorMessage/error-message';
 import BasketSummary from '../../components/basket-summary/basket-summary';
 import Preloader from '../../components/preloader/preloader';
@@ -45,6 +46,7 @@ function BasketPage(): JSX.Element {
     initialRemoveProductModalState
   );
   const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false);
+  const [isOrderFailureModalOpen, setIsOrderFailureModalOpen] = useState(false);
   const [userCoupon, setUserCoupon] = useState<string | null>(null);
 
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
@@ -235,6 +237,14 @@ function BasketPage(): JSX.Element {
     setIsOrderSuccessModalOpen(false);
   };
 
+  const handleFailureModalOpen = () => {
+    setIsOrderFailureModalOpen(true);
+  };
+
+  const handleFailureModalClose = () => {
+    setIsOrderFailureModalOpen(false);
+  };
+
   const handleCouponChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     if (
       evt.target.value !== undefined
@@ -272,6 +282,8 @@ function BasketPage(): JSX.Element {
         setUserCoupon(null);
         dispatch(changeCartProductsAmount(undefined));
         handleSuccessModalOpen();
+      } else if (response.meta.requestStatus === LoadingStatus.Rejected) {
+        handleFailureModalOpen();
       }
     });
   };
@@ -327,6 +339,12 @@ function BasketPage(): JSX.Element {
         <OrderSuccessModal
           isSuccessModalOpen={isOrderSuccessModalOpen}
           onSuccessModalClose={handleSuccessModalClose}
+        />
+      )}
+      {isOrderFailureModalOpen && (
+        <OrderFailureModal
+          isFailureModalOpen={isOrderFailureModalOpen}
+          onFailureModalClose={handleFailureModalClose}
         />
       )}
       <Preloader />
