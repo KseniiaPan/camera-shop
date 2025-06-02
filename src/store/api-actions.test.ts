@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import {Action} from 'redux';
 import {AppThunkDispatch, extractActionsTypes, mockProducts, mockProduct, mockReviews, mockUserOrder} from '../utils/mocks';
 import {State} from '../types/state-types';
-import {fetchProductsAction, fetchCurrentProductAction, fetchReviewsAction, postOrderAction, fetchSimilarProductsAction, fetchPromoProductsAction} from './api-actions';
+import {fetchProductsAction, fetchCurrentProductAction, fetchReviewsAction, postOrderAction, fetchSimilarProductsAction, fetchPromoProductsAction, postCouponAction} from './api-actions';
 import { APIRoute } from '../consts';
 
 describe('Async actions', () => {
@@ -227,6 +227,45 @@ describe('Async actions', () => {
       expect(actions).toEqual([
         fetchPromoProductsAction.pending.type,
         fetchPromoProductsAction.rejected.type,
+      ]);
+    });
+  });
+  describe('postCouponAction', () => {
+    it('should dispatch "postCouponAction.pending", "postCouponAction.fulfilled", when server response is 200', async () => {
+      const mockCoupon = {'coupon': 'camera-333'};
+      const mockDiscount = 15;
+      mockAxiosAdapter
+        .onPost(APIRoute.Coupon, mockCoupon)
+        .reply(200, mockDiscount);
+
+      await store.dispatch(postCouponAction(mockCoupon));
+
+      const emittedActions = store.getActions();
+      const extractedActionsTypes = extractActionsTypes(emittedActions);
+      const postCouponActionFulfilled = emittedActions.at(1) as ReturnType<
+        typeof postCouponAction.fulfilled
+      >;
+
+      expect(extractedActionsTypes).toEqual([
+        postCouponAction.pending.type,
+        postCouponAction.fulfilled.type,
+      ]);
+
+      expect(postCouponActionFulfilled.payload).toEqual(mockDiscount);
+    });
+
+    it('should dispatch "postCouponAction.pending", "postCouponAction.rejected" when server response is 400', async () => {
+      const mockCoupon = {'coupon': 'camera'};
+      mockAxiosAdapter
+        .onPost(APIRoute.Coupon, mockCoupon)
+        .reply(400);
+
+      await store.dispatch(postCouponAction(mockCoupon));
+      const actions = extractActionsTypes(store.getActions());
+
+      expect(actions).toEqual([
+        postCouponAction.pending.type,
+        postCouponAction.rejected.type,
       ]);
     });
   });

@@ -1,5 +1,5 @@
 import {orderProcess} from './order-process';
-import {postOrderAction} from '../api-actions';
+import {postOrderAction, postCouponAction} from '../api-actions';
 import {mockOrder} from '../../utils/mocks';
 import { datatype } from 'faker';
 import { ValidityStatus } from '../../consts';
@@ -43,6 +43,37 @@ describe('OrderProcess Slice', () => {
     const result = orderProcess.reducer(
       undefined,
       postOrderAction.fulfilled(undefined, '', mockOrder)
+    );
+    expect(result).toEqual(expectedState);
+  });
+  it('should set "isCouponPosting" to "true" with "postCouponAction.pending"', () => {
+    const expectedState = {
+      ...initialState,
+      isCouponPosting: true,
+    };
+    const result = orderProcess.reducer(
+      undefined,
+      postCouponAction.pending
+    );
+    expect(result).toEqual(expectedState);
+  });
+
+  it('should set "isCouponPosting" to "false", "couponDiscount" to the discount amount and "couponValidityStatus" to "valid" with "postCouponAction.fulfilled"', () => {
+    const mockDiscount = 15;
+    const mockCoupon = {'coupon': 'camera-333'};
+    const expectedState = { ...initialState, couponValidityStatus: ValidityStatus.Valid, couponDiscount: mockDiscount };
+    const result = orderProcess.reducer(
+      undefined,
+      postCouponAction.fulfilled(mockDiscount, '', mockCoupon)
+    );
+    expect(result).toEqual(expectedState);
+  });
+
+  it('should set "isCouponPosting" to "false", "couponDiscount" to "undefined" and "couponValidityStatus" to "invalid" with "postCouponAction.rejected"', () => {
+    const expectedState = { ...initialState, couponValidityStatus: ValidityStatus.Invalid};
+    const result = orderProcess.reducer(
+      undefined,
+      postCouponAction.rejected
     );
     expect(result).toEqual(expectedState);
   });
