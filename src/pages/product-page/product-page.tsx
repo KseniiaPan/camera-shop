@@ -15,17 +15,8 @@ import AddProductSuccessModal from '../../components/add-product-success-modal/a
 import { useAppDispatch, useAppSelector } from '../../hooks/index';
 import { RatingOption, ErrorText } from '../../consts';
 import { ProductModalData, ProductInfo } from '../../types/product-types';
-import {
-  fetchCurrentProductAction,
-  fetchReviewsAction,
-  fetchSimilarProductsAction,
-} from '../../store/api-actions';
-import {
-  getCurrentProductData,
-  getCurrentProductLoadingStatus,
-  getDataLoadingErrorStatus,
-  getSimilarProductsData,
-} from '../../store/product-process/selectors';
+import { fetchCurrentProductAction, fetchReviewsAction, fetchSimilarProductsAction } from '../../store/api-actions';
+import { getCurrentProductData, getCurrentProductLoadingStatus, getDataLoadingErrorStatus, getSimilarProductsData } from '../../store/product-process/selectors';
 import { useLocalStorage } from '../../hooks/use-local-storage';
 import { getStoredValue } from '../../utils/common';
 import { getBasketProdutsAmount } from '../../utils/basket-calculation';
@@ -37,16 +28,12 @@ const initialAddProductModalState: ProductModalData = {
 };
 
 function ProductPage(): JSX.Element {
-  const [addProductModalData, setAddProductModalData] = useState(
-    initialAddProductModalState
-  );
-  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
-    useState(false);
+  const [addProductModalData, setAddProductModalData] = useState(initialAddProductModalState);
+  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] = useState(false);
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
+
   const dispatch = useAppDispatch();
-  const isDetailedProductLoading = useAppSelector(
-    getCurrentProductLoadingStatus
-  );
+  const isDetailedProductLoading = useAppSelector(getCurrentProductLoadingStatus);
   const isDataLoadingError = useAppSelector(getDataLoadingErrorStatus);
   const currentProduct = useAppSelector(getCurrentProductData);
   const similarProducts = useAppSelector(getSimilarProductsData);

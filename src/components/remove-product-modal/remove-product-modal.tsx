@@ -31,7 +31,7 @@ function RemoveProductModal({onRemoveProductModalClose, modalData, onRemoveFromC
     <FocusTrap
       active={modalData.isModalOpen}
       focusTrapOptions={{
-        initialFocus: '#delete-produt',
+        initialFocus: '#delete-product',
         tabbableOptions: {
           displayCheck: 'none',
         },
@@ -54,7 +54,7 @@ function RemoveProductModal({onRemoveProductModalClose, modalData, onRemoveFromC
               {openedCameraInfo && (
                 <button
                   className="btn btn--purple modal__btn modal__btn--half-width"
-                  id="delete-produt"
+                  id="delete-product"
                   type="button"
                   onClick={() => onRemoveFromCartClick(openedCameraInfo)}
                 >

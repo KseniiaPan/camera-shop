@@ -1,5 +1,5 @@
 import { ProductInfo } from '../../types/product-types';
-import { BasketCardOption, BASKET_PRODUCTS_MIN_COUNT, BASKET_PRODUCTS_MAX_COUNT} from '../../consts';
+import { BasketCardOption, BASKET_PRODUCTS_MIN_COUNT, BASKET_PRODUCTS_MAX_COUNT } from '../../consts';
 import { getFormattedPrice, getStoredValue } from '../../utils/common';
 import BasketItem from '../../components/basket-item/basket-item';
 import { useAppSelector } from '../../hooks/index';

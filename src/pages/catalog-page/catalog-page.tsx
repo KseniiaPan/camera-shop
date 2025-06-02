@@ -15,20 +15,8 @@ import { ProductFilters } from '../../types/filter-types';
 import { ProductSorting } from '../../types/sorting-types';
 import { ProductsCatalogPagination } from '../../types/pagination-types';
 import { useAppSelector, useAppDispatch } from '../../hooks/index';
-import {
-  getDataLoadingErrorStatus,
-  getProductsLoadingStatus,
-  getProductsData,
-} from '../../store/product-process/selectors';
-import {
-  ProductsListOption,
-  ErrorText,
-  FilterSection,
-  SortingSection,
-  START_PAGE,
-  PRODUCTS_COUNT_STEP,
-  DISPLAYED_PAGINATION_STEP,
-} from '../../consts';
+import { getDataLoadingErrorStatus, getProductsLoadingStatus, getProductsData } from '../../store/product-process/selectors';
+import { ProductsListOption, ErrorText, FilterSection, SortingSection, START_PAGE, PRODUCTS_COUNT_STEP, DISPLAYED_PAGINATION_STEP } from '../../consts';
 import { useCatalogSearchParams } from '../../hooks/use-catalog-search-params';
 import { filterProducts, filterProductsbyPrice } from '../../utils/filtering';
 import { sortProducts } from '../../utils/sorting';
@@ -53,33 +41,14 @@ const initialPaginationState: ProductsCatalogPagination = {
 };
 
 function CatalogPage(): JSX.Element {
-  const [addProductModalData, setAddProductModalData] = useState(
-    initialAddProductModalState
-  );
+  const [addProductModalData, setAddProductModalData] = useState(initialAddProductModalState);
 
-  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] =
-    useState(false);
+  const [isProductSuccessModalOpen, setIsProductSuccessModalOpen] = useState(false);
 
   const [cart, setCart] = useLocalStorage<ProductInfo[]>('cart', []);
   const dispatch = useAppDispatch();
 
-  const {
-    page,
-    setPagination,
-    sort,
-    direction,
-    setSorting,
-    setFilters,
-    removeFilters,
-    removeNonValidFilters,
-    removeMinPriceFilters,
-    removeMaxPriceFilters,
-    category,
-    types,
-    levels,
-    minPrice,
-    maxPrice,
-  } = useCatalogSearchParams();
+  const { page, setPagination, sort, direction, setSorting, setFilters, removeFilters, removeNonValidFilters, removeMinPriceFilters, removeMaxPriceFilters, category, types, levels, minPrice, maxPrice } = useCatalogSearchParams();
 
   useEffect(() => {
     if (page === null) {

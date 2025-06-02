@@ -195,3 +195,4 @@ export const PAGINATION_ITEMS_MAX_COUNT = 3;
 export const BASKET_PRODUCTS_MIN_COUNT = 1;
 export const BASKET_PRODUCTS_MAX_COUNT = 9;
 export const PRODUCT_DEFAULT_QUANTITY = 1;
+export const DEFAULT_DISCOUNT = 0;

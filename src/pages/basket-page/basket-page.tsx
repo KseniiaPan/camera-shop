@@ -16,8 +16,7 @@ import { getStoredValue } from '../../utils/common';
 import { changeCartProductsAmount } from '../../store/order-process/order-process';
 import { postOrderAction, postCouponAction } from '../../store/api-actions';
 import { getPromoProductsData } from '../../store/promo-process/selectors';
-import { getOrderPostingStatus } from '../../store/order-process/selectors';
-import { getCouponDiscount, getCouponValidityStatus, getCouponPostingStatus } from '../../store/order-process/selectors';
+import { getOrderPostingStatus, getCouponDiscount, getCouponValidityStatus, getCouponPostingStatus } from '../../store/order-process/selectors';
 import { getBasketProdutsAmount, getNonPromoBasketProducts, getSummedPrice, getProductsQuantity, getDiscountForQuantity, getReducedDiscount, getOrderedProductsIds, getTotalDiscount} from '../../utils/basket-calculation';
 
 const initialRemoveProductModalState: ProductModalData = {
@@ -27,9 +26,7 @@ const initialRemoveProductModalState: ProductModalData = {
 
 function BasketPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [removeProductModalData, setDeleteProductModalData] = useState(
-    initialRemoveProductModalState
-  );
+  const [removeProductModalData, setRemoveProductModalData] = useState(initialRemoveProductModalState);
   const [isOrderSuccessModalOpen, setIsOrderSuccessModalOpen] = useState(false);
   const [isOrderFailureModalOpen, setIsOrderFailureModalOpen] = useState(false);
   const [userCoupon, setUserCoupon] = useState<string | null>(null);
@@ -103,12 +100,12 @@ function BasketPage(): JSX.Element {
   const orderedProductsIds = currentBasketProducts && getOrderedProductsIds(currentBasketProducts);
 
   const handleRemoveProductModalOpen = (id: number | null) => {
-    setDeleteProductModalData({ isModalOpen: true, openedCameraId: id });
+    setRemoveProductModalData({ isModalOpen: true, openedCameraId: id });
   };
 
   const handleRemoveProductModalClose = useCallback(() => {
-    setDeleteProductModalData({ isModalOpen: false, openedCameraId: null });
-  },[setDeleteProductModalData]);
+    setRemoveProductModalData({ isModalOpen: false, openedCameraId: null });
+  },[setRemoveProductModalData]);
 
   const handleIncreaseClick = useCallback(
     (product: ProductInfo) => {

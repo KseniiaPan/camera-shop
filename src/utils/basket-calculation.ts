@@ -1,6 +1,6 @@
 import { PRODUCT_DEFAULT_QUANTITY } from '../consts';
 import { ProductInfo, PrimaryProductInfo } from '../types/product-types';
-import { DiscountOption, DiscountReductionOption } from '../consts';
+import { DiscountOption, DiscountReductionOption, DEFAULT_DISCOUNT } from '../consts';
 
 const getBasketProdutsAmount = (cartProducts: ProductInfo[]): number | undefined =>
   cartProducts.reduce(
@@ -11,7 +11,7 @@ const getBasketProdutsAmount = (cartProducts: ProductInfo[]): number | undefined
     0
   );
 
-const getNonPromoBasketProducts = (currentCartProducts: ProductInfo[],currentPromoProducts: PrimaryProductInfo[]): ProductInfo[] =>
+const getNonPromoBasketProducts = (currentCartProducts: ProductInfo[], currentPromoProducts: PrimaryProductInfo[]): ProductInfo[] =>
   currentCartProducts.filter(
     (currentCartProductsItem) =>
       !currentPromoProducts.some(
@@ -51,7 +51,7 @@ const getDiscountForQuantity = (productsQuantity: number) => {
   } else if (productsQuantity > DiscountOption.MaximalDiscount.quantity) {
     discountForQuantity = DiscountOption.MaximalDiscount.discount;
   } else {
-    discountForQuantity = 0;
+    discountForQuantity = DEFAULT_DISCOUNT;
   }
   return discountForQuantity;
 };

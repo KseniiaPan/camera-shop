@@ -22,7 +22,7 @@ function BasketSummary({finalCost, discount, totalCost, userCoupon, isOrderButto
 
   return (
     <div className="basket__summary" data-testid="basket-summary">
-      <BasketPromo userCoupon = {userCoupon} onCouponChange={onCouponChange} onApplyCouponButtonClick={onApplyCouponButtonClick}/>
+      <BasketPromo userCoupon={userCoupon} onCouponChange={onCouponChange} onApplyCouponButtonClick={onApplyCouponButtonClick}/>
       <div className="basket__summary-order">
         <p className="basket__summary-item">
           <span className="basket__summary-text">Всего:</span>

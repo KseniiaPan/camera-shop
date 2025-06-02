@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 const useDisableBackground = (isModalOpen: boolean) => {
   useEffect(() => {
     if (isModalOpen) {

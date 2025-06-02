@@ -7,12 +7,8 @@ import { ProductInfo } from '../../types/product-types';
 
 type BasketPromoProps = {
   userCoupon: string | null;
-  onCouponChange: (
-    evt: React.ChangeEvent<HTMLInputElement>
-  ) => void;
-  onApplyCouponButtonClick: (
-    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
+  onCouponChange: (evt: React.ChangeEvent<HTMLInputElement>) => void;
+  onApplyCouponButtonClick: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 function BasketPromo({userCoupon, onCouponChange, onApplyCouponButtonClick}: BasketPromoProps): JSX.Element {
@@ -24,6 +20,7 @@ function BasketPromo({userCoupon, onCouponChange, onApplyCouponButtonClick}: Bas
   const storedCoupon = getStoredValue<string | null>('coupon', null);
   const currentBasketProducts = getStoredValue<ProductInfo[]>('cart', []);
   const isApplyButtonDisabled = currentBasketProducts && currentBasketProducts.length === 0 || isCouponPosting;
+
   return (
     <div className="basket__promo" data-testid="basket-promo">
       <p className="title title--h4">

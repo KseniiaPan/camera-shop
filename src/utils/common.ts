@@ -3,13 +3,6 @@ import 'dayjs/locale/ru';
 
 const getFormattedPrice = (price: number | undefined) =>
   price && price.toLocaleString('ru-RU');
-const getFormattedPhoneNumber = (phoneNumber: string) => {
-  let formattedPhoneNumber = phoneNumber.replace(/[(|)| |\-))]/g, '');
-  if (formattedPhoneNumber[0] === '8') {
-    formattedPhoneNumber = `+7${formattedPhoneNumber.slice(1)}`;
-  }
-  return formattedPhoneNumber;
-};
 
 const humanizeCommentDate = (commentDate: string) =>
   dayjs(commentDate).locale('ru').format('DD MMMM');
@@ -32,7 +25,6 @@ function getStoredValue<T>(key: string, defaultValue: T): T | undefined {
 
 export {
   getFormattedPrice,
-  getFormattedPhoneNumber,
   humanizeCommentDate,
   getDateWithoutTime,
   getStoredValue,
